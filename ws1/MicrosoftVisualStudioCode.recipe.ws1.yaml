@@ -3,7 +3,7 @@ Comment: |
   See https://as135.awmdm.com/API/help/#!/apis/10001?!%2FAppsV2%2FAppsV2_UpdateAssignmentRuleAsync
 Description: Downloads and Creates a munki package for Microsoft Company Portal, imports it into WorkSpace ONE UEM, and makes assignment rules.
 Identifier: com.github.codeskipper.ws1.MicrosoftVisualStudioCode
-ParentRecipe: com.github.killahquam.munki.visualstudiocode
+ParentRecipe: com.github.valdore86.munki.visualstudiocode
 MinimumVersion: '2.3'
 
 Input:
