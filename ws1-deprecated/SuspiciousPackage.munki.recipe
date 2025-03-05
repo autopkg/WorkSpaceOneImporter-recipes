@@ -35,11 +35,26 @@ https://www.mothersruin.com/software/SuspiciousPackage/</string>
 			</dict>
 		</dict>
 		<key>MinimumVersion</key>
-		<string>0.2.0</string>
+		<string>1.1</string>
 		<key>ParentRecipe</key>
 		<string>com.github.novaksam.download.SuspiciousPackage</string>
 		<key>Process</key>
 		<array>
+			<dict>
+				<key>Arguments</key>
+				<dict>
+					<key>warning_message</key>
+					<string>WorkSpaceOneImporter recipes have switched to parent Munki recipes in other recipe-repos in the main Autopkg org where possible to avoid confusing users with separate recipes.
+						See https://github.com/autopkg/autopkg/issues/951#issuecomment-2295361381
+
+						This recipe was used in SuspiciousPackage.ws1.recipe.yaml and is replaced by com.github.poundbangbash.eholtam-recipes.munki.SuspiciousPackageApp
+
+						This recipe is deprecated and will be removed in the future.
+					</string>
+				</dict>
+				<key>Processor</key>
+				<string>DeprecationWarning</string>
+			</dict>
 			<dict>
 				<key>Arguments</key>
 				<dict>

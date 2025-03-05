@@ -13,7 +13,7 @@ Input:
     display_name: 'MacAdmins Python Recommended'
     category: devops
     catalogs:
-    - testing
+      - testing
     description: |
       Framework files for use with popular Python3 Mac Admin toolsets. Relocatable, includes PyObjC.
       Python3 is not included by default in macOS since Monterey v.12.3.
@@ -27,11 +27,20 @@ Input:
     minimum_os_version: '10.9'
 
 Process:
-- Processor: MunkiPkginfoMerger
-  Arguments:
-    additional_pkginfo:
-      version: '%version%'
-- Processor: MunkiImporter
-  Arguments:
-    pkg_path: '%pathname%'
-    repo_subdirectory: '%MUNKI_REPO_SUBDIR%'
+  - Processor: DeprecationWarning
+    Arguments:
+      warning_message: |
+        WorkSpaceOneImporter recipes have switched to parent Munki recipes in other recipe-repos in the main Autopkg org where possible to avoid confusing users with separate recipes.
+        See https://github.com/autopkg/autopkg/issues/951#issuecomment-2295361381
+        
+        This recipe was used in by MacAdminsPython.ws1.recipe.yaml and is replaced by com.github.dataJAR-recipes.munki.MacadminsPython
+        
+        This recipe is deprecated and will be removed in the future.
+  - Processor: MunkiPkginfoMerger
+    Arguments:
+      additional_pkginfo:
+        version: '%version%'
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: '%pathname%'
+      repo_subdirectory: '%MUNKI_REPO_SUBDIR%'
