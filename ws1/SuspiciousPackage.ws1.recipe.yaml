@@ -20,6 +20,7 @@ Input:
   WS1_PUSH_MODE: PUSH_MODE_SETTING
 
   MUNKI_REPO_SUBDIR: 'apps/MothersRuin/SuspiciousPackage'
+  repo_subdirectory: '%MUNKI_REPO_SUBDIR%'
   pkginfo:
     catalogs:
     - testing
