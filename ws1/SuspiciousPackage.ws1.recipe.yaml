@@ -28,7 +28,7 @@ Input:
     description: |
       With Suspicious Package, you can open a macOS Installer package and see what's inside, without installing it first.
 
-      https://www.mothersruin.com/software/SuspiciousPackage/
+      https://www.mothersruin.com/software/SuspiciousPackage
     developer: Mothers Ruin Software
     display_name: Suspicious Package
     minimum_os_version: '12.0'
