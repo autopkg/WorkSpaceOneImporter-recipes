@@ -3,11 +3,30 @@ Description: |
   Downloads and Creates a munki package for Mac Admins Python Recommended, imports it into
   WorkSpace ONE UEM, and makes assignment rules.
 Identifier: com.github.codeskipper.ws1.MacAdminsPython
-ParentRecipe: com.github.codeskipper.munki.MacAdminsPython
+ParentRecipe: com.github.dataJAR-recipes.munki.MacadminsPython
 MinimumVersion: '2.3'
 
 Input:
   NAME: MacAdmins Python Recommended
+  MUNKI_REPO_SUBDIR: macadmins/python
+  INCLUDE_PRERELEASES: 'False'
+  pkginfo:
+    name: '%NAME%'
+    display_name: 'MacAdmins Python Recommended'
+    category: devops
+    catalogs:
+      - testing
+    description: |
+      Framework files for use with popular Python3 Mac Admin toolsets. Relocatable, includes PyObjC.
+      Python3 is not included by default in macOS since Monterey v.12.3.
+
+      Installs to /Library/ManagedFrameworks/Python/Python3.framework - out of the way for
+      developers and other power users.
+
+      https://github.com/macadmins/python#recommended
+    developer: MacAdmins
+    unattended_install: True
+    minimum_os_version: '10.9'
 
   # WS1 specific input,  secrets
   WS1_OAUTH_CLIENT_ID: OAUTH2_CLIENT_ID_HERE

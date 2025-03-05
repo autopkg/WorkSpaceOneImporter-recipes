@@ -34,11 +34,12 @@ Done:
  * added production ready example recipes (moved from my autopkg-recipe repo)
  * added support for re-using OAuth tokens
  * new feature to prune old software versions from WS1 UEM
+ * cleanup code, consistent use of f-strings
  * cleanup code, confirm to Autopkg codestyle standards, added pre-commit
 
 ToDo:
- * add to Autopkg repo recipe subfolder
- * cleanup code, consistent use of f-strings
+ * refactor recipes to remove duplicate parent recipes found in main Autopkg repos
+ * add to main Autopkg repo recipe subfolder
  * expand usage documentation in wiki
  * maybe establish separate demo repo
 

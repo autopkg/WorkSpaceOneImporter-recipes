@@ -1,4 +1,10 @@
-Description: Imports GlobalProtect into munki.
+Description: |
+  Imports GlobalProtect into munki.  Extra processor step to tweak version number format to get it working OK with 
+  Workspace ONE UEM.  
+  Includes preinstall script to create a global preferences file as shown in the docs from Palo Alto at 
+  https://docs.paloaltonetworks.com/globalprotect/10-1/globalprotect-admin/mobile-endpoint-management/manage-the-globalprotect-app-using-jamf/manage-the-globalprotect-app-for-macos-using-jamf-pro/deploy-the-globalprotect-mobile-app-using-jamf
+  Uses uninstall script to call the Palo Alto provided script.
+  NB - you need to specify YOUR portal Hostname (FQDN) in the input variables and in the preinstall script the recipe override.
 Identifier: com.github.codeskipper.munki.PaloAltoNetworksGlobalProtect
 ParentRecipe: com.github.peshay.download.GlobalProtect
 MinimumVersion: 0.6.1
@@ -23,7 +29,7 @@ Input:
     name: '%NAME%'
     notes: |
         2024-03-05 Intended to process the software package from YOUR company firewall - you need to specify your
-        portal HOSTNAME in the recipe override
+        portal HOSTNAME in the input variable and in the preinstall script the recipe override.
     unattended_install: true
     unattended_uninstall: true
     comment: |
