@@ -13,11 +13,17 @@ ___
 
 ## Heads up 
 
+# duplicate app issues
+
 Workspace ONE UEM version 2410 introduced a change to the internal macOS native app bundle ID from the leading "com.vmw.macos." to "com.ws1.macos.".  When uploading manually hrough the browser, UEM checks for pre-existing software titles, and if found, it uses the same bundle ID for the new app version.  This check is not done for uploads using the API, and this results in duplicate native apps.  
 
 This leads to multiple issues installing and updating the affected apps.  Firstly , it's confusing for both the end-user and the admin.  Secondly, app updates are not installing as expected.  Last but not least, when all the old versions of the app with the bundle ID with leading "com.vmw.macos." are purged as they are deactivated/deleted from UEM, uninstall is triggered for the new version as well and it is thus removed from the end user Mac.
 
 Omnissa has recognized the root cause for the duplicate macOS native apps and has announced a fix to be released in a future version.
+
+# unexpected uninstall of apps and issue reinstalling
+
+In the situation where duplicate apps were created and later pruned from UEM, and on modern stack, there have been incidents in at least one environment after a batch of app removals that were paused, and later Dismissed from UEM, this has triggered release of other batches of app removals for the same apps and also other apps with the duplicate issue.  When the unexpected app removals occurred on the end-user Mac computers, the (Re)Install button did not result in the app getting reinstalled, it button status just kept spinning in the Hub and users had to download and install the missing apps manually.  The Omnissa service case for these issues is under analysis by the engineering team not resolved yet.
 
 ---
 ### Roadmap
