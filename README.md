@@ -13,16 +13,16 @@ ___
 
 ## Heads up 
 
-Workspace ONE UEM version 2410 introduced a change to the internal macOS native app bundle ID from the leading "com.vmw.macos." to "com.ws1.macos.".  When uploading manually hrough the browser, UEM checks for pre-existing software titles, and if found, it uses the same bundle ID for the new app verson.  This check is not done for uploads using the API, and this results in duplicate native apps.  
+Workspace ONE UEM version 2410 introduced a change to the internal macOS native app bundle ID from the leading "com.vmw.macos." to "com.ws1.macos.".  When uploading manually hrough the browser, UEM checks for pre-existing software titles, and if found, it uses the same bundle ID for the new app version.  This check is not done for uploads using the API, and this results in duplicate native apps.  
 
-This leads to multiple issues installing and updating the affected apps.  Firstly , it's confusing for both the end-user and tge admin.  Secondly, app updates are not installing as expected.  Last but not least, when all the old versions of the app with the bundle ID with leading "com.vmw.macos." are purged as they are deactivated/deleted from UEM, uninstall is triggered for the new version as well and it is thus removed form the end user Mac.
+This leads to multiple issues installing and updating the affected apps.  Firstly , it's confusing for both the end-user and the admin.  Secondly, app updates are not installing as expected.  Last but not least, when all the old versions of the app with the bundle ID with leading "com.vmw.macos." are purged as they are deactivated/deleted from UEM, uninstall is triggered for the new version as well and it is thus removed from the end user Mac.
 
 Omnissa has recognized the root cause for the duplicate macOS native apps and has announced a fix to be released in a future version.
 
 ---
 ### Roadmap
 
-Project is working stable in production. You can reach me as @martinus in MacAdmins Slack. Issues and PRs welcome in GitHub.
+Project is working stable in production. You can reach me as @Martinus in MacAdmins Slack. Issues and PRs welcome in GitHub.
 
 Done:
  * testing API calls involved for WS1 using Postman -> success
@@ -50,8 +50,8 @@ Done:
  * add to main Autopkg repo recipe subfolder
 
 ToDo:
- * expand usage documentation in wiki
- * maybe establish separate demo repo
+ * copy wiki from [old repo and wiki location](https://github.com/codeskipper/WorkSpaceOneImporter/wiki) and expand usage documentation
+ * establish separate demo repo
 
 ---
 
