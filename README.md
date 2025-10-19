@@ -9,6 +9,16 @@ WorkSpaceOneImporter is a custom AutoPkg Processor for automating import of Mac 
 
 Adapted from [jprichards/AirWatchImporter](https://github.com/jprichards/AirWatchImporter).
 
+___
+
+## Heads up 
+
+Workspace ONE UEM version 2410 introduced a change to the internal macOS native app bundle ID from the leading "com.vmw.macos." to "com.ws1.macos.".  When uploading manually hrough the browser, UEM checks for pre-existing software titles, and if found, it uses the same bundle ID for the new app verson.  This check is not done for uploads using the API, and this results in duplicate native apps.  
+
+This leads to multiple issues installing and updating the affected apps.  Firstly , it's confusing for both the end-user and tge admin.  Secondly, app updates are not installing as expected.  Last but not least, when all the old versions of the app with the bundle ID with leading "com.vmw.macos." are purged as they are deprecated and later deleted from UEM, uninstall is triggered for the new version as well and it is thus removed form the end user Mac.
+
+Omnissa has recognized the root cause for the duplicate macOS native apps and has announced a fix to be released in a future version.
+
 ---
 ### Roadmap
 
