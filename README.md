@@ -22,7 +22,7 @@ Omnissa has recognized the root cause for the duplicate macOS native apps and ha
 ---
 ### Roadmap
 
-Project is working stable in production. You can reach me as @mart in MacAdmins Slack. Issues and PRs welcome in GitHub.
+Project is working stable in production. You can reach me as @martinus in MacAdmins Slack. Issues and PRs welcome in GitHub.
 
 Done:
  * testing API calls involved for WS1 using Postman -> success
@@ -46,10 +46,10 @@ Done:
  * new feature to prune old software versions from WS1 UEM
  * cleanup code, consistent use of f-strings
  * cleanup code, confirm to Autopkg codestyle standards, added pre-commit
-
-ToDo:
  * refactor recipes to remove duplicate parent recipes found in main Autopkg repos
  * add to main Autopkg repo recipe subfolder
+
+ToDo:
  * expand usage documentation in wiki
  * maybe establish separate demo repo
 
