@@ -1,0 +1,88 @@
+Comment:
+Description: Creates a Munki package for Suspicious Package, and imports it into WorkSpace ONE.
+Identifier: com.github.codeskipper.ws1.Apparency
+ParentRecipe: com.github.kevinmcox.munki.Apparency
+MinimumVersion: '2.3'
+
+Input:
+  NAME: Apparency
+  WS1_OAUTH_CLIENT_ID: OAUTH2_CLIENT_ID_HERE
+  WS1_OAUTH_CLIENT_SECRET: OAUTH2_CLIENT_CLIENT_SECRET_HERE
+  WS1_OAUTH_TOKEN_URL: OAUTH2_ACCESS_TOKEN_SERVER_URL_HERE
+  WS1_API_USERNAME: API_USERNAME_HERE
+  WS1_API_PASSWORD: API_PASSWORD_HERE
+  WS1_API_TOKEN: API_TOKEN_HERE
+  WS1_B64ENCODED_API_CREDENTIALS: B64ENCODED_API_CREDENTIALS_HERE
+  WS1_API_URL: WORKSPACEONE_API_URL_HERE
+  WS1_CONSOLE_URL: WORKSPACEONE_CONSOLE_URL_HERE
+  WS1_GROUPID: GROUP_ID_HERE
+  WS1_SMART_GROUP_NAME: SMART_GROUP_NAME_HERE
+  WS1_PUSH_MODE: PUSH_MODE_SETTING
+
+  MUNKI_REPO_SUBDIR: 'apps/MothersRuin/Apparency'
+  repo_subdirectory: '%MUNKI_REPO_SUBDIR%'
+  pkginfo:
+    catalogs:
+    - testing
+    category: Utilities
+    description: |
+      Apparency is an application for inspecting other applications.
+
+      WHAT HAPPENS WHEN YOU OPEN THAT APP?
+      macOS checks every app against a slew of security features: Gatekeeper, notarization, hardening, entitlements and
+      more. But it doesn't show you the result of these checks, preferring to keep these behind the
+      scenes — either the app opens or it doesn't, perhaps with an “app downloaded from the internet” dialog first.
+
+      Even “code signatures” — around since Mac OS X 10.5 (Leopard!) — are visible only via arcane Terminal incantations.
+
+      WHAT'S INSIDE THAT APP?
+      Today's macOS apps are often made up of many pieces. Some of these are organizational artifacts, of interest only
+      to the developers.
+
+      But some pieces of an app can extend macOS itself — Share Extensions, Today Widgets, Safari Extensions, Quick
+      Look generators, Spotlight importers, and so on. macOS lets you see and manage some of these, but not all of
+      them, and not all in one place.
+
+      ENTER APPARENCY — THE APP THAT OPENS APPS
+
+      https://www.mothersruin.com/software/Apparency
+    developer: Mothers Ruin Software
+    display_name: Apparency
+    minimum_os_version: '13.0'
+    name: '%NAME%'
+    unattended_install: true
+
+  # WS1 - testing new AppsV2 assignments feature
+  ws1_app_assignments:
+      - distribution:
+          name: ASSIGNMENT_NAME
+          description: ASSIGNMENT_DESCRIPTION
+          smart_group_names:
+            - SMART_GROUP_NAME1
+            - SMART_GROUP_NAME2
+          app_delivery_method: AUTO_OR_ON_DEMAND
+          distr_delay_days: DISTRIBUTION_DELAY_DAYS
+          display_in_app_catalog: true
+          is_default_assignment: false
+          keep_app_updated_automatically: true
+        restriction:
+            remove_on_unenroll: false
+            managed_access: false
+            desired_state_management: false
+            prevent_removal: false
+
+Process:
+- Processor: com.github.codeskipper.VMWARE-WorkSpaceOneImporter/WorkSpaceOneImporter
+  Arguments:
+    ws1_oauth_client_id: '%WS1_OAUTH_CLIENT_ID%'
+    ws1_oauth_client_secret: '%WS1_OAUTH_CLIENT_SECRET%'
+    ws1_oauth_token_url: '%WS1_OAUTH_TOKEN_URL%'
+    ws1_api_token: '%WS1_API_TOKEN%'
+    ws1_api_username: '%WS1_API_USERNAME%'
+    ws1_api_password: '%WS1_API_PASSWORD%'
+    ws1_b64encoded_api_credentials: '%WS1_B64ENCODED_API_CREDENTIALS%'
+    ws1_api_url: '%WS1_API_URL%'
+    ws1_console_url: '%WS1_CONSOLE_URL%'
+    ws1_groupid: '%WS1_GROUPID%'
+    ws1_smart_group_name: '%WS1_SMART_GROUP_NAME%'
+    ws1_push_mode: '%WS1_PUSH_MODE%'
