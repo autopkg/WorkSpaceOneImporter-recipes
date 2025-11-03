@@ -36,6 +36,7 @@ try:
     # https://github.com/sheagcraig/MacSesh/issues/7
     # https://github.com/sheagcraig/MacSesh/issues/9
     import macsesh
+
     HAS_MACSESH = True
 except ImportError:
     HAS_MACSESH = False
@@ -62,7 +63,7 @@ def getsha256hash(filename):
     try:
         fileref = open(filename, "rb")
         while True:
-            chunk = fileref.read(2 ** 16)
+            chunk = fileref.read(2**16)
             if not chunk:
                 break
             hasher.update(chunk)
@@ -146,7 +147,7 @@ class WorkSpaceOneImporter(Processor):
         "ws1_console_url": {
             "required": False,
             "description": "Base url of WorkSpace ONE UEM Console server for easy result lookup "
-                           "(eg. https://admin-mobile.myorg.com)",
+            "(eg. https://admin-mobile.myorg.com)",
         },
         "ws1_groupid": {
             "required": True,
@@ -159,27 +160,27 @@ class WorkSpaceOneImporter(Processor):
         "ws1_api_username": {
             "required": False,
             "description": "WorkSpace ONE REST API Username. Either api_username and api_password or "
-                           "b64encoded_api_credentials are required for Basic authentication.",
+            "b64encoded_api_credentials are required for Basic authentication.",
         },
         "ws1_api_password": {
             "required": False,
             "description": "WorkSpace ONE REST API User Password. Either api_username and api_password or "
-                           "b64encoded_api_credentials are required for Basic authentication.",
+            "b64encoded_api_credentials are required for Basic authentication.",
         },
         "ws1_b64encoded_api_credentials": {
             "required": False,
             "description": '"Basic " + Base64 encoded username:password. Either api_username and api_password or '
-                           "b64encoded_api_credentials are required for Basic authentication.",
+            "b64encoded_api_credentials are required for Basic authentication.",
         },
         "ws1_oauth_client_id": {
             "required": False,
             "description": "Client ID for Oauth 2.0 authorization - a more secure and recommended replacement for Basic"
-                           " authentication.",
+            " authentication.",
         },
         "ws1_oauth_client_secret": {
             "required": False,
             "description": "Client Secret for Oauth 2.0 authorization - a more secure and recommended replacement for "
-                           "Basic authentication.",
+            "Basic authentication.",
         },
         "ws1_oauth_token_url": {
             "required": False,
@@ -215,14 +216,14 @@ class WorkSpaceOneImporter(Processor):
             "required": False,
             "default": "True",
             "description": 'If "false", in case no version was imported into Munki in this session, find latest version'
-                           " in munki_repo to import into WS1.\n\n"
-                           "Default: true, meaning only newly imported versions are imported to WS1, this is default to preserve "
-                           "previous behaviour.",
+            " in munki_repo to import into WS1.\n\n"
+            "Default: true, meaning only newly imported versions are imported to WS1, this is default to preserve "
+            "previous behaviour.",
         },
         "ws1_smart_group_name": {
             "required": False,
             "description": "The name of the first smart group the app should be assigned to, typically testers / "
-                           "early access.",
+            "early access.",
         },
         "ws1_push_mode": {
             "required": False,
@@ -231,30 +232,30 @@ class WorkSpaceOneImporter(Processor):
         "ws1_assignment_rules": {
             "required": False,
             "description": 'Define recipe Input-variable "ws1_app_assignments" instead of this documentation '
-                           "placeholder. NOT as Processor input var as it is "
-                           "too complex to be be substituted. MUST override.\n\n"
-                           "See https://github.com/codeskipper/WorkSpaceOneImporter/wiki/ws1_app_assignments\n",
+            "placeholder. NOT as Processor input var as it is "
+            "too complex to be be substituted. MUST override.\n\n"
+            "See https://github.com/codeskipper/WorkSpaceOneImporter/wiki/ws1_app_assignments\n",
         },
         "ws1_app_versions_to_keep": {
             "required": False,
             "description": "The number of versions of an app to keep in WS1. Please set this in a recipe (override).\n"
-                           " See also app_versions_prune.\n\n"
-                           "NB - please make sure to provide the input variable as type string in the recipe override, using "
-                           " an integer will result in a hard to trace runtime error 'expected string or bytes-like object'",
+            " See also app_versions_prune.\n\n"
+            "NB - please make sure to provide the input variable as type string in the recipe override, using "
+            " an integer will result in a hard to trace runtime error 'expected string or bytes-like object'",
         },
         "ws1_app_versions_to_keep_default": {
             "required": False,
             "default": "5",
             "description": "The default number of versions of an app to keep in WS1. Default:5."
-                           "See also app_versions_prune.\n\n"
-                           "NB - please make sure to provide the input variable as type string in the recipe override, using "
-                           " an integer will result in a hard to trace runtime error 'expected string or bytes-like object'",
+            "See also app_versions_prune.\n\n"
+            "NB - please make sure to provide the input variable as type string in the recipe override, using "
+            " an integer will result in a hard to trace runtime error 'expected string or bytes-like object'",
         },
         "ws1_app_versions_prune": {
             "required": False,
             "default": "dry_run",
             "description": "Whether to prune old versions of an app on WS1. Possible values: True or False or "
-                           "dry_run. Default:dry_run. See also app_versions_to_keep",
+            "dry_run. Default:dry_run. See also app_versions_to_keep",
         },
     }
 
@@ -620,8 +621,11 @@ class WorkSpaceOneImporter(Processor):
             macsesh.inject_into_requests()
             self.output("MacSesh is installed, imported, and injected.", verbose_level=2)
         else:
-            self.output("MacSesh was NOT found installed. If you need to use custom certificates for TLS packet "
-                        "inspection, you must either install it or provide the certs another way.", verbose_level=1)
+            self.output(
+                "MacSesh was NOT found installed. If you need to use custom certificates for TLS packet "
+                "inspection, you must either install it or provide the certs another way.",
+                verbose_level=1,
+            )
 
         # take care of headers for WS1 REST API authentication
         headers, headers_v2 = self.ws1_auth_prep()
@@ -1064,7 +1068,7 @@ class WorkSpaceOneImporter(Processor):
                 )
 
             # remove existing assignments from report_assignment_rules
-            report_assignment_rules = report_assignment_rules[len(result["assignments"]):]
+            report_assignment_rules = report_assignment_rules[len(result["assignments"]) :]
 
             # if the same number of assignments exist already, bail out
             if len(app_assignments) <= len(result["assignments"]):
@@ -1218,9 +1222,9 @@ class WorkSpaceOneImporter(Processor):
         if self.env.get("ws1_app_versions_prune", "True").lower() in ("true", "0", "t"):
             app_versions_prune = "True"
         elif self.env.get("ws1_app_versions_prune", "False").lower() in (
-                "false",
-                "1",
-                "f",
+            "false",
+            "1",
+            "f",
         ):
             # app_versions_prune = "False"
             self.output("app_versions_prune is set to False, skipping")
@@ -1424,7 +1428,7 @@ class WorkSpaceOneImporter(Processor):
             self.output(f"MUNKI_REPO: {munki_repo}", verbose_level=2)
             if os.path.isfile(pkg):
                 itemsize = int(os.path.getsize(pkg))
-                installer_item_path = pkg[len(munki_repo) + 1:]  # get path relative from repo
+                installer_item_path = pkg[len(munki_repo) + 1 :]  # get path relative from repo
                 if not itemsize == citemsize:
                     self.output(
                         "size of item in local munki repo differs from cached, might be a Git LFS shortcut, "
