@@ -23,7 +23,11 @@ Omnissa has recognized the root cause for the duplicate macOS native apps and ha
 
 # unexpected uninstall of apps and issue reinstalling
 
-In the situation where duplicate apps were created and later pruned from UEM, and on modern stack, there have been incidents in at least one environment after a batch of app removals that were paused, and later Dismissed from UEM, this has triggered release of other batches of app removals for the same apps and also other apps with the duplicate issue.  When the unexpected app removals occurred on the end-user Mac computers, the (Re)Install button did not result in the app getting reinstalled, it button status just kept spinning in the Hub and users had to download and install the missing apps manually.  The Omnissa service case for these issues is under analysis by the engineering team not resolved yet.
+In the situation where duplicate apps were created and later pruned from UEM, and on modern stack, there have been incidents in at least one environment after a batch of app removals that were paused, and later Dismissed from UEM, this has triggered release of other batches of app removals for the same apps and also other apps with the duplicate issue.  
+ 
+When the unexpected app removals occurred on the end-user Mac computers, the (Re)Install button did not result in the app getting reinstalled, it button status just kept spinning in the Hub and users had to download and install the missing apps manually.  
+ 
+The Omnissa service case for these issues is under analysis by the engineering team and is not resolved yet.  Some remediation scripts are being tested and are slated to become part of the upcoming release of Hub, version 24.11.4.
 
 ---
 ### Roadmap
