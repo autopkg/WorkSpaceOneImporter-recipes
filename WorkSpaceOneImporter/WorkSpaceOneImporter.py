@@ -36,7 +36,6 @@ try:
     # https://github.com/sheagcraig/MacSesh/issues/7
     # https://github.com/sheagcraig/MacSesh/issues/9
     import macsesh
-
     HAS_MACSESH = True
 except ImportError:
     HAS_MACSESH = False
