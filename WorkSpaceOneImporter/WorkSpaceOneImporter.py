@@ -624,7 +624,7 @@ class WorkSpaceOneImporter(Processor):
             self.output(
                 "MacSesh was NOT found installed. If you need to use custom certificates for TLS packet "
                 "inspection, you must either install it or provide the certs another way.",
-                    verbose_level=1,
+                verbose_level=1,
             )
 
         # take care of headers for WS1 REST API authentication
