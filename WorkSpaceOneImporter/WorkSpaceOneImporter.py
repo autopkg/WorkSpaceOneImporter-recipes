@@ -40,6 +40,8 @@ try:
     HAS_MACSESH = True
 except ImportError:
     HAS_MACSESH = False
+except ModuleNotFoundError:
+    HAS_MACSESH = False
 
 import requests  # dependency, needs to be installed
 from autopkglib import Processor, ProcessorError, get_pref
