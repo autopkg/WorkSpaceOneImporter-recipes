@@ -31,7 +31,8 @@ from urllib.parse import urlparse
 
 try:
     # if you need to use custom CA certificates, e.g. if your runner is behind a proxy or gateway that does packet
-    # inspection, you can use MasSesh or provide the extra certificates another way.
+    # inspection, you can use MasSesh or provide the extra certificates another way, like having the CA certificates
+    # available in a file and set the REQUESTS_CA_BUNDLE environment variable to point to the path.
     # because of the deprecation issues cited below, using macsesh currently means you need urllib3 < 2.
     # https://github.com/sheagcraig/MacSesh/issues/7
     # https://github.com/sheagcraig/MacSesh/issues/9
