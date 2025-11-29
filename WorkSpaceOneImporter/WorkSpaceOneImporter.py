@@ -625,8 +625,10 @@ class WorkSpaceOneImporter(Processor):
             self.output("MacSesh is installed, imported, and injected.", verbose_level=2)
         else:
             self.output(
-                "MacSesh was NOT found installed. If you need to use custom certificates for TLS packet "
-                "inspection, you must either install it or provide the certs another way.",
+                "MacSesh was NOT found installed. If you need to use custom CA certificates for TLS packet "
+                "inspection, you must either install it or provide the certs another way, like having the CA "
+                "certificates available in a file and set the REQUESTS_CA_BUNDLE environment variable to point "
+                "to the path.",
                 verbose_level=1,
             )
 
