@@ -28,9 +28,7 @@ def main():
     # service = "Autopkg_WS1_OAUTH"
     service = "autopkg_tool_launcher"
 
-    ws1_oauth_token_url = get_password_from_keychain(
-        keychain, service, "WS1_OAUTH_TOKEN_URL"
-    )
+    ws1_oauth_token_url = get_password_from_keychain(keychain, service, "WS1_OAUTH_TOKEN_URL")
     if ws1_oauth_token_url is None:
         print(f"Failed to get WS1_OAUTH_TOKEN_URL from keychain {keychain} - aborting")
         exit(code=1)
@@ -44,13 +42,9 @@ def main():
     print(f"Retrieved WS1_OAUTH_CLIENT_ID from keychain {keychain}")
     os.environ["AUTOPKG_ws1_oauth_client_id"] = client_id
 
-    client_secret = get_password_from_keychain(
-        keychain, service, "WS1_OAUTH_CLIENT_SECRET"
-    )
+    client_secret = get_password_from_keychain(keychain, service, "WS1_OAUTH_CLIENT_SECRET")
     if client_secret is None:
-        print(
-            f"Failed to get WS1_OAUTH_CLIENT_SECRET from keychain {keychain} - aborting"
-        )
+        print(f"Failed to get WS1_OAUTH_CLIENT_SECRET from keychain {keychain} - aborting")
         exit(code=1)
     print(f"Retrieved WS1_OAUTH_CLIENT_SECRET from keychain {keychain}")
     os.environ["AUTOPKG_ws1_oauth_client_secret"] = client_secret
