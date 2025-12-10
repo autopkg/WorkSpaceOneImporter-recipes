@@ -1,9 +1,9 @@
 Comment:
 Description: |
-  Downloads and Creates a munki package for Mac Admins Python Recommended, imports it into
+  Downloads and Creates a Munki package for Mac Admins Python Recommended, imports it into
   WorkSpace ONE UEM, and makes assignment rules.
 Identifier: com.github.codeskipper.ws1.MacAdminsPython
-ParentRecipe: com.github.dataJAR-recipes.munki.MacadminsPython
+ParentRecipe: com.github.codeskipper.munki.MacadminsPython
 MinimumVersion: '2.3'
 
 Input:

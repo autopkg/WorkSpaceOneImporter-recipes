@@ -1,0 +1,58 @@
+Description: |
+    Downloads the latest version of Mac Admins Python and imports it into Munki. This version also sets the
+    version_comparison_key in the installs array to CFBundleVersion instead of CFBundleShortVersionString because
+    that holds the correct version format as set forth by Apple developer documentation
+    at https://developer.apple.com/documentation/bundleresources/information-property-list/cfbundleshortversionstring
+    This is needed for Omnissa Workspace ONE
+Identifier: com.github.codeskipper.munki.MacadminsPython
+ParentRecipe: com.github.jazzace.download.MacadminsPython
+MinimumVersion: 1.0.0
+
+Input:
+  NAME: MacadminsPython
+  MUNKI_REPO_SUBDIR: apps/%NAME%
+  pkginfo:
+    catalogs:
+    - testing
+    description: Framework files for use with popular python macadmin toolsets
+    developer: Clever DevOps Co.
+    display_name: Mac Admins Python
+    name: '%NAME%'
+    unattended_install: true
+
+Process:
+- Processor: FlatPkgUnpacker
+  Arguments:
+    destination_path: '%RECIPE_CACHE_DIR%/unpacked'
+    flat_pkg_path: '%pathname%'
+    purge_destination: true
+
+- Processor: FileFinder
+  Arguments:
+    pattern: '%RECIPE_CACHE_DIR%/unpacked/*python_recommended_signed*.pkg'
+
+- Processor: PkgPayloadUnpacker
+  Arguments:
+    destination_path: '%RECIPE_CACHE_DIR%/Payload'
+    pkg_payload_path: '%found_filename%/Payload'
+    purge_destination: false
+
+- Processor: MunkiInstallsItemsCreator
+  Arguments:
+    faux_root: '%RECIPE_CACHE_DIR%/Payload'
+    installs_item_paths:
+    - /Library/ManagedFrameworks/Python/Python3.framework
+    version_comparison_key: CFBundleVersion
+
+- Processor: MunkiPkginfoMerger
+
+- Processor: MunkiImporter
+  Arguments:
+    pkg_path: '%pathname%'
+    repo_subdirectory: '%MUNKI_REPO_SUBDIR%'
+
+- Processor: PathDeleter
+  Arguments:
+    path_list:
+    - '%RECIPE_CACHE_DIR%/unpacked/'
+    - '%RECIPE_CACHE_DIR%/Payload/'
