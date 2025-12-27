@@ -23,8 +23,6 @@ import base64
 import hashlib
 import json
 import os
-
-# import os.path
 import plistlib
 import re
 import subprocess
@@ -41,6 +39,7 @@ if "REQUESTS_CA_BUNDLE" in os.environ:
 else:
     HAS_REQUESTS_CA_BUNDLE = False
     try:
+        # see if we can import macsesh module
         # because of the deprecation issues cited below, using macsesh currently means you need urllib3 < 2.
         # https://github.com/sheagcraig/MacSesh/issues/7
         # https://github.com/sheagcraig/MacSesh/issues/9
