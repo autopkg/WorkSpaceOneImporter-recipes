@@ -629,7 +629,7 @@ class WorkSpaceOneImporter(Processor):
             self.output(
                 f"Found environment variable REQUESTS_CA_BUNDLE is set to: [{os.getenv('REQUESTS_CA_BUNDLE')}] "
                 "so using that for CA-certificates instead of macsesh module.",
-                verbose_level=1,
+                verbose_level=2,
             )
         else:
             if HAS_MACSESH:
@@ -643,7 +643,7 @@ class WorkSpaceOneImporter(Processor):
                     "inspection, you must either install it or provide the certs another way, like having the CA "
                     "certificates available in a file and set the REQUESTS_CA_BUNDLE environment variable to point "
                     "to the path.",
-                    verbose_level=1,
+                    verbose_level=2,
                 )
 
         # take care of headers for WS1 REST API authentication
