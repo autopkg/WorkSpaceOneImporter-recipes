@@ -22,27 +22,35 @@
 import base64
 import hashlib
 import json
-import os.path
+import os
+
+# import os.path
 import plistlib
 import re
 import subprocess
 from datetime import datetime, timedelta
 from urllib.parse import urlparse
 
-try:
-    # if you need to use custom CA certificates, e.g. if your runner is behind a proxy or gateway that does packet
-    # inspection, you can use MasSesh or provide the extra certificates another way, like having the CA certificates
-    # available in a file and set the REQUESTS_CA_BUNDLE environment variable to point to the path.
-    # because of the deprecation issues cited below, using macsesh currently means you need urllib3 < 2.
-    # https://github.com/sheagcraig/MacSesh/issues/7
-    # https://github.com/sheagcraig/MacSesh/issues/9
-    import macsesh
+# if you need to use custom CA certificates, e.g. if your runner is behind a proxy or gateway that does packet
+# inspection, you can use MasSesh or provide the extra certificates another way, like having all the CA certificates
+# available in a file and set the REQUESTS_CA_BUNDLE environment variable to point to the path.
+# The environment variable is used instead of macsesh if set.
+if "REQUESTS_CA_BUNDLE" in os.environ:
+    HAS_REQUESTS_CA_BUNDLE = True
+    HAS_MACSESH = False
+else:
+    HAS_REQUESTS_CA_BUNDLE = False
+    try:
+        # because of the deprecation issues cited below, using macsesh currently means you need urllib3 < 2.
+        # https://github.com/sheagcraig/MacSesh/issues/7
+        # https://github.com/sheagcraig/MacSesh/issues/9
+        import macsesh
 
-    HAS_MACSESH = True
-except ImportError:
-    HAS_MACSESH = False
-except ModuleNotFoundError:
-    HAS_MACSESH = False
+        HAS_MACSESH = True
+    except ImportError:
+        HAS_MACSESH = False
+    except ModuleNotFoundError:
+        HAS_MACSESH = False
 
 import requests  # dependency, needs to be installed
 from autopkglib import Processor, ProcessorError, get_pref
@@ -618,19 +626,26 @@ class WorkSpaceOneImporter(Processor):
             raise ProcessorError(f"name not found in pkginfo [{pkg_info_path}]")
         app_name = pkg_info["name"]
 
-        if HAS_MACSESH:
-            # Init the MacSesh so we can use the trusted certs in macOS Keychains to verify SSL.
-            # Needed especially in networks with TLS packet inspection and custom certificates.
-            macsesh.inject_into_requests()
-            self.output("MacSesh is installed, imported, and injected.", verbose_level=2)
-        else:
+        if HAS_REQUESTS_CA_BUNDLE:
             self.output(
-                "MacSesh was NOT found installed. If you need to use custom CA certificates for TLS packet "
-                "inspection, you must either install it or provide the certs another way, like having the CA "
-                "certificates available in a file and set the REQUESTS_CA_BUNDLE environment variable to point "
-                "to the path.",
+                f"Found environment variable REQUESTS_CA_BUNDLE is set to: [{os.getenv('REQUESTS_CA_BUNDLE')}] "
+                "so using that for CA-certificates instead of macsesh module.",
                 verbose_level=1,
             )
+        else:
+            if HAS_MACSESH:
+                # Init the MacSesh so we can use the trusted certs in macOS Keychains to verify SSL.
+                # Needed especially in networks with TLS packet inspection and custom certificates.
+                macsesh.inject_into_requests()
+                self.output("MacSesh is installed, imported, and injected.", verbose_level=2)
+            else:
+                self.output(
+                    "MacSesh was NOT found installed. If you need to use custom CA certificates for TLS packet "
+                    "inspection, you must either install it or provide the certs another way, like having the CA "
+                    "certificates available in a file and set the REQUESTS_CA_BUNDLE environment variable to point "
+                    "to the path.",
+                    verbose_level=1,
+                )
 
         # take care of headers for WS1 REST API authentication
         headers, headers_v2 = self.ws1_auth_prep()
