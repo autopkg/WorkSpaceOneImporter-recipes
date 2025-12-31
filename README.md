@@ -58,9 +58,9 @@ Done:
  * cleanup code, confirm to Autopkg codestyle standards, added pre-commit
  * refactor recipes to remove duplicate parent recipes found in main Autopkg repos
  * add to main Autopkg repo recipe subfolder
+ * make macsesh optional
 
 ToDo:
- * make macsesh optional
  * copy wiki from [old repo and wiki location](https://github.com/codeskipper/WorkSpaceOneImporter/wiki) and expand usage documentation
  * establish separate demo repo
 
@@ -84,6 +84,18 @@ These can be installed by running: [(Thanks)](https://blog.eisenschmiede.com/pos
 sudo -H /Library/AutoPkg/Python3/Python.framework/Versions/Current/bin/pip3 install requests
 sudo -H /Library/AutoPkg/Python3/Python.framework/Versions/Current/bin/pip3 install requests_toolbelt
 ```
+
+### a note about security
+We've used the MacSesh library for the first couple of years for convenience to provide our corporate internal CA-certificates to Autopkg Python. These certificates are needed when running on self-hosted GitHub runners because our internet firewall performs packet inspection.
+When reviewing the dependencies, we found the need to keep urllib3 < 2 due to issues with supporting features being deprecated.  Details are [here](https://github.com/sheagcraig/MacSesh/issues/7) and [here](https://github.com/sheagcraig/MacSesh/issues/9).
+
+Note that GitHub Advanced Security (GHAS) will generate both a couple of high severity alerts and a medium one for vulnerabilities in this urllib3 version.
+These are the vulnerabilities reported in urllib3 < 2.6.0:
+- [urllib3 streaming API improperly handles highly compressed data](https://github.com/advisories/GHSA-2xpw-w6gg-jr37)
+- [urllib3 allows an unbounded number of links in the decompression chain](https://github.com/advisories/GHSA-gm62-xv2j-4w53)
+- [urllib3 redirects are not disabled when retries are disabled on PoolManager instantiation](https://github.com/advisories/GHSA-pq67-6m6q-mj2v)
+Therefore we've now adapted the code to using REQUESTS_CA_BUNDLE in production instead of MacSesh, this allows us to use the latest urllib3.
+When this environment variable is set, it will be used instead of MacSesh. MacSesh is only imported if it is installed and REQUESTS_CA_BUNDLE is not set.
 
 ---
 ## AutoPkg Shared Processor
