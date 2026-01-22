@@ -9,12 +9,8 @@ api_doc_example_assignment_rules = {
                 "description": "Text value",
                 "smart_groups": ["c687ab4d-6c3b-485b-b30b-f47ff1132a4d"],
                 "bsp_assignments": {
-                    "smart_groups_online_licenses": [
-                        "3915d8a1-4e0c-4716-b1a5-6d7d391c020b"
-                    ],
-                    "smart_groups_offline_licenses": [
-                        "6bf7ab67-7065-4028-bef7-ee8d987a7c29"
-                    ],
+                    "smart_groups_online_licenses": ["3915d8a1-4e0c-4716-b1a5-6d7d391c020b"],
+                    "smart_groups_offline_licenses": ["6bf7ab67-7065-4028-bef7-ee8d987a7c29"],
                 },
                 "vpp_app_details": {
                     "license_usage": [
