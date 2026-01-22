@@ -19,7 +19,7 @@ Workspace ONE UEM version 2410 introduced a change to the internal macOS native 
 
 This leads to multiple issues installing and updating the affected apps.  Firstly, it's confusing for both the end-user and the admin.  Secondly, app updates are not installing as expected.  Last but not least, when all the old versions of the app with the bundle ID with leading "com.vmw.macos." are purged as they are deactivated/deleted from UEM, uninstall is triggered for the new version as well and it is thus removed from the end user Mac.
 
-Omnissa has recognized the root cause for the duplicate macOS native apps and has announced a fix will be backported into UEM 2410 Patch 36 and 2506 Patch 17, the date for general availability of these is not yet announced at the time of writing.
+Omnissa has recognized the root cause for the duplicate macOS native apps and has released a fix, which has also been be backported into UEM 2410 Patch 36 and 2506 Patch 17, the fix has not been validated on by customers AFAIK at the time of writing.
 
 # unexpected uninstall of apps and issue reinstalling
 
@@ -27,7 +27,7 @@ In the situation where duplicate apps were created and later pruned from UEM, an
 
 When the unexpected app removals occurred on the end-user Mac computers, the (Re)Install button did not result in the app getting reinstalled, it button status just kept spinning in the Hub and users had to download and install the missing apps manually.
 
-The Omnissa service case for these issues is under analysis by the engineering team and is not resolved yet.  Some remediation scripts are being tested and are slated to become part of the upcoming release of Hub, version 24.11.4.
+The Omnissa service requsts for these issues are under analysis by the engineering team and not all are resolved yet.  Some remediation scripts have become part of Hub 24.11.4.  More are planned for the upcoming release of the Hub in February 2026.
 
 ---
 ### Roadmap
