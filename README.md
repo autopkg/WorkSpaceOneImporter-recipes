@@ -11,58 +11,52 @@ Adapted from [jprichards/AirWatchImporter](https://github.com/jprichards/AirWatc
 
 ___
 
-## Heads up
-
-# duplicate app issues
+#### Heads up - duplicate app issues
 
 Workspace ONE UEM version 2410 introduced a change to the internal macOS native app bundle ID from the leading "com.vmw.macos." to "com.ws1.macos.".  When uploading manually hrough the browser, UEM checks for pre-existing software titles, and if found, it uses the same bundle ID for the new app version.  This check is not done for uploads using the API, and this results in duplicate native apps.
 
 This leads to multiple issues installing and updating the affected apps.  Firstly, it's confusing for both the end-user and the admin.  Secondly, app updates are not installing as expected.  Last but not least, when all the old versions of the app with the bundle ID with leading "com.vmw.macos." are purged as they are deactivated/deleted from UEM, uninstall is triggered for the new version as well and it is thus removed from the end user Mac.
 
-Omnissa has recognized the root cause for the duplicate macOS native apps and has released a fix, which has also been be backported into UEM 2410 Patch 36 and 2506 Patch 17, the fix has not been validated on by customers AFAIK at the time of writing.
+Omnissa has recognised the root cause for the duplicate macOS native apps and has released a fix, which has also been be backported into UEM 2410 Patch 36 and 2506 Patch 17.
 
-# unexpected uninstall of apps and issue reinstalling
+#### unexpected uninstall of apps and issue reinstalling
 
-In the situation where duplicate apps were created and later pruned from UEM, and on modern stack, there have been incidents in at least one environment after a batch of app removals that were paused, and later Dismissed from UEM, this has triggered release of other batches of app removals for the same apps and also other apps with the duplicate issue.
+In the situation where duplicate apps were created and later pruned from UEM, and on modern stack, there have been incidents in at least one environment after a batch of app removals that were paused, and later dismissed from UEM. This has triggered release of other batches of app removals for the same apps and also other apps with the duplicates issue.
 
-When the unexpected app removals occurred on the end-user Mac computers, the (Re)Install button did not result in the app getting reinstalled, it button status just kept spinning in the Hub and users had to download and install the missing apps manually.
+When the unexpected app removals occurred on the end-user Mac computers, the (Re)Install button did not result in the app getting reinstalled, button status just kept spinning in the Hub and users had to download and install the missing apps manually.
 
-The Omnissa service requsts for these issues are under analysis by the engineering team and not all are resolved yet.  Some remediation scripts have become part of Hub 24.11.4.  More are planned for the upcoming release of the Hub in February 2026.
+The Omnissa service requests for these issues have been resolved.  One remediation script to help stop unsuccessfull uninstall atempts as seen in the Troubleshooting section of Mac devices in UEM is not yet part of Hub 26.01.1.1292, the latest release as of April 2026. We're now able to clear up the remaining app duplicates. With the latest remediation script shared by engineering, we are able to stop the deleted app duplicates from showing up in the Troubleshooting section of UEM for the Macs with failed removal attempts.
+
+#### In short, UEM 2410 Patch 36 and 2506 Patch 17, and later are known to have the fix for the app duplicates issue.
 
 ---
 ### Roadmap
 
-Project is working stable in production. You can reach me as @Martinus in MacAdmins Slack. Issues and PRs welcome in GitHub.
+Project is working stable in production since late 2022.
+Changelog is available in [CHANGELOG.md](CHANGELOG.md).
 
-Done:
- * testing API calls involved for WS1 using Postman -> success
- * forked this repo from [jprichards/AirWatchImporter](https://github.com/jprichards/AirWatchImporter)
- * add roadmap to Readme.md
- * rename files, classes, functions, variable names, and comments to reflect update to WS1 from Airwatch, update license, copyright
- * added stub recipe so shared processor can be found in recipes from other repos
- * get call as Autopkg Shared Processor stub to work from other repo
- * try library dependency install for Autopkg as suggested [here](https://blog.eisenschmiede.com/posts/install-python-modules-in-autopkg-context/) -> working
- * update for Python3
- * update API calls for WS1 as tested with Postman
- * **milestone: get POC working**
- * test new input "ws1_console_url" and code that produces link to imported app
- * get force_import working
- * add code to find icon file to upload
- * merged PR#1 from @SoxIn4 - ability to supply base64 pre-encoded api username and password
- * added support for Oauth
- * added support to specify advanced app assignment (API v.2) settings and update on schedule
- * added production ready example recipes (moved from my autopkg-recipe repo)
- * added support for re-using OAuth tokens
- * new feature to prune old software versions from WS1 UEM
- * cleanup code, consistent use of f-strings
- * cleanup code, confirm to Autopkg codestyle standards, added pre-commit
- * refactor recipes to remove duplicate parent recipes found in main Autopkg repos
- * add to main Autopkg repo recipe subfolder
- * make macsesh optional
+Contact and contribution welcome.
+You can reach me as @Martinus in MacAdmins Slack. Issues and PRs welcome in GitHub.
+
+In the fall of 2025, [cloud-autopkg-runner (CAR)](https://pypi.org/project/cloud-autopkg-runner/) was released, and I have started to adapt the code to be optimised for running in CAR.
+This will allow for concurrent processing of recipes, as well as for caching the metadata for downloads, so it can run efficiently in the cloud.
+
+So far, all features are working in a single custom processor.
+One of the optimisations in CAR is to cut short the processor run after the check phase is done, if there are no new downloads for a recipe.
+This means the code for app assignments, and for pruning of old versions will not run with CAR if there are no new downloads.
+
+Therefore, the plan is to separate out the code for API client in a Python library.
+App assignments, and pruning of old versions can then be moved to separate processors, so they can be run either as pre-processors, or on a separate schedule.
+Code for Slack notifications is to be moved from a Python script with the runner in the CICD repo to a separate processor in this repo, so it can be used when running with CAR when processing recipes concurrently.
 
 ToDo:
  * copy wiki from [old repo and wiki location](https://github.com/codeskipper/WorkSpaceOneImporter/wiki) and expand usage documentation
- * establish separate demo repo
+ * publish separate example / demo repo
+ * optimise for [cloud-autopkg-runner (CAR)](https://pypi.org/project/cloud-autopkg-runner/) and share example code for that
+   * separate out the API client code to a library
+   * separate out the Slack notification code to a processor
+   * separate out the pruning code to a processor
+   * separate out the app assignment code to a processor
 
 ---
 
