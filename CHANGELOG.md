@@ -23,3 +23,5 @@ Done:
  * refactor recipes to remove duplicate parent recipes found in main Autopkg repos
  * add to main Autopkg repo recipe subfolder
  * make macsesh optional
+ * copy wiki from [old repo and wiki location](https://github.com/codeskipper/WorkSpaceOneImporter/wiki)
+
