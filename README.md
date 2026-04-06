@@ -50,13 +50,13 @@ App assignments, and pruning of old versions can then be moved to separate proce
 Code for Slack notifications is to be moved from a Python script with the runner in the CICD repo to a separate processor in this repo, so it can be used when running with CAR when processing recipes concurrently.
 
 ToDo:
- * copy wiki from [old repo and wiki location](https://github.com/codeskipper/WorkSpaceOneImporter/wiki) and expand usage documentation
- * publish separate example / demo repo
  * optimise for [cloud-autopkg-runner (CAR)](https://pypi.org/project/cloud-autopkg-runner/) and share example code for that
    * separate out the API client code to a library
    * separate out the Slack notification code to a processor
    * separate out the pruning code to a processor
    * separate out the app assignment code to a processor
+ * publish separate example / demo repo
+ * expand usage documentation in wiki
 
 ---
 
@@ -136,25 +136,25 @@ You'll need to specify credentials for either Oauth or Basic authentication.
 `ws1_app_versions_prune` lets you prune old software versions, it is set to `dry_run` per default. Behaviour can be controlled in detail by setting `ws1_app_versions_to_keep` and `ws1_app_versions_to_keep_default`.
 
 
-* [`ws1_api_url`](https://github.com/codeskipper/WorkSpaceOneImporter/wiki/ws1_api_url)
-* [`ws1_console_url`](https://github.com/codeskipper/WorkSpaceOneImporter/wiki/ws1_console_url)
-* [`ws1_oauth_client_id`](https://github.com/codeskipper/WorkSpaceOneImporter/wiki/ws1_oauth_client_id)
-* [`ws1_oauth_client_secret`](https://github.com/codeskipper/WorkSpaceOneImporter/wiki/ws1_oauth_client_secret)
-* [`ws1_oauth_token_url`](https://github.com/codeskipper/WorkSpaceOneImporter/wiki/ws1_oauth_token_url)
-* [`ws1_api_token`](https://github.com/codeskipper/WorkSpaceOneImporter/wiki/ws1_api_token)
-* [`ws1_api_username`](https://github.com/codeskipper/WorkSpaceOneImporter/wiki/ws1_api_username)
-* [`ws1_api_password`](https://github.com/codeskipper/WorkSpaceOneImporter/wiki/ws1_api_password)
-* [`ws1_b64encoded_api_credentials`](https://github.com/codeskipper/WorkSpaceOneImporter/wiki/ws1_b64encoded_api_credentials)
-* [`ws1_force_import`](https://github.com/codeskipper/WorkSpaceOneImporter/wiki/ws1_force_import)
-* [`ws1_import_new_only`](https://github.com/codeskipper/WorkSpaceOneImporter/wiki/ws1_import_new_only)
-* [`ws1_groupid`](https://github.com/codeskipper/WorkSpaceOneImporter/wiki/ws1_groupid)
-* [`ws1_smart_group_name`](https://github.com/codeskipper/WorkSpaceOneImporter/wiki/ws1_smart_group_name)
-* [`ws1_push_mode`](https://github.com/codeskipper/WorkSpaceOneImporter/wiki/ws1_push_mode)
-* [`ws1_app_assignments`](https://github.com/codeskipper/WorkSpaceOneImporter/wiki/ws1_app_assignments)
-* [`ws1_update_assignments`](https://github.com/codeskipper/WorkSpaceOneImporter/wiki/ws1_update_assignments)
-* [`ws1_app_versions_to_keep`](https://github.com/codeskipper/WorkSpaceOneImporter/wiki/ws1_app_versions_to_keep)
-* [`ws1_app_versions_to_keep_default`](https://github.com/codeskipper/WorkSpaceOneImporter/wiki/ws1_app_versions_to_keep_default)
-* [`ws1_app_versions_prune`](https://github.com/codeskipper/WorkSpaceOneImporter/wiki/ws1_app_versions_prune)
+* [`ws1_api_url`](https://github.com/autopkg/WorkSpaceOneImporter-recipes/wiki/ws1_api_url)
+* [`ws1_console_url`](https://github.com/codeskipper/WorkSpaceOneImporter-recipes/wiki/ws1_console_url)
+* [`ws1_oauth_client_id`](https://github.com/codeskipper/WorkSpaceOneImporter-recipes/wiki/ws1_oauth_client_id)
+* [`ws1_oauth_client_secret`](https://github.com/codeskipper/WorkSpaceOneImporter-recipes/wiki/ws1_oauth_client_secret)
+* [`ws1_oauth_token_url`](https://github.com/codeskipper/WorkSpaceOneImporter-recipes/wiki/ws1_oauth_token_url)
+* [`ws1_api_token`](https://github.com/codeskipper/WorkSpaceOneImporter-recipes/wiki/ws1_api_token)
+* [`ws1_api_username`](https://github.com/codeskipper/WorkSpaceOneImporter-recipes/wiki/ws1_api_username)
+* [`ws1_api_password`](https://github.com/codeskipper/WorkSpaceOneImporter-recipes/wiki/ws1_api_password)
+* [`ws1_b64encoded_api_credentials`](https://github.com/codeskipper/WorkSpaceOneImporter-recipes/wiki/ws1_b64encoded_api_credentials)
+* [`ws1_force_import`](https://github.com/codeskipper/WorkSpaceOneImporter-recipes/wiki/ws1_force_import)
+* [`ws1_import_new_only`](https://github.com/codeskipper/WorkSpaceOneImporter-recipes/wiki/ws1_import_new_only)
+* [`ws1_groupid`](https://github.com/codeskipper/WorkSpaceOneImporter-recipes/wiki/ws1_groupid)
+* [`ws1_smart_group_name`](https://github.com/codeskipper/WorkSpaceOneImporter-recipes/wiki/ws1_smart_group_name)
+* [`ws1_push_mode`](https://github.com/codeskipper/WorkSpaceOneImporter-recipes/wiki/ws1_push_mode)
+* [`ws1_app_assignments`](https://github.com/codeskipper/WorkSpaceOneImporter-recipes/wiki/ws1_app_assignments)
+* [`ws1_update_assignments`](https://github.com/codeskipper/WorkSpaceOneImporter-recipes/wiki/ws1_update_assignments)
+* [`ws1_app_versions_to_keep`](https://github.com/codeskipper/WorkSpaceOneImporter-recipes/wiki/ws1_app_versions_to_keep)
+* [`ws1_app_versions_to_keep_default`](https://github.com/codeskipper/WorkSpaceOneImporter-recipes/wiki/ws1_app_versions_to_keep_default)
+* [`ws1_app_versions_prune`](https://github.com/codeskipper/WorkSpaceOneImporter-recipes/wiki/ws1_app_versions_prune)
 
 
 ### List available input variables
