@@ -51,10 +51,9 @@ Code for Slack notifications is to be moved from a Python script with the runner
 
 ToDo:
  * optimise for [cloud-autopkg-runner (CAR)](https://pypi.org/project/cloud-autopkg-runner/) and share example code for that
-   * separate out the API client code to a library
-   * separate out the Slack notification code to a processor
-   * separate out the pruning code to a processor
-   * separate out the app assignment code to a processor
+   * add WS1 Slack notification code to a new custom processor
+   * separate out the pruning code to a new custom processor
+   * separate out the app assignment code to a new custom processor
  * publish separate example / demo repo
  * expand usage documentation in wiki
 

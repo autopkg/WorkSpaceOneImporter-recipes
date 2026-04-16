@@ -273,6 +273,7 @@ class WorkSpaceOneImporter(WorkSpaceOneImporterBase):
             raise ProcessorError(f"name not found in pkginfo [{pkg_info_path}]")
         app_name = pkg_info["name"]
 
+        # handle any REQUESTS_CA_BUNDLE supplied or macsesh installed
         self.init_tls()
 
         # take care of headers for WS1 REST API authentication

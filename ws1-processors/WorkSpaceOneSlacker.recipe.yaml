@@ -1,0 +1,13 @@
+Description: |
+  This is the yaml stub recipe for WorkSpaceOneSlacker shared processor, so it can be
+  used by another recipe outside of this repo.
+  Sends Slack webhook notifications about WorkSpaceOne import results.
+  Instead of setting the 'Processor' key to a processor name only, we separate the
+  recipe identifier and the processor name with a slash:
+  Processor: com.github.codeskipper.VMWARE-WorkSpaceOneSlacker/WorkSpaceOneSlacker
+
+Identifier: com.github.codeskipper.VMWARE-WorkSpaceOneSlacker
+Input: {}
+MinimumVersion: "2.3"
+Process: []
+
