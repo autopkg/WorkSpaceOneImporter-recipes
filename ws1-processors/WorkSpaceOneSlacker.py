@@ -214,7 +214,7 @@ class WorkSpaceOneSlacker(WorkSpaceOneImporterBase):
                 "Request to Slack returned an error %s, the response is:\n%s" % (response.status_code, response.text)
             )
 
-        self.output(f"Slack notification sent: {title}")
+        self.output(f"Slack notification sent: {title}", verbose_level=2)
         self.env["ws1_slacker_summary_result"] = {
             "summary_text": "Slack notification sent.",
             "report_fields": ["title", "color"],
@@ -231,22 +231,22 @@ class WorkSpaceOneSlacker(WorkSpaceOneImporterBase):
         # Guard: high verbosity — avoid leaking secrets in logs
         verbose = int(self.env.get("verbose", 0))
         if verbose >= 3:
-            self.output("Skipping Slack notification — verbose level ≥3 is set.")
+            self.output("Skipping Slack notification — verbose level ≥3 is set.", verbose_level=3)
             return
 
         # Guard: missing webhook
         webhook_url = self.env.get("ws1_slack_webhook_url")
         if not webhook_url:
-            self.output("Skipping Slack notification — webhook URL is missing.")
+            self.output("Skipping Slack notification — webhook URL is missing.", verbose_level=1)
             return
 
         # Gather state — prefer report plist, fall back to env
         report_path = self.env.get("REPORT_PLIST")
         if report_path and os.path.isfile(report_path):
-            self.output(f"Reading results from report plist: {report_path}")
+            self.output(f"Reading results from report plist: {report_path}", verbose_level=2)
             results = self._parse_report_plist(report_path)
         else:
-            self.output("REPORT_PLIST not available, falling back to environment variables.")
+            self.output("REPORT_PLIST not available, falling back to environment variables.", verbose_level=1)
             results = self._gather_state_from_env()
 
         # Extract variables
@@ -356,7 +356,7 @@ class WorkSpaceOneSlacker(WorkSpaceOneImporterBase):
             )
         else:
             # Fall through — no updates, no notification
-            self.output("No updates detected — skipping Slack notification.")
+            self.output("No updates detected — skipping Slack notification.", verbose_level=1)
             return
 
         # Determine color
