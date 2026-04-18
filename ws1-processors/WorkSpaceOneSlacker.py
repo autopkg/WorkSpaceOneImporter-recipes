@@ -32,6 +32,8 @@
 # autopkg_tools_ws1_cloud_cli.py from https://github.com/equinor/autopkg-cicd.
 # The rest of the WorkSpaceOneImporter-recipes project is licensed under the Apache License 2.0.
 
+# Credits: takes elements from https://github.com/notverypc/autopkg-recipes/blob/master/PostProcessors/Slacker.py
+
 """Autopkg processor to send Slack webhook notifications about WorkSpaceOne import results."""
 
 import json
@@ -43,9 +45,9 @@ import requests
 from autopkglib import ProcessorError
 
 # Ensure ws1_lib package (sibling directory) is importable
-# comments copied from processors in https://github.com/autopkg/grahampugh-recipes
-# to use a base module in AutoPkg we need to add this path to the sys.path.
-# this violates flake8 E402 (PEP8 imports) but is unavoidable, so the following
+# Helpful comments copied from processors in https://github.com/autopkg/grahampugh-recipes
+# To use a base module in AutoPkg we need to add this path to the sys.path.
+# This violates flake8 E402 (PEP8 imports) but is unavoidable, so the following
 # imports require noqa comments for E402
 sys.path.insert(0, os.path.dirname(__file__))
 from ws1_lib.WorkSpaceOneImporterBase import WorkSpaceOneImporterBase  # noqa: E402

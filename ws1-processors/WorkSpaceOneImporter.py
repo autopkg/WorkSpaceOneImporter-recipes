@@ -33,9 +33,9 @@ from autopkglib import ProcessorError, get_pref
 from requests_toolbelt import StreamingIterator  # dependency from requests
 
 # Ensure ws1_lib package (sibling directory) is importable
-# comments copied from processors in https://github.com/autopkg/grahampugh-recipes
-# to use a base module in AutoPkg we need to add this path to the sys.path.
-# this violates flake8 E402 (PEP8 imports) but is unavoidable, so the following
+# Helpful comments copied from processors in https://github.com/autopkg/grahampugh-recipes
+# To use a base module in AutoPkg we need to add this path to the sys.path.
+# This violates flake8 E402 (PEP8 imports) but is unavoidable, so the following
 # imports require noqa comments for E402
 sys.path.insert(0, os.path.dirname(__file__))
 

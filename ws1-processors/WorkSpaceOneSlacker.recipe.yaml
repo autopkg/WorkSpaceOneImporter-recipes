@@ -4,9 +4,9 @@ Description: |
   Sends Slack webhook notifications about WorkSpaceOne import results.
   Instead of setting the 'Processor' key to a processor name only, we separate the
   recipe identifier and the processor name with a slash:
-  Processor: com.github.codeskipper.VMWARE-WorkSpaceOneSlacker/WorkSpaceOneSlacker
+  Processor: com.github.codeskipper.OMNISSA-WorkSpaceOneSlacker/WorkSpaceOneSlacker
 
-Identifier: com.github.codeskipper.VMWARE-WorkSpaceOneSlacker
+Identifier: com.github.codeskipper.OMNISSA-WorkSpaceOneSlacker
 Input: {}
 MinimumVersion: "2.3"
 Process: []
