@@ -1325,7 +1325,7 @@ class WorkSpaceOneImporter(Processor):
         app_list.sort(key=lambda x: x["date"])
 
         self.output(app_list, verbose_level=4)
-        self.output("Updating prune status", verbose_level=4)
+        self.output("Updating prune status", verbose_level=2)
         for index, row in enumerate(app_list):
             if index < (num_versions_found - keep_versions):
                 row["status"] = "TO BE PRUNED"
@@ -1339,6 +1339,18 @@ class WorkSpaceOneImporter(Processor):
             for row in app_list:
                 if row["status"] == "TO BE PRUNED":
                     self.output(f"Deleting old version {row['version']}...", verbose_level=3)
+
+                    # safeguard against removal of versions that are still assigned to devices, hardcoded limit for now
+                    if int(row["num"]) > 0:
+                        self.output(
+                            f"Version {row['version']} is still assigned to {row['num']} devices, "
+                            "cannot be deleted, bailing out.",
+                            verbose_level=1,
+                        )
+                        raise ProcessorError(
+                            f"ws1_app_versions_prune - Version {row['version']} is still assigned to {row['num']} "
+                            "devices, cannot be deleted, bailing out."
+                        )
                     try:
                         r = requests.delete(
                             f"{api_base_url}/api/mam/apps/internal/{row['App_ID']}",
