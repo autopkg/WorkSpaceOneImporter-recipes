@@ -1351,6 +1351,11 @@ class WorkSpaceOneImporter(Processor):
                             f"ws1_app_versions_prune - Version {row['version']} is still assigned to {row['num']} "
                             "devices, cannot be deleted, bailing out."
                         )
+                    else:
+                        self.output(
+                            f"Version {row['version']} is assigned to {row['num']} devices, and " "will be pruned.",
+                            verbose_level=2,
+                        )
                     try:
                         r = requests.delete(
                             f"{api_base_url}/api/mam/apps/internal/{row['App_ID']}",
