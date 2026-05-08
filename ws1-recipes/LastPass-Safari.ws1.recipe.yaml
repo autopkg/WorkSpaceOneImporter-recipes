@@ -54,7 +54,7 @@ Input:
             prevent_removal: false
 
 Process:
-- Processor: com.github.codeskipper.VMWARE-WorkSpaceOneImporter/WorkSpaceOneImporter
+- Processor: com.github.codeskipper.OMNISSA-WorkSpaceOneImporter/WorkSpaceOneImporter
   Arguments:
     ws1_oauth_client_id: '%WS1_OAUTH_CLIENT_ID%'
     ws1_oauth_client_secret: '%WS1_OAUTH_CLIENT_SECRET%'
