@@ -60,6 +60,9 @@ class WorkSpaceOneSlacker(WorkSpaceOneImporterBase):
 
     Reads results from the AutoPkg report plist (preferred) or falls back
     to environment variables set by earlier processors in the recipe chain.
+
+    If your Slack webhook was created via a modern Slack App (not a legacy Custom Integration), Slack
+    will still ignore channel, username, and icon_url, and are therefore not supported in this processor.
     """
 
     description = __doc__
@@ -69,19 +72,6 @@ class WorkSpaceOneSlacker(WorkSpaceOneImporterBase):
         "ws1_slack_webhook_url": {
             "required": True,
             "description": "Slack incoming-webhook URL to post notifications to.",
-        },
-        "ws1_slack_channel": {
-            "required": False,
-            "description": "Override Slack channel (optional, uses webhook default if omitted).",
-        },
-        "ws1_slack_username": {
-            "required": False,
-            "default": "Autopkg",
-            "description": "Display name for the Slack bot. Default: Autopkg.",
-        },
-        "ws1_slack_icon_url": {
-            "required": False,
-            "description": "URL for the Slack bot icon (optional).",
         },
         "ws1_slack_trust_verified": {
             "required": False,
@@ -181,13 +171,14 @@ class WorkSpaceOneSlacker(WorkSpaceOneImporterBase):
         }
 
     def _post_to_slack(self, webhook_url, title, description, color):
-        """Post a Slack message attachment via incoming webhook."""
-        username = self.env.get("ws1_slack_username", "Autopkg")
+        """Post a Slack message attachment via incoming webhook.
+
+        Channel, username, and icon are configured in the Slack App webhook
+        settings — modern Slack webhooks ignore payload-level overrides.
+        """
         payload = {
             "attachments": [
                 {
-                    "username": username,
-                    "as_user": True,
                     "title": title,
                     "color": color,
                     "text": description,
@@ -195,14 +186,6 @@ class WorkSpaceOneSlacker(WorkSpaceOneImporterBase):
                 }
             ]
         }
-
-        channel = self.env.get("ws1_slack_channel")
-        if channel:
-            payload["channel"] = channel
-
-        icon_url = self.env.get("ws1_slack_icon_url")
-        if icon_url:
-            payload["icon_url"] = icon_url
 
         response = requests.post(
             webhook_url,
@@ -273,10 +256,10 @@ class WorkSpaceOneSlacker(WorkSpaceOneImporterBase):
         task_description = None
 
         if not trust_verified:
-            task_title = f"{app_name} failed trust verification"
+            task_title = f"{app_name} failed trust verification (WS1_Slacker)"
             task_description = failure_message or "Trust verification failed."
         elif has_error:
-            task_title = f"Failed to import {app_name}"
+            task_title = f"Failed to import {app_name} (WS1_Slacker)"
             if not failed_items:
                 task_description = "Unknown error"
             else:
@@ -288,10 +271,7 @@ class WorkSpaceOneSlacker(WorkSpaceOneImporterBase):
                     # Just no updates — return silently
                     return
         elif munki_updated and not ws1_updated:
-            task_title = "Munki (NOT WS1 UEM!) imported %s %s" % (
-                app_name,
-                str(updated_version),
-            )
+            task_title = f"Munki (NOT WS1 UEM!) imported {app_name} {str(updated_version)} (WS1_Slacker)"
             task_description = (
                 "*Catalogs:* %s \n" % imported_items[0].get("catalogs", "")
                 + "*Package Path:* `%s` \n" % imported_items[0].get("pkg_repo_path", "")
@@ -299,7 +279,7 @@ class WorkSpaceOneSlacker(WorkSpaceOneImporterBase):
             )
         elif munki_updated and ws1_updated:
             ws1_row = ws1_results_data[0] if ws1_results_data else {}
-            task_title = "WS1 UEM and Munki - Imported"
+            task_title = "WS1 UEM and Munki - Imported (WS1_Slacker)"
             task_description = (
                 "*WS1 UEM* \n" f"App:       `{app_name}` \n" f"Version: `{ws1_row.get('version', '')}` \n"
             )
@@ -320,7 +300,7 @@ class WorkSpaceOneSlacker(WorkSpaceOneImporterBase):
                 )
         elif ws1_updated:
             ws1_row = ws1_results_data[0] if ws1_results_data else {}
-            task_title = "WS1 UEM - Imported"
+            task_title = "WS1 UEM - Imported (WS1_Slacker)"
             task_description = f"App:       `{app_name}` \n" f"Version: `{ws1_row.get('version', '')}` \n"
             if ws1_row.get("new_assignment_rules"):
                 task_description += f"*Assignment rules:* `{ws1_row['new_assignment_rules']}` \n"
@@ -333,7 +313,7 @@ class WorkSpaceOneSlacker(WorkSpaceOneImporterBase):
                 )
         elif ws1_updated_assignments:
             ws1_row = ws1_results_data[0] if ws1_results_data else {}
-            task_title = "WS1 UEM - New Assignment Rules"
+            task_title = "WS1 UEM - New Assignment Rules (WS1_Slacker)"
             task_description = (
                 f"App:       `{app_name}` \n"
                 f"Version: `{ws1_row.get('version', '')}` \n"
@@ -348,7 +328,7 @@ class WorkSpaceOneSlacker(WorkSpaceOneImporterBase):
                 )
         elif ws1_pruned:
             ws1_row = ws1_results_data[0] if ws1_results_data else {}
-            task_title = "WS1 UEM - old app versions pruned"
+            task_title = "WS1 UEM - old app versions pruned (WS1_Slacker)"
             task_description = (
                 f"App:       `{app_name}` \n"
                 f"*Pruned versions:* `{ws1_row.get('pruned_versions', '')}` \n"
