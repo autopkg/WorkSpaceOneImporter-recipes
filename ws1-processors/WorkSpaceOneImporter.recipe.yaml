@@ -4,10 +4,10 @@ Description: |
   NB - identifier is different to avoid conflict with the plist version!
   Instead of setting the 'Processor' key to a processor name only, we separate the
   recipe identifier and the processor name with a slash:
-  Processor: com.github.codeskipper.VMWARE-WorkSpaceOneImporter
+  Processor: com.github.codeskipper.OMNISSA-WorkSpaceOneImporter/WorkSpaceOneImporter
   ..assuming that this recipe is in one of AutoPkg's search dirs.
 
-Identifier: com.github.codeskipper.VMWARE-WorkSpaceOneImporter
+Identifier: com.github.codeskipper.OMNISSA-WorkSpaceOneImporter
 Input: {}
 MinimumVersion: "2.3"
 Process: []
