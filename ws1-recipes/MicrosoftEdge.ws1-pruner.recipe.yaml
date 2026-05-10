@@ -5,7 +5,7 @@ MinimumVersion: '2.3'
 
 Input:
   NAME: Microsoft Edge
-  MUNKI_REPO_SUBDIR: apps/Microsoft
+  WS1_VERSIONS_TO_KEEP: NUMBER_OF_VERSIONS_TO_KEEP_HERE
 
   # WS1 specific input,  secrets.  Only one set of API credentials is needed.
   WS1_OAUTH_CLIENT_ID: OAUTH2_CLIENT_ID_HERE
@@ -18,9 +18,6 @@ Input:
   WS1_API_URL: WORKSPACEONE_API_URL_HERE
   WS1_CONSOLE_URL: WORKSPACEONE_CONSOLE_URL_HERE
   WS1_GROUPID: GROUP_ID_HERE
-
-  # WS1-prunner specific input
-  WS1_VERSIONS_TO_KEEP: NUMBER_OF_VERSIONS_TO_KEEP_HERE
 
 Process:
 - Processor: com.github.codeskipper.OMNISSA-WorkSpaceOnePruner/WorkSpaceOnePruner
