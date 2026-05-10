@@ -54,7 +54,8 @@ class WorkSpaceOnePruner(WorkSpaceOneImporterBase):
         **WorkSpaceOneImporterBase.input_variables,
         "ws1_app_versions_to_keep": {
             "required": False,
-            "description": "The number of versions of an app to keep in WS1. Please set this in a recipe (override).\n"
+            "description": "The number of versions of an app to keep in WS1. Please set this in a recipe override, if "
+            "you do not the default is used.\n"
             " See also app_versions_prune.\n\n"
             "NB - please make sure to provide the input variable as type string in the recipe override, using "
             " an integer will result in a hard to trace runtime error 'expected string or bytes-like object'",
@@ -63,7 +64,8 @@ class WorkSpaceOnePruner(WorkSpaceOneImporterBase):
             "required": False,
             "default": "5",
             "description": "The default number of versions of an app to keep in WS1. Default:5."
-            "See also app_versions_prune.\n\n"
+            "See also app_versions_prune.\nCan be set across recipes and software titles, in this case "
+            " an environment variable is practical.\n"
             "NB - please make sure to provide the input variable as type string in the recipe override, using "
             " an integer will result in a hard to trace runtime error 'expected string or bytes-like object'",
         },
@@ -71,7 +73,9 @@ class WorkSpaceOnePruner(WorkSpaceOneImporterBase):
             "required": False,
             "default": "dry_run",
             "description": "Whether to prune old versions of an app on WS1. Possible values: True or False or "
-            "dry_run. Default:dry_run. See also app_versions_to_keep",
+            "dry_run. Default:dry_run. See also app_versions_to_keep.\n"
+            "Can be set across recipes and software titles, in this case "
+            " an environment variable is practical.",
         },
     }
 
