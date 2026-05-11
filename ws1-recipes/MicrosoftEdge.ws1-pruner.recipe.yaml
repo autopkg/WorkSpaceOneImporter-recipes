@@ -5,7 +5,7 @@ MinimumVersion: '2.3'
 
 Input:
   NAME: Microsoft Edge
-  WS1_VERSIONS_TO_KEEP: NUMBER_OF_VERSIONS_TO_KEEP_HERE
+  WS1_APP_VERSIONS_TO_KEEP: NUMBER_OF_VERSIONS_TO_KEEP_HERE
 
   # WS1 specific input,  secrets.  Only one set of API credentials is needed.
   WS1_OAUTH_CLIENT_ID: OAUTH2_CLIENT_ID_HERE
@@ -31,5 +31,5 @@ Process:
     ws1_b64encoded_api_credentials: '%WS1_B64ENCODED_API_CREDENTIALS%'
     ws1_api_url: '%WS1_API_URL%'
     ws1_groupid: '%WS1_GROUPID%'
-    ws1_app_versions_to_keep: '%WS1_VERSIONS_TO_KEEP%'
+    ws1_app_versions_to_keep: '%WS1_APP_VERSIONS_TO_KEEP%'
 
