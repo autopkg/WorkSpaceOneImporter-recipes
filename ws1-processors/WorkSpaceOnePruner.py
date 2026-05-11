@@ -139,7 +139,7 @@ class WorkSpaceOnePruner(WorkSpaceOneImporterBase):
         get ws1_app_versions_to_keep_default, defaults to 5
         """
         keep_versions_default_str = self.env.get("ws1_app_versions_to_keep_default", "5")
-        self.output(f"ws1_app_versions_to_keep_default: {keep_versions_default_str}", verbose_level=2)
+        self.output(f"ws1_app_versions_to_keep_default: {keep_versions_default_str}", verbose_level=3)
         keep_versions_default = extract_first_integer_from_string(keep_versions_default_str)
         if keep_versions_default < 1:
             self.output(
@@ -153,6 +153,7 @@ class WorkSpaceOnePruner(WorkSpaceOneImporterBase):
           an int will result in a hard to trace runtime error "expected string or bytes-like object"
         """
         keep_versions_str = self.env.get("ws1_app_versions_to_keep")
+        self.output(f"ws1_app_versions_to_keep: {keep_versions_str}", verbose_level=3)
         if keep_versions_str is not None:
             keep_versions = extract_first_integer_from_string(keep_versions_str)
         else:
