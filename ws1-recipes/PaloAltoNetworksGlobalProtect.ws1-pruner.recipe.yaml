@@ -1,0 +1,35 @@
+Comment:
+Description: Prune old versions of Palo Alto Networks GlobalProtect from Workspace ONE, keep the given number of versions.
+Identifier: com.github.codeskipper.ws1-pruner.PaloAltoNetworksGlobalProtect
+MinimumVersion: '2.3'
+
+Input:
+  NAME: Palo Alto Networks GlobalProtect
+  WS1_APP_VERSIONS_TO_KEEP: NUMBER_OF_VERSIONS_TO_KEEP_HERE
+
+  # WS1 specific input,  secrets.  Only one set of API credentials is needed.
+  WS1_OAUTH_CLIENT_ID: OAUTH2_CLIENT_ID_HERE
+  WS1_OAUTH_CLIENT_SECRET: OAUTH2_CLIENT_CLIENT_SECRET_HERE
+  WS1_OAUTH_TOKEN_URL: OAUTH2_ACCESS_TOKEN_SERVER_URL_HERE
+  WS1_API_USERNAME: API_USERNAME_HERE
+  WS1_API_PASSWORD: API_PASSWORD_HERE
+  WS1_API_TOKEN: API_TOKEN_HERE
+  WS1_B64ENCODED_API_CREDENTIALS: B64ENCODED_API_CREDENTIALS_HERE
+  WS1_API_URL: WORKSPACEONE_API_URL_HERE
+  WS1_CONSOLE_URL: WORKSPACEONE_CONSOLE_URL_HERE
+  WS1_GROUPID: GROUP_ID_HERE
+
+Process:
+- Processor: com.github.codeskipper.OMNISSA-WorkSpaceOnePruner/WorkSpaceOnePruner
+  Arguments:
+    ws1_oauth_client_id: '%WS1_OAUTH_CLIENT_ID%'
+    ws1_oauth_client_secret: '%WS1_OAUTH_CLIENT_SECRET%'
+    ws1_oauth_token_url: '%WS1_OAUTH_TOKEN_URL%'
+    ws1_api_token: '%WS1_API_TOKEN%'
+    ws1_api_username: '%WS1_API_USERNAME%'
+    ws1_api_password: '%WS1_API_PASSWORD%'
+    ws1_b64encoded_api_credentials: '%WS1_B64ENCODED_API_CREDENTIALS%'
+    ws1_api_url: '%WS1_API_URL%'
+    ws1_groupid: '%WS1_GROUPID%'
+    ws1_app_versions_to_keep: '%WS1_APP_VERSIONS_TO_KEEP%'
+
