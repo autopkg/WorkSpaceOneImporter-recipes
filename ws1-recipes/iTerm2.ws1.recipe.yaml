@@ -5,6 +5,7 @@ ParentRecipe: io.github.hjuutilainen.munki.iTerm2
 MinimumVersion: '2.3'
 
 Input:
+  NAME: iTerm2
 
   # WS1 specific input,  secrets
   WS1_OAUTH_CLIENT_ID: OAUTH2_CLIENT_ID_HERE

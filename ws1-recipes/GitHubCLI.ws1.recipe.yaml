@@ -5,6 +5,7 @@ ParentRecipe: com.github.homebysix.munki.GitHubCLI
 MinimumVersion: '2.3'
 
 Input:
+  NAME: GitHub CLI
   MUNKI_REPO_SUBDIR: 'apps/%NAME%'
   MUNKI_CATEGORY: 'Development'
   pkginfo:
