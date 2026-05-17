@@ -150,6 +150,16 @@ class WorkSpaceOneSlacker(WorkSpaceOneImporterBase):
         if isinstance(ws1_summary, dict) and ws1_summary.get("data"):
             ws1_results_data.append(ws1_summary["data"])
 
+        # Also capture pruner results (for version and pruning details)
+        pruner_summary = self.env.get("ws1_pruner_summary_result")
+        if isinstance(pruner_summary, dict) and pruner_summary.get("data"):
+            # If we have pruner data, merge it with importer data if available,
+            # or use it standalone if no importer data exists
+            if ws1_results_data:
+                ws1_results_data[0].update(pruner_summary["data"])
+            else:
+                ws1_results_data.append(pruner_summary["data"])
+
         failed_items = []
         ws1_stderr = self.env.get("ws1_stderr", "")
         failure_message = self.env.get("ws1_slack_failure_message", "")
