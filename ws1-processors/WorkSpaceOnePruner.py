@@ -157,10 +157,15 @@ class WorkSpaceOnePruner(WorkSpaceOneImporterBase):
             keep_versions = extract_first_integer_from_string(keep_versions_str)
             if keep_versions is None:
                 raise ValueError("No integer found in ws1_app_versions_to_keep")
+            self.output(
+                f"ws1_app_versions_to_keep: {keep_versions_str}.",
+                verbose_level=2,
+            )
         except ValueError:
             self.output(
                 f"ws1_app_versions_to_keep setting {keep_versions_str} is out of range, "
-                f"setting default of {keep_versions_default}."
+                f"setting default of {keep_versions_default}.",
+                verbose_level=2,
             )
             keep_versions = keep_versions_default
 
