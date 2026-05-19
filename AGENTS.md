@@ -59,3 +59,8 @@ Copy an existing `.ws1.recipe.yaml` from `ws1-recipes/` (e.g., `Firefox.ws1.reci
 ## Planned Refactoring
 
 The processor is being split for [cloud-autopkg-runner (CAR)](https://pypi.org/project/cloud-autopkg-runner/) compatibility. Future processors (`WorkSpaceOneUploader`, `WorkSpaceOneAssigner`, `WorkSpaceOnePruner`) will each inherit `WorkSpaceOneImporterBase`. See `ws1-processors/ws1_lib/REFACTOR_PROMPT 01.separate out supporting functions into library.md`.
+
+
+## Prompt and results summary saving style
+
+- **Prompt and results** are saved in a new, separate Markdown file, with the prompt at the top and results below.  Folder structure is `ws1-processors/ws1_lib/REFACTOR_PROMPT <number>.<short-description>.md`.

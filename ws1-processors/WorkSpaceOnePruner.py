@@ -20,7 +20,6 @@
 """Autopkg processor to prune old app versions from Omnissa Workspace ONE UEM using REST API."""
 
 import os
-import re
 import sys
 from datetime import datetime
 
@@ -34,17 +33,12 @@ from autopkglib import ProcessorError
 # imports require noqa comments for E402
 sys.path.insert(0, os.path.dirname(__file__))
 
-from ws1_lib.WorkSpaceOneImporterBase import WorkSpaceOneImporterBase  # noqa: E402
+from ws1_lib.WorkSpaceOneImporterBase import (  # noqa: E402
+    WorkSpaceOneImporterBase,
+    extract_first_integer_from_string,
+)
 
 __all__ = ["WorkSpaceOnePruner"]
-
-
-def extract_first_integer_from_string(s):
-    """Search for the first occurrence of a sequence of digits and return as int."""
-    match = re.search(r"\d+", s)
-    if match:
-        return int(match.group())
-    return None
 
 
 class WorkSpaceOnePruner(WorkSpaceOneImporterBase):

@@ -21,6 +21,7 @@
 
 import base64
 import os
+import re
 import subprocess
 from datetime import datetime, timedelta
 from urllib.parse import urlparse
@@ -96,6 +97,14 @@ def is_url(url):
         return all([result.scheme, result.netloc])
     except ValueError:
         return False
+
+
+def extract_first_integer_from_string(s):
+    """Search for the first occurrence of a sequence of digits and return as int."""
+    match = re.search(r"\d+", s)
+    if match:
+        return int(match.group())
+    return None
 
 
 class WorkSpaceOneImporterBase(Processor):

@@ -41,6 +41,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 
 from ws1_lib.WorkSpaceOneImporterBase import (  # noqa: E402
     WorkSpaceOneImporterBase,
+    extract_first_integer_from_string,
     is_url,
 )
 
@@ -70,15 +71,6 @@ def getsha256hash(filename):
         return hasher.hexdigest()
     except OSError:
         return "HASH_ERROR"
-
-
-def extract_first_integer_from_string(s):
-    # Search for the first occurrence of a sequence of digits
-    match = re.search(r"\d+", s)
-    if match:
-        # Convert the first match to an integer and return it
-        return int(match.group())
-    return None
 
 
 def stream_file(filepath, url, headers):
