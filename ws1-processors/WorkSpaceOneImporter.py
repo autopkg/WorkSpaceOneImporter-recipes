@@ -17,7 +17,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Autopkg processor to upload files from a Munki repo to VMWare Workspace ONE UEM using REST API"""
+"""Autopkg processor to upload files from a Munki repo to Omnissa Workspace ONE UEM using REST API"""
 
 import hashlib
 import json

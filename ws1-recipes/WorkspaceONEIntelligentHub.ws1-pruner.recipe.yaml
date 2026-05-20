@@ -1,10 +1,10 @@
 Comment:
-Description: Prune old versions of VMWare Workspace ONE Intelligent Hub from Workspace ONE, keep the given number of versions.
+Description: Prune old versions of Omnissa Workspace ONE Intelligent Hub from Workspace ONE, keep the given number of versions.
 Identifier: com.github.codeskipper.ws1-pruner.WorkspaceONEIntelligentHub
 MinimumVersion: '2.3'
 
 Input:
-  NAME: VMWare Workspace ONE Intelligent Hub
+  NAME: Omnissa Workspace ONE Intelligent Hub
   WS1_APP_VERSIONS_TO_KEEP: NUMBER_OF_VERSIONS_TO_KEEP_HERE
 
   # WS1 specific input,  secrets.  Only one set of API credentials is needed.

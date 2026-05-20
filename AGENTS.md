@@ -11,7 +11,7 @@ Custom [AutoPkg](https://github.com/autopkg/autopkg) shared processor and recipe
 - **`ws1-processors/ws1_lib/`** — Python package (`__init__.py` re-exports `WorkSpaceOneImporterBase`). Imported via `sys.path.insert(0, os.path.dirname(__file__))` in the processor — this `sys.path` hack is required by AutoPkg's shared processor loading; keep the `# noqa: E402` comments on the resulting imports.
 - **`ws1-recipes/`** — YAML `.ws1.recipe.yaml` files. Each chains a community munki `ParentRecipe` with the shared processor. Secrets are templated as `%WS1_*%` variables.
 - **`ws1-parent-recipes/`** — Custom munki parent recipes for apps not in community repos.
-- **`ws1-processors/WorkSpaceOneImporter.recipe.yaml`** — Stub recipe that registers the shared processor identifier `com.github.codeskipper.VMWARE-WorkSpaceOneImporter`. Recipes reference it as `com.github.codeskipper.VMWARE-WorkSpaceOneImporter/WorkSpaceOneImporter`.
+- **`ws1-processors/WorkSpaceOneImporter.recipe.yaml`** — Stub recipe that registers the shared processor identifier `com.github.codeskipper.OMNISSA-WorkSpaceOneImporter`. Recipes reference it as `com.github.codeskipper.OMNISSA-WorkSpaceOneImporter/WorkSpaceOneImporter`.
 
 ## Key Conventions
 

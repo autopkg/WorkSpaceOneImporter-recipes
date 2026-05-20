@@ -1,15 +1,15 @@
 Comment: |
   Import to WS1 as native app to deploy as update. Avoids issue with No hub deployed on newly enrolled Macs, which
-  is triggered by asking VMWare support to seed new versions in UEM
+  is triggered by asking Omnissa support to seed new versions in UEM
 Description: |
-  Downloads and Creates a munki package for VMWare Workspace ONE Intelligent Hub, imports it into
+  Downloads and Creates a munki package for Omnissa Workspace ONE Intelligent Hub, imports it into
   WorkSpace ONE UEM, and makes assignment rules.
 Identifier: com.github.codeskipper.ws1.WorkspaceONEIntelligentHub
 ParentRecipe: io.github.hjuutilainen.munki.WorkspaceONEIntelligentHub
 MinimumVersion: '2.3'
 
 Input:
-  NAME: VMWare Workspace ONE Intelligent Hub
+  NAME: Omnissa Workspace ONE Intelligent Hub
 
   # WS1 specific input,  secrets
   WS1_OAUTH_CLIENT_ID: OAUTH2_CLIENT_ID_HERE
