@@ -84,50 +84,6 @@ class WorkSpaceOnePruner(WorkSpaceOneImporterBase):
 
     description = __doc__
 
-    def _resolve_ogid(self, api_base_url, org_group_id, headers_v2):
-        """Resolve the WS1 Organization Group ID from the textual GroupID."""
-        try:
-            r = requests.get(
-                f"{api_base_url}/api/system/groups/search?groupid={org_group_id}",
-                headers=headers_v2,
-            )
-            result = r.json()
-            r.raise_for_status()
-        except AttributeError:
-            raise ProcessorError(
-                f"WorkSpaceOnePruner: Unable to retrieve an ID for the Organizational GroupID specified: {org_group_id}"
-            )
-        except requests.exceptions.HTTPError as err:
-            raise ProcessorError(
-                f"WorkSpaceOnePruner: Server responded with error when making the OG ID API call: {err}"
-            )
-        except requests.exceptions.RequestException as e:
-            raise ProcessorError(f"WorkSpaceOnePruner: Error making the OG ID API call: {e}")
-
-        ogid = ""
-        if org_group_id in result["OrganizationGroups"][0]["GroupId"]:
-            ogid = result["OrganizationGroups"][0]["Id"]
-        self.output(f"Organisation group ID: {ogid}", verbose_level=2)
-        return ogid
-
-    def _search_apps(self, api_base_url, ogid, app_name, headers):
-        """Search WS1 for existing versions of the given app."""
-        condensed_app_name = app_name.replace(" ", "%20")
-        try:
-            r = requests.get(
-                f"{api_base_url}/api/mam/apps/search?locationgroupid={ogid}&applicationname={condensed_app_name}",
-                headers=headers,
-            )
-        except Exception:
-            raise ProcessorError("WorkSpaceOnePruner: Something went wrong searching for app on server.")
-        if r.status_code != 200:
-            self.output(
-                f"App search returned status {r.status_code}, no apps found to prune.",
-                verbose_level=1,
-            )
-            return None
-        return r.json()
-
     def ws1_app_versions_prune(self, api_base_url, headers, app_name, search_results):
         """
         get ws1_app_versions_to_keep_default, defaults to 5
@@ -339,10 +295,10 @@ class WorkSpaceOnePruner(WorkSpaceOneImporterBase):
         headers, headers_v2 = self.ws1_auth_prep()
 
         # Resolve Organization Group numeric ID
-        ogid = self._resolve_ogid(api_base_url, org_group_id, headers_v2)
+        ogid = self.resolve_ogid(api_base_url, org_group_id, headers_v2)
 
         # Search for existing app versions
-        search_results = self._search_apps(api_base_url, ogid, app_name, headers)
+        search_results = self.search_apps(api_base_url, ogid, app_name, headers)
         if search_results is None:
             self.output("No app versions found on server, nothing to prune.")
             return

@@ -272,41 +272,11 @@ class WorkSpaceOneImporter(WorkSpaceOneImporterBase):
         headers, headers_v2 = self.ws1_auth_prep()
 
         # get OG ID from GROUPID
-        result = ""
-        try:
-            r = requests.get(
-                f"{api_base_url}/api/system/groups/search?groupid={org_group_id}",
-                headers=headers_v2,
-            )
-            result = r.json()
-            r.raise_for_status()
-        except AttributeError:
-            raise ProcessorError(
-                "WorkSpaceOneImporter:"
-                f"Unable to retrieve an ID for the Organizational GroupID specified: {org_group_id}"
-            )
-        except requests.exceptions.HTTPError as err:
-            raise ProcessorError(
-                f"WorkSpaceOneImporter: Server responded with error when making the OG ID API call: {err}"
-            )
-        except requests.exceptions.RequestException as e:
-            ProcessorError(f"WorkSpaceOneImporter: Error making the OG ID API call: {e}")
-        ogid = ""
-        if org_group_id in result["OrganizationGroups"][0]["GroupId"]:
-            ogid = result["OrganizationGroups"][0]["Id"]
-        self.output(f"Organisation group ID: {ogid}", verbose_level=2)
+        ogid = self.resolve_ogid(api_base_url, org_group_id, headers_v2)
 
         # Check for app versions already present on WS1 server
-        try:
-            condensed_app_name = app_name.replace(" ", "%20")
-            r = requests.get(
-                f"{api_base_url}/api/mam/apps/search?locationgroupid={ogid}&applicationname=" f"{condensed_app_name}",
-                headers=headers,
-            )
-        except Exception:
-            raise ProcessorError("Something went wrong handling pre-existing app version on server")
-        if r.status_code == 200:
-            search_results = r.json()
+        search_results = self.search_apps(api_base_url, ogid, app_name, headers)
+        if search_results is not None:
 
             # handle older versions of app already present on WS1 UEM
             self.ws1_app_versions_prune(api_base_url, headers, app_name, search_results)
@@ -409,7 +379,7 @@ class WorkSpaceOneImporter(WorkSpaceOneImporterBase):
                             )
                         self.output(f"Pre-existing App [ID: {ws1_app_id}] now successfully deleted")
                         break
-        elif r.status_code == 204:
+        else:
             # app not found on WS1 server, so we're fine to proceed with upload
             self.output(f"App [{app_name}] version [{app_version}] is not yet present on server, will attempt upload")
 

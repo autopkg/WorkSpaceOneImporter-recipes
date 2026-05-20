@@ -440,3 +440,68 @@ class WorkSpaceOneImporterBase(Processor):
         self.output(f"API v.2 call headers: {headers_v2}", verbose_level=4)
 
         return headers, headers_v2
+
+    def resolve_ogid(self, api_base_url, org_group_id, headers_v2):
+        """Resolve the WS1 Organization Group numeric ID from the textual GroupID.
+
+        Args:
+            api_base_url: Base URL of the WS1 UEM REST API server.
+            org_group_id: The textual Organization Group ID to resolve.
+            headers_v2: HTTP headers dict including API v2 Accept header.
+
+        Returns:
+            The numeric Organization Group ID.
+
+        Raises:
+            ProcessorError: If the OG ID cannot be resolved.
+        """
+        try:
+            r = requests.get(
+                f"{api_base_url}/api/system/groups/search?groupid={org_group_id}",
+                headers=headers_v2,
+            )
+            result = r.json()
+            r.raise_for_status()
+        except AttributeError:
+            raise ProcessorError(f"Unable to retrieve an ID for the Organizational GroupID specified: {org_group_id}")
+        except requests.exceptions.HTTPError as err:
+            raise ProcessorError(f"Server responded with error when making the OG ID API call: {err}")
+        except requests.exceptions.RequestException as e:
+            raise ProcessorError(f"Error making the OG ID API call: {e}")
+
+        ogid = ""
+        if org_group_id in result["OrganizationGroups"][0]["GroupId"]:
+            ogid = result["OrganizationGroups"][0]["Id"]
+        self.output(f"Organisation group ID: {ogid}", verbose_level=2)
+        return ogid
+
+    def search_apps(self, api_base_url, ogid, app_name, headers):
+        """Search WS1 for existing versions of the given app.
+
+        Args:
+            api_base_url: Base URL of the WS1 UEM REST API server.
+            ogid: Numeric Organization Group ID.
+            app_name: Application name to search for.
+            headers: HTTP headers dict for API authentication.
+
+        Returns:
+            JSON response dict from the app search API, or None if no apps found.
+
+        Raises:
+            ProcessorError: If the API call fails with an exception.
+        """
+        condensed_app_name = app_name.replace(" ", "%20")
+        try:
+            r = requests.get(
+                f"{api_base_url}/api/mam/apps/search?locationgroupid={ogid}&applicationname={condensed_app_name}",
+                headers=headers,
+            )
+        except Exception:
+            raise ProcessorError("Something went wrong searching for app on server.")
+        if r.status_code != 200:
+            self.output(
+                f"App search returned status {r.status_code}, no apps found.",
+                verbose_level=1,
+            )
+            return None
+        return r.json()

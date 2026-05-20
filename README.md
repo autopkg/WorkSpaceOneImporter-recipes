@@ -49,10 +49,12 @@ Therefore, the plan is to separate out the code for API client in a Python libra
 App assignments, and pruning of old versions can then be moved to separate processors, so they can be run either as pre-processors, or on a separate schedule.
 Code for Slack notifications is to be moved from a Python script with the runner in the CICD repo to a separate processor in this repo, so it can be used when running with CAR when processing recipes concurrently.
 
-ToDo:
- * optimise for [cloud-autopkg-runner (CAR)](https://pypi.org/project/cloud-autopkg-runner/) and share example code for that
+Done:
    * add WS1 Slack notification code to a new custom processor
    * separate out the pruning code to a new custom processor
+
+ToDo:
+ * optimise for [cloud-autopkg-runner (CAR)](https://pypi.org/project/cloud-autopkg-runner/) and share example code for that
    * separate out the app assignment code to a new custom processor
  * publish separate example / demo repo
  * expand usage documentation in wiki
