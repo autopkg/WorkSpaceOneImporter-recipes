@@ -41,7 +41,6 @@ sys.path.insert(0, os.path.dirname(__file__))
 
 from ws1_lib.WorkSpaceOneImporterBase import (  # noqa: E402
     WorkSpaceOneImporterBase,
-    extract_first_integer_from_string,
     is_url,
 )
 
@@ -123,27 +122,6 @@ class WorkSpaceOneImporter(WorkSpaceOneImporterBase):
             "placeholder. NOT as Processor input var as it is "
             "too complex to be be substituted. MUST override.\n\n"
             "See https://github.com/codeskipper/WorkSpaceOneImporter/wiki/ws1_app_assignments\n",
-        },
-        "ws1_app_versions_to_keep": {
-            "required": False,
-            "description": "The number of versions of an app to keep in WS1. Please set this in a recipe (override).\n"
-            " See also app_versions_prune.\n\n"
-            "NB - please make sure to provide the input variable as type string in the recipe override, using "
-            " an integer will result in a hard to trace runtime error 'expected string or bytes-like object'",
-        },
-        "ws1_app_versions_to_keep_default": {
-            "required": False,
-            "default": "5",
-            "description": "The default number of versions of an app to keep in WS1. Default:5."
-            "See also app_versions_prune.\n\n"
-            "NB - please make sure to provide the input variable as type string in the recipe override, using "
-            " an integer will result in a hard to trace runtime error 'expected string or bytes-like object'",
-        },
-        "ws1_app_versions_prune": {
-            "required": False,
-            "default": "dry_run",
-            "description": "Whether to prune old versions of an app on WS1. Possible values: True or False or "
-            "dry_run. Default:dry_run. See also app_versions_to_keep",
         },
     }
 
@@ -277,9 +255,6 @@ class WorkSpaceOneImporter(WorkSpaceOneImporterBase):
         # Check for app versions already present on WS1 server
         search_results = self.search_apps(api_base_url, ogid, app_name, headers)
         if search_results is not None:
-
-            # handle older versions of app already present on WS1 UEM
-            self.ws1_app_versions_prune(api_base_url, headers, app_name, search_results)
 
             # handle any updates that might be needed for the latest app version already present on WS1 UEM
             for app in search_results["Application"]:
@@ -798,191 +773,6 @@ class WorkSpaceOneImporter(WorkSpaceOneImporterBase):
             raise ProcessorError(f"Unable to assign the app [{self.env['NAME']}] to the group [{smart_group}]")
         self.env["ws1_app_assignments_changed"] = True
         self.output(f"Successfully assigned the app [{self.env['NAME']}] to the group [{smart_group}]")
-
-    def ws1_app_versions_prune(self, api_base_url, headers, app_name, search_results):
-        """
-        get ws1_app_versions_to_keep_default, defaults to 5
-        """
-        keep_versions_default_str = self.env.get("ws1_app_versions_to_keep_default", "5")
-        keep_versions_default = extract_first_integer_from_string(keep_versions_default_str)
-        if keep_versions_default < 1:
-            self.output(
-                f"ws1_app_versions_to_keep_default setting {keep_versions_default:d} is out of range, "
-                "setting default of 5."
-            )
-            keep_versions_default = 5
-
-        """
-        NB - please make sure to provide the input variable as type string in the recipe override, providing as
-          an int will result in a hard to trace runtime error "expected string or bytes-like object"
-        """
-        keep_versions_str = self.env.get("ws1_app_versions_to_keep")
-        if keep_versions_str is not None:
-            keep_versions = extract_first_integer_from_string(keep_versions_str)
-        else:
-            keep_versions = 0
-        if keep_versions < 1:
-            self.output(
-                f"ws1_app_versions_to_keep setting {keep_versions:d} is out of range, "
-                f"setting default of {keep_versions_default}."
-            )
-            keep_versions = keep_versions_default
-        else:
-            self.output(f"ws1_app_versions_to_keep is set to: {keep_versions}", verbose_level=2)
-
-        if self.env.get("ws1_app_versions_prune", "True").lower() in ("true", "0", "t"):
-            app_versions_prune = "True"
-        elif self.env.get("ws1_app_versions_prune", "False").lower() in (
-            "false",
-            "1",
-            "f",
-        ):
-            # app_versions_prune = "False"
-            self.output("app_versions_prune is set to False, skipping")
-            return None
-        else:
-            app_versions_prune = "dry_run"
-        self.output(f"ws1_app_versions_prune is set to: {app_versions_prune}", verbose_level=2)
-
-        num_versions_found = 0
-
-        # prepare API V2 headers
-        headers_v2 = dict(headers)
-        headers_v2["Accept"] = f"{headers['Accept']};version=2"
-        self.output(f"API v.2 call headers: {headers_v2}", verbose_level=4)
-
-        self.output(f"Looking for old versions of {app_name} on WorkspaceONE")
-        app_list = []
-
-        for app in search_results["Application"]:
-            if app["Platform"] == 10 and app["ApplicationName"] in app_name:
-                # get assignment rules to find first deployment date
-                try:
-                    r = requests.get(
-                        f"{api_base_url}/api/mam/apps/{app['Uuid']}/assignment-rules",
-                        headers=headers_v2,
-                    )
-                    result = r.json()
-                except requests.exceptions.RequestException:
-                    raise ProcessorError("API call to get existing app assignment rules failed")
-                if not r.status_code == 200:
-                    raise ProcessorError(
-                        f"WorkSpaceOneImporter: Unable to get existing app assignment rules from WS1 "
-                        f"- message: {result['message']}."
-                    )
-                try:
-                    """ugly hack to split just the date at the T from the returned ISO-8601 as we don't care about the
-                    time may have a float as seconds or an int
-                    no timezone is returned in UEM v.22.12 but suspect that might change
-                    datetime.fromisoformat() can't handle the above in current Python v3.10
-                    alternative would be to install python-dateutil but that would introduce a new dependency
-                    """
-                    e_date = "".join(result["assignments"][0]["distribution"]["effective_date"].split("T", 1)[:1])
-                    self.output(
-                        f"Deployment date found in assignment #0: {[e_date]} ",
-                        verbose_level=4,
-                    )
-                    ws1_app_ass_day0_str = datetime.fromisoformat(e_date).date().isoformat()
-
-                    num_versions_found += 1
-                    app_list.append(
-                        {
-                            "App_ID": app["Id"]["Value"],
-                            "UUID:": app["Uuid"],
-                            "version": app["ActualFileVersion"],
-                            "date": ws1_app_ass_day0_str,
-                            "num": app["AssignedDeviceCount"],
-                            "status": "n/a",
-                        }
-                    )
-                except IndexError:
-                    self.output(
-                        "Failed to find deployment date in Assignments, skipping "
-                        f"version:{app['ActualFileVersion']}...!"
-                    )
-                    ws1_app_ass_day0_str = "UNKNOWN!"
-                self.output(
-                    f"App ID: [{app['Id']['Value']}] UUID: [{app['Uuid']}] "
-                    f"version: [{app['ActualFileVersion']}] "
-                    f"deployment date: {ws1_app_ass_day0_str} "
-                    f"Assigned device count: [{app['AssignedDeviceCount']}]",
-                    verbose_level=3,
-                )
-
-        self.output("Sorting app version list by date", verbose_level=4)
-
-        # works as intended, but PyCharm code inspection throws warning, not sure if it needs type hints or how
-        # see: https://stackoverflow.com/q/78764269/4326287
-        # Unexpected type(s):((x: Any) -> Any)Possible type(s):(None)(Callable[Any, SupportsDunderLT | SupportsDunderGT]) # noqa: E501
-        app_list.sort(key=lambda x: x["date"])
-
-        self.output(app_list, verbose_level=4)
-        self.output("Updating prune status", verbose_level=2)
-        for index, row in enumerate(app_list):
-            if index < (num_versions_found - keep_versions):
-                row["status"] = "TO BE PRUNED"
-            else:
-                row["status"] = "keep"
-            self.output(row, verbose_level=2)
-        self.output(f"App {app_name}  - found {num_versions_found} versions")
-        if app_versions_prune == "True":
-            num_pruned = 0
-            pruned_versions = ""
-            for row in app_list:
-                if row["status"] == "TO BE PRUNED":
-                    self.output(f"Deleting old version {row['version']}...", verbose_level=3)
-
-                    # safeguard against removal of versions that are still assigned to devices, hardcoded limit for now
-                    if int(row["num"]) > 0:
-                        self.output(
-                            f"Version {row['version']} is still assigned to {row['num']} devices, "
-                            "cannot be deleted, bailing out.",
-                            verbose_level=1,
-                        )
-                        raise ProcessorError(
-                            f"ws1_app_versions_prune - Version {row['version']} is still assigned to {row['num']} "
-                            "devices, cannot be deleted, bailing out."
-                        )
-                    else:
-                        self.output(
-                            f"Version {row['version']} is assigned to {row['num']} devices, and " "will be pruned.",
-                            verbose_level=2,
-                        )
-                    try:
-                        r = requests.delete(
-                            f"{api_base_url}/api/mam/apps/internal/{row['App_ID']}",
-                            headers=headers,
-                        )
-                    except requests.exceptions.RequestException as err:
-                        raise ProcessorError(
-                            f"ws1_app_versions_prune - delete of pre-existing app failed, error: {err}, aborting."
-                        )
-                    if not r.status_code == 202 and not r.status_code == 204:
-                        self.output(f"App delete status code: {r.status_code}", verbose_level=4)
-                        self.output(f"App delete response: {r.text}", verbose_level=4)
-                        result = r.json()
-                        self.output(f"App delete result: {result}", verbose_level=3)
-                        raise ProcessorError("ws1_app_versions_prune - delete of old app version failed, aborting.")
-                    else:
-                        self.output(
-                            f"Successfully deleted old version {row['version']}",
-                            verbose_level=2,
-                        )
-                        row["status"] = "PRUNED"
-                        pruned_versions += f"[{row['version']}] "
-                        num_pruned += 1
-            if num_pruned > 0:
-                self.output(f"Successfully deleted {num_pruned} old versions", verbose_level=1)
-                self.env["ws1_pruned"] = True
-                self.env["ws1_importer_summary_result"] = {
-                    "summary_text": "Old software versions pruned",
-                    "report_fields": ["name", "pruned_versions", "pruned_versions_num"],
-                    "data": {
-                        "name": app_name,
-                        "pruned_versions": pruned_versions,
-                        "pruned_versions_num": str(num_pruned),
-                    },
-                }
 
     def main(self):
         """Rebuild Munki catalogs in repo_path"""
