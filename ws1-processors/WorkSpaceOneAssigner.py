@@ -64,7 +64,7 @@ class WorkSpaceOneAssigner(WorkSpaceOneImporterBase):
         "ws1_app_assignments": {
             "required": False,
             "description": "Advanced app assignments (API V2 rules). Complex structure — "
-            "see https://github.com/codeskipper/WorkSpaceOneImporter/wiki/ws1_app_assignments\n",
+            "see https://github.com/autopkg/WorkSpaceOneImporter-recipes/wiki/ws1_app_assignments",
         },
     }
 
