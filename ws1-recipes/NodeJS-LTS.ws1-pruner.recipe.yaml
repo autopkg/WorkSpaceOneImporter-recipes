@@ -4,7 +4,7 @@ Identifier: com.github.codeskipper.ws1-pruner.NodeJSLTS
 MinimumVersion: '2.3'
 
 Input:
-  NAME: 'Node JS LTS'
+  NAME: Node JS LTS
   WS1_APP_VERSIONS_TO_KEEP: NUMBER_OF_VERSIONS_TO_KEEP_HERE
 
   # WS1 specific input,  secrets.  Only one set of API credentials is needed.

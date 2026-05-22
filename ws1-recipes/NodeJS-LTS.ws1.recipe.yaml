@@ -5,7 +5,7 @@ ParentRecipe: com.github.dataJAR-recipes.munki.nodejslts
 MinimumVersion: '2.3'
 
 Input:
-  NAME: 'Node JS LTS'
+  NAME: Node JS LTS
   MUNKI_REPO_SUBDIR: ''
   MUNKI_CATEGORY: 'Development'
   pkginfo:

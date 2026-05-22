@@ -1,27 +1,13 @@
 Comment: |
   recipe with ws1_assignments for AppsV2 API style assignment-rules
   See https://as135.awmdm.com/API/help/#!/apis/10001?!%2FAppsV2%2FAppsV2_UpdateAssignmentRuleAsync
-Description: Downloads and Creates a Munki package for Microsoft Company Portal, imports it into WorkSpace ONE UEM, and makes assignment rules.
-Identifier: com.github.codeskipper.ws1.MicrosoftVisualStudioCode
-ParentRecipe: com.github.valdore86.munki.visualstudiocode
+Description: Assigns Microsoft Teams to smart groups in WorkSpace ONE UEM using assignment rules.
+Identifier: com.github.codeskipper.ws1-assigner.MicrosoftTeams
+
 MinimumVersion: '2.3'
 
 Input:
-  NAME: Microsoft Visual Studio Code
-  DISPLAY_NAME: Microsoft Visual Studio Code
-  MUNKI_REPO_SUBDIR: apps/Microsoft
-  pkginfo:
-    catalogs:
-    - testing
-    category: Development
-    developer: Microsoft
-    description: |
-      Code combines the streamlined UI of a modern editor with rich code assistance and navigation, and an integrated debugging experience – without the need for a full IDE.
-    display_name: '%DISPLAY_NAME%'
-    name: '%NAME%'
-    unattended_install: true
-    unattended_uninstall: true
-
+  NAME: Microsoft Teams
 
   # WS1 specific input,  secrets
   WS1_OAUTH_CLIENT_ID: OAUTH2_CLIENT_ID_HERE
@@ -37,7 +23,9 @@ Input:
   WS1_SMART_GROUP_NAME: SMART_GROUP_NAME_HERE
   WS1_PUSH_MODE: PUSH_MODE_SETTING
 
-  # WS1 - testing new AppsV2 assignments feature
+  # WS1 - AppsV2 advanced assignments input
+  # NOTE: This key must be lowercase to match the processor's input_variables key name directly.
+  # Complex types (lists/dicts) cannot use AutoPkg's %VAR% string substitution in Arguments.
   ws1_app_assignments:
       - distribution:
           name: ASSIGNMENT_NAME
@@ -57,7 +45,7 @@ Input:
             prevent_removal: false
 
 Process:
-- Processor: com.github.codeskipper.OMNISSA-WorkSpaceOneImporter/WorkSpaceOneImporter
+- Processor: com.github.codeskipper.OMNISSA-WorkSpaceOneAssigner/WorkSpaceOneAssigner
   Arguments:
     ws1_oauth_client_id: '%WS1_OAUTH_CLIENT_ID%'
     ws1_oauth_client_secret: '%WS1_OAUTH_CLIENT_SECRET%'
@@ -71,3 +59,4 @@ Process:
     ws1_groupid: '%WS1_GROUPID%'
     ws1_smart_group_name: '%WS1_SMART_GROUP_NAME%'
     ws1_push_mode: '%WS1_PUSH_MODE%'
+
