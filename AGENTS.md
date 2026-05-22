@@ -63,4 +63,4 @@ The processor is being split for [cloud-autopkg-runner (CAR)](https://pypi.org/p
 
 ## Prompt and results summary saving style
 
-- **Prompt and results** are saved in a new, separate Markdown file, with the prompt at the top and results below.  Folder structure is `ws1-processors/ws1_lib/REFACTOR_PROMPT <number>.<short-description>.md`.
+- **Prompt and results** are saved in a new, separate Markdown file, with the prompt at the top and results below.  Folder structure is `ws1-processors/dev work/2026 refactoring to separate WS1 operations/<number>. REFACTOR_PROMPT <short-description>.md`.

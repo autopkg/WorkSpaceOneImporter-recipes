@@ -1,0 +1,1193 @@
+{
+  "Application": [
+    {
+      "ApplicationName": "Microsoft Visual Studio Code",
+      "BundleId": "com.ws1.macos.Microsoft-Visual-Studio-Code",
+      "AppVersion": "1.109.5.0",
+      "ActualFileVersion": "1.109.5",
+      "AppType": "Internal",
+      "Status": "Active",
+      "Platform": 10,
+      "SupportedModels": {
+        "Model": [
+          {
+            "ApplicationId": 3208,
+            "ModelId": 14,
+            "ModelName": "MacBook Pro"
+          },
+          {
+            "ApplicationId": 3208,
+            "ModelId": 15,
+            "ModelName": "MacBook Air"
+          },
+          {
+            "ApplicationId": 3208,
+            "ModelId": 16,
+            "ModelName": "Mac Mini"
+          },
+          {
+            "ApplicationId": 3208,
+            "ModelId": 30,
+            "ModelName": "iMac"
+          },
+          {
+            "ApplicationId": 3208,
+            "ModelId": 31,
+            "ModelName": "Mac Pro"
+          },
+          {
+            "ApplicationId": 3208,
+            "ModelId": 35,
+            "ModelName": "MacBook"
+          },
+          {
+            "ApplicationId": 3208,
+            "ModelId": 113,
+            "ModelName": "Mac Studio"
+          }
+        ]
+      },
+      "AssignmentStatus": "Assigned",
+      "ApplicationSize": "273.61 MB",
+      "CategoryList": {
+        "Category": []
+      },
+      "SmartGroups": [
+        {
+          "Id": 746,
+          "Name": "macOS-SW-TESTING"
+        },
+        {
+          "Id": 526,
+          "Name": "macOS-SW-EARLY_ACCESS"
+        },
+        {
+          "Id": 163,
+          "Name": "macOS_MgtType-FULL"
+        }
+      ],
+      "IsReimbursable": false,
+      "ApplicationSource": 0,
+      "LocationGroupId": 570,
+      "RootLocationGroupName": "example-company",
+      "OrganizationGroupUuid": "9f148ebb-8989-49f1-9568-723ca307752d",
+      "LargeIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/9c5d2b14-220f-4d6f-a5b3-36490e452490/BlobHandler.pblob",
+      "MediumIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/4bde5af1-c631-4dd7-9206-0cd7597e3c66/BlobHandler.pblob",
+      "SmallIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/4ef9a2e9-8960-419f-8183-0ad7208b13d7/BlobHandler.pblob",
+      "PushMode": 0,
+      "AppRank": 0,
+      "AssignedDeviceCount": 0,
+      "InstalledDeviceCount": 0,
+      "NotInstalledDeviceCount": 0,
+      "AutoUpdateVersion": false,
+      "EnableProvisioning": false,
+      "IsDependencyFile": false,
+      "ContentGatewayId": 0,
+      "IconFileName": "Microsoft Visual Studio Code.png",
+      "ApplicationFileName": "Microsoft Visual Studio Code-universal-1.109.5.dmg",
+      "MetadataFileName": "Microsoft Visual Studio Code-1.109.5.plist",
+      "VersionIdentifier": "",
+      "LaunchCommand": "",
+      "LaunchType": "LaunchPath",
+      "Id": {
+        "Value": 3208
+      },
+      "Uuid": "58bd0c5e-b1ae-488f-9f96-c2efcf920d62"
+    },
+    {
+      "ApplicationName": "Microsoft Visual Studio Code",
+      "BundleId": "com.ws1.macos.Microsoft-Visual-Studio-Code",
+      "AppVersion": "1.110.0.0",
+      "ActualFileVersion": "1.110.0",
+      "AppType": "Internal",
+      "Status": "Active",
+      "Platform": 10,
+      "SupportedModels": {
+        "Model": [
+          {
+            "ApplicationId": 3228,
+            "ModelId": 14,
+            "ModelName": "MacBook Pro"
+          },
+          {
+            "ApplicationId": 3228,
+            "ModelId": 15,
+            "ModelName": "MacBook Air"
+          },
+          {
+            "ApplicationId": 3228,
+            "ModelId": 16,
+            "ModelName": "Mac Mini"
+          },
+          {
+            "ApplicationId": 3228,
+            "ModelId": 30,
+            "ModelName": "iMac"
+          },
+          {
+            "ApplicationId": 3228,
+            "ModelId": 31,
+            "ModelName": "Mac Pro"
+          },
+          {
+            "ApplicationId": 3228,
+            "ModelId": 35,
+            "ModelName": "MacBook"
+          },
+          {
+            "ApplicationId": 3228,
+            "ModelId": 113,
+            "ModelName": "Mac Studio"
+          }
+        ]
+      },
+      "AssignmentStatus": "Assigned",
+      "ApplicationSize": "273.61 MB",
+      "CategoryList": {
+        "Category": []
+      },
+      "SmartGroups": [
+        {
+          "Id": 746,
+          "Name": "macOS-SW-TESTING"
+        },
+        {
+          "Id": 780,
+          "Name": "macOS-SW-Prune-test"
+        }
+      ],
+      "IsReimbursable": false,
+      "ApplicationSource": 0,
+      "LocationGroupId": 570,
+      "RootLocationGroupName": "example-company",
+      "OrganizationGroupUuid": "9f148ebb-8989-49f1-9568-723ca307752d",
+      "LargeIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/ed7c9846-1b77-4b3f-9f6a-966ebdf75613/BlobHandler.pblob",
+      "MediumIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/a8d5f323-c418-4e60-9182-98f641ec4cbf/BlobHandler.pblob",
+      "SmallIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/4054b914-4e04-4ca3-8aa0-110fabb638d1/BlobHandler.pblob",
+      "PushMode": 0,
+      "AppRank": 0,
+      "AssignedDeviceCount": 0,
+      "InstalledDeviceCount": 0,
+      "NotInstalledDeviceCount": 0,
+      "AutoUpdateVersion": false,
+      "EnableProvisioning": false,
+      "IsDependencyFile": false,
+      "ContentGatewayId": 0,
+      "IconFileName": "Microsoft Visual Studio Code.png",
+      "ApplicationFileName": "Microsoft Visual Studio Code-universal-1.110.0.dmg",
+      "MetadataFileName": "Microsoft Visual Studio Code-1.110.0.plist",
+      "LaunchCommand": "",
+      "LaunchType": "LaunchPath",
+      "Id": {
+        "Value": 3228
+      },
+      "Uuid": "1ae60a8b-275a-4cf8-84d6-b032a7d1138f"
+    },
+    {
+      "ApplicationName": "Microsoft Visual Studio Code",
+      "BundleId": "com.ws1.macos.Microsoft-Visual-Studio-Code",
+      "AppVersion": "1.111.0.0",
+      "ActualFileVersion": "1.111.0",
+      "AppType": "Internal",
+      "Status": "Active",
+      "Platform": 10,
+      "SupportedModels": {
+        "Model": [
+          {
+            "ApplicationId": 3231,
+            "ModelId": 14,
+            "ModelName": "MacBook Pro"
+          },
+          {
+            "ApplicationId": 3231,
+            "ModelId": 15,
+            "ModelName": "MacBook Air"
+          },
+          {
+            "ApplicationId": 3231,
+            "ModelId": 16,
+            "ModelName": "Mac Mini"
+          },
+          {
+            "ApplicationId": 3231,
+            "ModelId": 30,
+            "ModelName": "iMac"
+          },
+          {
+            "ApplicationId": 3231,
+            "ModelId": 31,
+            "ModelName": "Mac Pro"
+          },
+          {
+            "ApplicationId": 3231,
+            "ModelId": 35,
+            "ModelName": "MacBook"
+          },
+          {
+            "ApplicationId": 3231,
+            "ModelId": 113,
+            "ModelName": "Mac Studio"
+          }
+        ]
+      },
+      "AssignmentStatus": "Assigned",
+      "ApplicationSize": "273.61 MB",
+      "CategoryList": {
+        "Category": []
+      },
+      "SmartGroups": [
+        {
+          "Id": 746,
+          "Name": "macOS-SW-TESTING"
+        },
+        {
+          "Id": 526,
+          "Name": "macOS-SW-EARLY_ACCESS"
+        },
+        {
+          "Id": 780,
+          "Name": "macOS-SW-Prune-test"
+        }
+      ],
+      "IsReimbursable": false,
+      "ApplicationSource": 0,
+      "LocationGroupId": 570,
+      "RootLocationGroupName": "example-company",
+      "OrganizationGroupUuid": "9f148ebb-8989-49f1-9568-723ca307752d",
+      "LargeIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/b4f4dde4-3525-4ed9-a634-157d8812d074/BlobHandler.pblob",
+      "MediumIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/3c0736c9-37b0-4183-a531-951ec12f83a1/BlobHandler.pblob",
+      "SmallIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/f2323765-080e-49d9-9586-48aeb0e92bf6/BlobHandler.pblob",
+      "PushMode": 0,
+      "AppRank": 0,
+      "AssignedDeviceCount": 0,
+      "InstalledDeviceCount": 0,
+      "NotInstalledDeviceCount": 0,
+      "AutoUpdateVersion": false,
+      "EnableProvisioning": false,
+      "IsDependencyFile": false,
+      "ContentGatewayId": 0,
+      "IconFileName": "Microsoft Visual Studio Code.png",
+      "ApplicationFileName": "Microsoft Visual Studio Code-universal-1.111.0.dmg",
+      "MetadataFileName": "Microsoft Visual Studio Code-1.111.0.plist",
+      "LaunchCommand": "",
+      "LaunchType": "LaunchPath",
+      "Id": {
+        "Value": 3231
+      },
+      "Uuid": "a54eeee3-465a-456f-acab-8664691d54a6"
+    },
+    {
+      "ApplicationName": "Microsoft Visual Studio Code",
+      "BundleId": "com.ws1.macos.Microsoft-Visual-Studio-Code",
+      "AppVersion": "1.112.0.0",
+      "ActualFileVersion": "1.112.0",
+      "AppType": "Internal",
+      "Status": "Active",
+      "Platform": 10,
+      "SupportedModels": {
+        "Model": [
+          {
+            "ApplicationId": 3253,
+            "ModelId": 14,
+            "ModelName": "MacBook Pro"
+          },
+          {
+            "ApplicationId": 3253,
+            "ModelId": 15,
+            "ModelName": "MacBook Air"
+          },
+          {
+            "ApplicationId": 3253,
+            "ModelId": 16,
+            "ModelName": "Mac Mini"
+          },
+          {
+            "ApplicationId": 3253,
+            "ModelId": 30,
+            "ModelName": "iMac"
+          },
+          {
+            "ApplicationId": 3253,
+            "ModelId": 31,
+            "ModelName": "Mac Pro"
+          },
+          {
+            "ApplicationId": 3253,
+            "ModelId": 35,
+            "ModelName": "MacBook"
+          },
+          {
+            "ApplicationId": 3253,
+            "ModelId": 113,
+            "ModelName": "Mac Studio"
+          }
+        ]
+      },
+      "AssignmentStatus": "Assigned",
+      "ApplicationSize": "273.61 MB",
+      "CategoryList": {
+        "Category": []
+      },
+      "SmartGroups": [
+        {
+          "Id": 746,
+          "Name": "macOS-SW-TESTING"
+        },
+        {
+          "Id": 780,
+          "Name": "macOS-SW-Prune-test"
+        }
+      ],
+      "IsReimbursable": false,
+      "ApplicationSource": 0,
+      "LocationGroupId": 570,
+      "RootLocationGroupName": "example-company",
+      "OrganizationGroupUuid": "9f148ebb-8989-49f1-9568-723ca307752d",
+      "LargeIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/c29c9bec-81c7-4b4b-b41d-76a18b63d242/BlobHandler.pblob",
+      "MediumIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/f6a70376-cec9-47a1-8554-b7f468894840/BlobHandler.pblob",
+      "SmallIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/829a8180-ba3c-4a2b-80e5-3d150b2480ee/BlobHandler.pblob",
+      "PushMode": 0,
+      "AppRank": 0,
+      "AssignedDeviceCount": 0,
+      "InstalledDeviceCount": 0,
+      "NotInstalledDeviceCount": 0,
+      "AutoUpdateVersion": false,
+      "EnableProvisioning": false,
+      "IsDependencyFile": false,
+      "ContentGatewayId": 0,
+      "IconFileName": "Microsoft Visual Studio Code.png",
+      "ApplicationFileName": "Microsoft Visual Studio Code-universal-1.112.0.dmg",
+      "MetadataFileName": "Microsoft Visual Studio Code-1.112.0.plist",
+      "LaunchCommand": "",
+      "LaunchType": "LaunchPath",
+      "Id": {
+        "Value": 3253
+      },
+      "Uuid": "b7bae832-44c7-45b9-8b7f-bdd2708e0384"
+    },
+    {
+      "ApplicationName": "Microsoft Visual Studio Code",
+      "BundleId": "com.ws1.macos.Microsoft-Visual-Studio-Code",
+      "AppVersion": "1.113.0.0",
+      "ActualFileVersion": "1.113.0",
+      "AppType": "Internal",
+      "Status": "Active",
+      "Platform": 10,
+      "SupportedModels": {
+        "Model": [
+          {
+            "ApplicationId": 3263,
+            "ModelId": 14,
+            "ModelName": "MacBook Pro"
+          },
+          {
+            "ApplicationId": 3263,
+            "ModelId": 15,
+            "ModelName": "MacBook Air"
+          },
+          {
+            "ApplicationId": 3263,
+            "ModelId": 16,
+            "ModelName": "Mac Mini"
+          },
+          {
+            "ApplicationId": 3263,
+            "ModelId": 30,
+            "ModelName": "iMac"
+          },
+          {
+            "ApplicationId": 3263,
+            "ModelId": 31,
+            "ModelName": "Mac Pro"
+          },
+          {
+            "ApplicationId": 3263,
+            "ModelId": 35,
+            "ModelName": "MacBook"
+          },
+          {
+            "ApplicationId": 3263,
+            "ModelId": 113,
+            "ModelName": "Mac Studio"
+          }
+        ]
+      },
+      "AssignmentStatus": "Assigned",
+      "ApplicationSize": "273.61 MB",
+      "CategoryList": {
+        "Category": []
+      },
+      "SmartGroups": [
+        {
+          "Id": 746,
+          "Name": "macOS-SW-TESTING"
+        },
+        {
+          "Id": 526,
+          "Name": "macOS-SW-EARLY_ACCESS"
+        },
+        {
+          "Id": 163,
+          "Name": "macOS_MgtType-FULL"
+        },
+        {
+          "Id": 780,
+          "Name": "macOS-SW-Prune-test"
+        }
+      ],
+      "IsReimbursable": false,
+      "ApplicationSource": 0,
+      "LocationGroupId": 570,
+      "RootLocationGroupName": "example-company",
+      "OrganizationGroupUuid": "9f148ebb-8989-49f1-9568-723ca307752d",
+      "LargeIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/118e48cf-4d7b-45af-9bf1-f09146249635/BlobHandler.pblob",
+      "MediumIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/f1c184f0-b826-46ce-ad18-f37e4aa403ca/BlobHandler.pblob",
+      "SmallIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/89e234c0-af28-4f44-8e3e-530c413cfe81/BlobHandler.pblob",
+      "PushMode": 0,
+      "AppRank": 0,
+      "AssignedDeviceCount": 416,
+      "InstalledDeviceCount": 285,
+      "NotInstalledDeviceCount": 131,
+      "AutoUpdateVersion": false,
+      "EnableProvisioning": false,
+      "IsDependencyFile": false,
+      "ContentGatewayId": 0,
+      "IconFileName": "Microsoft Visual Studio Code.png",
+      "ApplicationFileName": "Microsoft Visual Studio Code-universal-1.113.0.dmg",
+      "MetadataFileName": "Microsoft Visual Studio Code-1.113.0.plist",
+      "LaunchCommand": "",
+      "LaunchType": "LaunchPath",
+      "Id": {
+        "Value": 3263
+      },
+      "Uuid": "16ac26c6-904e-4d7d-9aba-37936a4e400e"
+    },
+    {
+      "ApplicationName": "Microsoft Visual Studio Code",
+      "BundleId": "com.ws1.macos.Microsoft-Visual-Studio-Code",
+      "AppVersion": "1.114.0.0",
+      "ActualFileVersion": "1.114.0",
+      "AppType": "Internal",
+      "Status": "Active",
+      "Platform": 10,
+      "SupportedModels": {
+        "Model": [
+          {
+            "ApplicationId": 3284,
+            "ModelId": 14,
+            "ModelName": "MacBook Pro"
+          },
+          {
+            "ApplicationId": 3284,
+            "ModelId": 15,
+            "ModelName": "MacBook Air"
+          },
+          {
+            "ApplicationId": 3284,
+            "ModelId": 16,
+            "ModelName": "Mac Mini"
+          },
+          {
+            "ApplicationId": 3284,
+            "ModelId": 30,
+            "ModelName": "iMac"
+          },
+          {
+            "ApplicationId": 3284,
+            "ModelId": 31,
+            "ModelName": "Mac Pro"
+          },
+          {
+            "ApplicationId": 3284,
+            "ModelId": 35,
+            "ModelName": "MacBook"
+          },
+          {
+            "ApplicationId": 3284,
+            "ModelId": 113,
+            "ModelName": "Mac Studio"
+          }
+        ]
+      },
+      "AssignmentStatus": "Assigned",
+      "ApplicationSize": "273.61 MB",
+      "CategoryList": {
+        "Category": []
+      },
+      "SmartGroups": [
+        {
+          "Id": 746,
+          "Name": "macOS-SW-TESTING"
+        },
+        {
+          "Id": 526,
+          "Name": "macOS-SW-EARLY_ACCESS"
+        },
+        {
+          "Id": 780,
+          "Name": "macOS-SW-Prune-test"
+        }
+      ],
+      "IsReimbursable": false,
+      "ApplicationSource": 0,
+      "LocationGroupId": 570,
+      "RootLocationGroupName": "example-company",
+      "OrganizationGroupUuid": "9f148ebb-8989-49f1-9568-723ca307752d",
+      "LargeIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/0b634cd8-71d0-4150-b0f9-1589443ff022/BlobHandler.pblob",
+      "MediumIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/d27ba4a0-ee2a-4b1a-a762-b226debd05fb/BlobHandler.pblob",
+      "SmallIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/e6c71bbb-a7eb-4968-99c0-7ed7538780db/BlobHandler.pblob",
+      "PushMode": 0,
+      "AppRank": 0,
+      "AssignedDeviceCount": 0,
+      "InstalledDeviceCount": 0,
+      "NotInstalledDeviceCount": 0,
+      "AutoUpdateVersion": false,
+      "EnableProvisioning": false,
+      "IsDependencyFile": false,
+      "ContentGatewayId": 0,
+      "IconFileName": "Microsoft Visual Studio Code.png",
+      "ApplicationFileName": "Microsoft Visual Studio Code-universal-1.114.0.dmg",
+      "MetadataFileName": "Microsoft Visual Studio Code-1.114.0.plist",
+      "LaunchCommand": "",
+      "LaunchType": "LaunchPath",
+      "Id": {
+        "Value": 3284
+      },
+      "Uuid": "f42127df-0dc7-45eb-8aa0-687e1e3967b6"
+    },
+    {
+      "ApplicationName": "Microsoft Visual Studio Code",
+      "BundleId": "com.ws1.macos.Microsoft-Visual-Studio-Code",
+      "AppVersion": "1.115.0.0",
+      "ActualFileVersion": "1.115.0",
+      "AppType": "Internal",
+      "Status": "Active",
+      "Platform": 10,
+      "SupportedModels": {
+        "Model": [
+          {
+            "ApplicationId": 3294,
+            "ModelId": 14,
+            "ModelName": "MacBook Pro"
+          },
+          {
+            "ApplicationId": 3294,
+            "ModelId": 15,
+            "ModelName": "MacBook Air"
+          },
+          {
+            "ApplicationId": 3294,
+            "ModelId": 16,
+            "ModelName": "Mac Mini"
+          },
+          {
+            "ApplicationId": 3294,
+            "ModelId": 30,
+            "ModelName": "iMac"
+          },
+          {
+            "ApplicationId": 3294,
+            "ModelId": 31,
+            "ModelName": "Mac Pro"
+          },
+          {
+            "ApplicationId": 3294,
+            "ModelId": 35,
+            "ModelName": "MacBook"
+          },
+          {
+            "ApplicationId": 3294,
+            "ModelId": 113,
+            "ModelName": "Mac Studio"
+          }
+        ]
+      },
+      "AssignmentStatus": "Assigned",
+      "ApplicationSize": "273.61 MB",
+      "CategoryList": {
+        "Category": []
+      },
+      "SmartGroups": [
+        {
+          "Id": 746,
+          "Name": "macOS-SW-TESTING"
+        },
+        {
+          "Id": 526,
+          "Name": "macOS-SW-EARLY_ACCESS"
+        }
+      ],
+      "IsReimbursable": false,
+      "ApplicationSource": 0,
+      "LocationGroupId": 570,
+      "RootLocationGroupName": "example-company",
+      "OrganizationGroupUuid": "9f148ebb-8989-49f1-9568-723ca307752d",
+      "LargeIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/98104db1-851e-4049-a2ee-21d60ce412a1/BlobHandler.pblob",
+      "MediumIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/58949074-aa75-4b09-b058-54cef273b5c1/BlobHandler.pblob",
+      "SmallIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/d7eedcf7-3c00-4846-a53f-40a194de5103/BlobHandler.pblob",
+      "PushMode": 0,
+      "AppRank": 0,
+      "AssignedDeviceCount": 0,
+      "InstalledDeviceCount": 0,
+      "NotInstalledDeviceCount": 0,
+      "AutoUpdateVersion": false,
+      "EnableProvisioning": false,
+      "IsDependencyFile": false,
+      "ContentGatewayId": 0,
+      "IconFileName": "Microsoft Visual Studio Code.png",
+      "ApplicationFileName": "Microsoft Visual Studio Code-universal-1.115.0.dmg",
+      "MetadataFileName": "Microsoft Visual Studio Code-1.115.0.plist",
+      "LaunchCommand": "",
+      "LaunchType": "LaunchPath",
+      "Id": {
+        "Value": 3294
+      },
+      "Uuid": "a0539945-e58b-49f9-9346-af925d12fad0"
+    },
+    {
+      "ApplicationName": "Microsoft Visual Studio Code",
+      "BundleId": "com.ws1.macos.Microsoft-Visual-Studio-Code",
+      "AppVersion": "1.116.0.0",
+      "ActualFileVersion": "1.116.0",
+      "AppType": "Internal",
+      "Status": "Active",
+      "Platform": 10,
+      "SupportedModels": {
+        "Model": [
+          {
+            "ApplicationId": 3302,
+            "ModelId": 14,
+            "ModelName": "MacBook Pro"
+          },
+          {
+            "ApplicationId": 3302,
+            "ModelId": 15,
+            "ModelName": "MacBook Air"
+          },
+          {
+            "ApplicationId": 3302,
+            "ModelId": 16,
+            "ModelName": "Mac Mini"
+          },
+          {
+            "ApplicationId": 3302,
+            "ModelId": 30,
+            "ModelName": "iMac"
+          },
+          {
+            "ApplicationId": 3302,
+            "ModelId": 31,
+            "ModelName": "Mac Pro"
+          },
+          {
+            "ApplicationId": 3302,
+            "ModelId": 35,
+            "ModelName": "MacBook"
+          },
+          {
+            "ApplicationId": 3302,
+            "ModelId": 113,
+            "ModelName": "Mac Studio"
+          }
+        ]
+      },
+      "AssignmentStatus": "Assigned",
+      "ApplicationSize": "273.61 MB",
+      "CategoryList": {
+        "Category": []
+      },
+      "SmartGroups": [
+        {
+          "Id": 746,
+          "Name": "macOS-SW-TESTING"
+        },
+        {
+          "Id": 780,
+          "Name": "macOS-SW-Prune-test"
+        }
+      ],
+      "IsReimbursable": false,
+      "ApplicationSource": 0,
+      "LocationGroupId": 570,
+      "RootLocationGroupName": "example-company",
+      "OrganizationGroupUuid": "9f148ebb-8989-49f1-9568-723ca307752d",
+      "LargeIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/57511cc4-62cb-4c40-8bbc-35493649e8c0/BlobHandler.pblob",
+      "MediumIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/e4b69ce7-5c3c-473b-9476-838d353137e8/BlobHandler.pblob",
+      "SmallIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/257e275e-f3e4-49c0-8275-5fdc447adfe4/BlobHandler.pblob",
+      "PushMode": 0,
+      "AppRank": 0,
+      "AssignedDeviceCount": 0,
+      "InstalledDeviceCount": 0,
+      "NotInstalledDeviceCount": 0,
+      "AutoUpdateVersion": false,
+      "EnableProvisioning": false,
+      "IsDependencyFile": false,
+      "ContentGatewayId": 0,
+      "IconFileName": "Microsoft Visual Studio Code.png",
+      "ApplicationFileName": "Microsoft Visual Studio Code-universal-1.116.0.dmg",
+      "MetadataFileName": "Microsoft Visual Studio Code-1.116.0.plist",
+      "LaunchCommand": "",
+      "LaunchType": "LaunchPath",
+      "Id": {
+        "Value": 3302
+      },
+      "Uuid": "32c467e0-9831-410d-b03c-d9ba4ef12fc4"
+    },
+    {
+      "ApplicationName": "Microsoft Visual Studio Code",
+      "BundleId": "com.ws1.macos.Microsoft-Visual-Studio-Code",
+      "AppVersion": "1.117.0.0",
+      "ActualFileVersion": "1.117.0",
+      "AppType": "Internal",
+      "Status": "Active",
+      "Platform": 10,
+      "SupportedModels": {
+        "Model": [
+          {
+            "ApplicationId": 3322,
+            "ModelId": 14,
+            "ModelName": "MacBook Pro"
+          },
+          {
+            "ApplicationId": 3322,
+            "ModelId": 15,
+            "ModelName": "MacBook Air"
+          },
+          {
+            "ApplicationId": 3322,
+            "ModelId": 16,
+            "ModelName": "Mac Mini"
+          },
+          {
+            "ApplicationId": 3322,
+            "ModelId": 30,
+            "ModelName": "iMac"
+          },
+          {
+            "ApplicationId": 3322,
+            "ModelId": 31,
+            "ModelName": "Mac Pro"
+          },
+          {
+            "ApplicationId": 3322,
+            "ModelId": 35,
+            "ModelName": "MacBook"
+          },
+          {
+            "ApplicationId": 3322,
+            "ModelId": 113,
+            "ModelName": "Mac Studio"
+          }
+        ]
+      },
+      "AssignmentStatus": "Assigned",
+      "ApplicationSize": "273.61 MB",
+      "CategoryList": {
+        "Category": []
+      },
+      "SmartGroups": [
+        {
+          "Id": 746,
+          "Name": "macOS-SW-TESTING"
+        },
+        {
+          "Id": 526,
+          "Name": "macOS-SW-EARLY_ACCESS"
+        },
+        {
+          "Id": 780,
+          "Name": "macOS-SW-Prune-test"
+        }
+      ],
+      "IsReimbursable": false,
+      "ApplicationSource": 0,
+      "LocationGroupId": 570,
+      "RootLocationGroupName": "example-company",
+      "OrganizationGroupUuid": "9f148ebb-8989-49f1-9568-723ca307752d",
+      "LargeIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/e144f8a8-b483-4111-9ec7-7045f38a2188/BlobHandler.pblob",
+      "MediumIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/7a81736e-66d3-4516-aa8a-306f54b49597/BlobHandler.pblob",
+      "SmallIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/a0664d33-3581-47a0-8783-8051e0e49668/BlobHandler.pblob",
+      "PushMode": 0,
+      "AppRank": 0,
+      "AssignedDeviceCount": 0,
+      "InstalledDeviceCount": 0,
+      "NotInstalledDeviceCount": 0,
+      "AutoUpdateVersion": false,
+      "EnableProvisioning": false,
+      "IsDependencyFile": false,
+      "ContentGatewayId": 0,
+      "IconFileName": "Microsoft Visual Studio Code.png",
+      "ApplicationFileName": "Microsoft Visual Studio Code-universal-1.117.0.dmg",
+      "MetadataFileName": "Microsoft Visual Studio Code-1.117.0.plist",
+      "LaunchCommand": "",
+      "LaunchType": "LaunchPath",
+      "Id": {
+        "Value": 3322
+      },
+      "Uuid": "8e8e90a5-8913-404a-90c2-e4e1cb332ab0"
+    },
+    {
+      "ApplicationName": "Microsoft Visual Studio Code",
+      "BundleId": "com.ws1.macos.Microsoft-Visual-Studio-Code",
+      "AppVersion": "1.118.0.0",
+      "ActualFileVersion": "1.118.0",
+      "AppType": "Internal",
+      "Status": "Active",
+      "Platform": 10,
+      "SupportedModels": {
+        "Model": [
+          {
+            "ApplicationId": 3330,
+            "ModelId": 14,
+            "ModelName": "MacBook Pro"
+          },
+          {
+            "ApplicationId": 3330,
+            "ModelId": 15,
+            "ModelName": "MacBook Air"
+          },
+          {
+            "ApplicationId": 3330,
+            "ModelId": 16,
+            "ModelName": "Mac Mini"
+          },
+          {
+            "ApplicationId": 3330,
+            "ModelId": 30,
+            "ModelName": "iMac"
+          },
+          {
+            "ApplicationId": 3330,
+            "ModelId": 31,
+            "ModelName": "Mac Pro"
+          },
+          {
+            "ApplicationId": 3330,
+            "ModelId": 35,
+            "ModelName": "MacBook"
+          },
+          {
+            "ApplicationId": 3330,
+            "ModelId": 113,
+            "ModelName": "Mac Studio"
+          }
+        ]
+      },
+      "AssignmentStatus": "Assigned",
+      "ApplicationSize": "273.61 MB",
+      "CategoryList": {
+        "Category": []
+      },
+      "SmartGroups": [
+        {
+          "Id": 746,
+          "Name": "macOS-SW-TESTING"
+        },
+        {
+          "Id": 780,
+          "Name": "macOS-SW-Prune-test"
+        }
+      ],
+      "IsReimbursable": false,
+      "ApplicationSource": 0,
+      "LocationGroupId": 570,
+      "RootLocationGroupName": "example-company",
+      "OrganizationGroupUuid": "9f148ebb-8989-49f1-9568-723ca307752d",
+      "LargeIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/8e476753-768c-468e-892f-7c7abc25f6a9/BlobHandler.pblob",
+      "MediumIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/a8f1f61e-7d2d-477c-9654-9f9683f025d5/BlobHandler.pblob",
+      "SmallIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/99e350bf-64b5-497e-9a89-85c1acce8e6e/BlobHandler.pblob",
+      "PushMode": 0,
+      "AppRank": 0,
+      "AssignedDeviceCount": 0,
+      "InstalledDeviceCount": 0,
+      "NotInstalledDeviceCount": 0,
+      "AutoUpdateVersion": false,
+      "EnableProvisioning": false,
+      "IsDependencyFile": false,
+      "ContentGatewayId": 0,
+      "IconFileName": "Microsoft Visual Studio Code.png",
+      "ApplicationFileName": "Microsoft Visual Studio Code-universal-1.118.0.dmg",
+      "MetadataFileName": "Microsoft Visual Studio Code-1.118.0.plist",
+      "LaunchCommand": "",
+      "LaunchType": "LaunchPath",
+      "Id": {
+        "Value": 3330
+      },
+      "Uuid": "ebe691c1-e00e-4a0b-a84f-1def3624de1d"
+    },
+    {
+      "ApplicationName": "Microsoft Visual Studio Code",
+      "BundleId": "com.ws1.macos.Microsoft-Visual-Studio-Code",
+      "AppVersion": "1.118.1.0",
+      "ActualFileVersion": "1.118.1",
+      "AppType": "Internal",
+      "Status": "Active",
+      "Platform": 10,
+      "SupportedModels": {
+        "Model": [
+          {
+            "ApplicationId": 3333,
+            "ModelId": 14,
+            "ModelName": "MacBook Pro"
+          },
+          {
+            "ApplicationId": 3333,
+            "ModelId": 15,
+            "ModelName": "MacBook Air"
+          },
+          {
+            "ApplicationId": 3333,
+            "ModelId": 16,
+            "ModelName": "Mac Mini"
+          },
+          {
+            "ApplicationId": 3333,
+            "ModelId": 30,
+            "ModelName": "iMac"
+          },
+          {
+            "ApplicationId": 3333,
+            "ModelId": 31,
+            "ModelName": "Mac Pro"
+          },
+          {
+            "ApplicationId": 3333,
+            "ModelId": 35,
+            "ModelName": "MacBook"
+          },
+          {
+            "ApplicationId": 3333,
+            "ModelId": 113,
+            "ModelName": "Mac Studio"
+          }
+        ]
+      },
+      "AssignmentStatus": "Assigned",
+      "ApplicationSize": "273.61 MB",
+      "CategoryList": {
+        "Category": []
+      },
+      "SmartGroups": [
+        {
+          "Id": 746,
+          "Name": "macOS-SW-TESTING"
+        },
+        {
+          "Id": 526,
+          "Name": "macOS-SW-EARLY_ACCESS"
+        },
+        {
+          "Id": 780,
+          "Name": "macOS-SW-Prune-test"
+        }
+      ],
+      "IsReimbursable": false,
+      "ApplicationSource": 0,
+      "LocationGroupId": 570,
+      "RootLocationGroupName": "example-company",
+      "OrganizationGroupUuid": "9f148ebb-8989-49f1-9568-723ca307752d",
+      "LargeIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/504b2f68-8bca-4724-8403-67b59d45dd99/BlobHandler.pblob",
+      "MediumIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/91d74ec1-9d5f-4678-bae0-8e8708773949/BlobHandler.pblob",
+      "SmallIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/c4cbcdf2-9d8b-4883-95b9-682c0da95ee6/BlobHandler.pblob",
+      "PushMode": 0,
+      "AppRank": 0,
+      "AssignedDeviceCount": 99,
+      "InstalledDeviceCount": 46,
+      "NotInstalledDeviceCount": 53,
+      "AutoUpdateVersion": false,
+      "EnableProvisioning": false,
+      "IsDependencyFile": false,
+      "ContentGatewayId": 0,
+      "IconFileName": "Microsoft Visual Studio Code.png",
+      "ApplicationFileName": "Microsoft Visual Studio Code-universal-1.118.1.dmg",
+      "MetadataFileName": "Microsoft Visual Studio Code-1.118.1.plist",
+      "LaunchCommand": "",
+      "LaunchType": "LaunchPath",
+      "Id": {
+        "Value": 3333
+      },
+      "Uuid": "8aa50c98-e5a4-4cae-a65d-34c54336a04d"
+    },
+    {
+      "ApplicationName": "Microsoft Visual Studio Code",
+      "BundleId": "com.ws1.macos.Microsoft-Visual-Studio-Code",
+      "AppVersion": "1.119.0.0",
+      "ActualFileVersion": "1.119.0",
+      "AppType": "Internal",
+      "Status": "Active",
+      "Platform": 10,
+      "SupportedModels": {
+        "Model": [
+          {
+            "ApplicationId": 3336,
+            "ModelId": 14,
+            "ModelName": "MacBook Pro"
+          },
+          {
+            "ApplicationId": 3336,
+            "ModelId": 15,
+            "ModelName": "MacBook Air"
+          },
+          {
+            "ApplicationId": 3336,
+            "ModelId": 16,
+            "ModelName": "Mac Mini"
+          },
+          {
+            "ApplicationId": 3336,
+            "ModelId": 30,
+            "ModelName": "iMac"
+          },
+          {
+            "ApplicationId": 3336,
+            "ModelId": 31,
+            "ModelName": "Mac Pro"
+          },
+          {
+            "ApplicationId": 3336,
+            "ModelId": 35,
+            "ModelName": "MacBook"
+          },
+          {
+            "ApplicationId": 3336,
+            "ModelId": 113,
+            "ModelName": "Mac Studio"
+          }
+        ]
+      },
+      "AssignmentStatus": "Assigned",
+      "ApplicationSize": "273.61 MB",
+      "CategoryList": {
+        "Category": []
+      },
+      "SmartGroups": [
+        {
+          "Id": 746,
+          "Name": "macOS-SW-TESTING"
+        },
+        {
+          "Id": 780,
+          "Name": "macOS-SW-Prune-test"
+        }
+      ],
+      "IsReimbursable": false,
+      "ApplicationSource": 0,
+      "LocationGroupId": 570,
+      "RootLocationGroupName": "example-company",
+      "OrganizationGroupUuid": "9f148ebb-8989-49f1-9568-723ca307752d",
+      "LargeIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/59ba23f2-21b2-4b4c-accc-0de8462b9a19/BlobHandler.pblob",
+      "MediumIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/983cd8d0-197d-4fcf-b085-21f74c4c2fb1/BlobHandler.pblob",
+      "SmallIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/b72cd4d3-67e3-48f2-bd27-69ded68c98ea/BlobHandler.pblob",
+      "PushMode": 0,
+      "AppRank": 0,
+      "AssignedDeviceCount": 0,
+      "InstalledDeviceCount": 0,
+      "NotInstalledDeviceCount": 0,
+      "AutoUpdateVersion": false,
+      "EnableProvisioning": false,
+      "IsDependencyFile": false,
+      "ContentGatewayId": 0,
+      "IconFileName": "Microsoft Visual Studio Code.png",
+      "ApplicationFileName": "Microsoft Visual Studio Code-universal-1.119.0.dmg",
+      "MetadataFileName": "Microsoft Visual Studio Code-1.119.0.plist",
+      "LaunchCommand": "",
+      "LaunchType": "LaunchPath",
+      "Id": {
+        "Value": 3336
+      },
+      "Uuid": "84cbba2e-8dcc-4dbc-8cd6-02f0736b030d"
+    },
+    {
+      "ApplicationName": "Microsoft Visual Studio Code",
+      "BundleId": "com.ws1.macos.Microsoft-Visual-Studio-Code",
+      "AppVersion": "1.120.0.0",
+      "ActualFileVersion": "1.120.0",
+      "AppType": "Internal",
+      "Status": "Active",
+      "Platform": 10,
+      "SupportedModels": {
+        "Model": [
+          {
+            "ApplicationId": 3347,
+            "ModelId": 14,
+            "ModelName": "MacBook Pro"
+          },
+          {
+            "ApplicationId": 3347,
+            "ModelId": 15,
+            "ModelName": "MacBook Air"
+          },
+          {
+            "ApplicationId": 3347,
+            "ModelId": 16,
+            "ModelName": "Mac Mini"
+          },
+          {
+            "ApplicationId": 3347,
+            "ModelId": 30,
+            "ModelName": "iMac"
+          },
+          {
+            "ApplicationId": 3347,
+            "ModelId": 31,
+            "ModelName": "Mac Pro"
+          },
+          {
+            "ApplicationId": 3347,
+            "ModelId": 35,
+            "ModelName": "MacBook"
+          },
+          {
+            "ApplicationId": 3347,
+            "ModelId": 113,
+            "ModelName": "Mac Studio"
+          }
+        ]
+      },
+      "AssignmentStatus": "Assigned",
+      "ApplicationSize": "273.61 MB",
+      "CategoryList": {
+        "Category": []
+      },
+      "SmartGroups": [
+        {
+          "Id": 746,
+          "Name": "macOS-SW-TESTING"
+        },
+        {
+          "Id": 780,
+          "Name": "macOS-SW-Prune-test"
+        }
+      ],
+      "IsReimbursable": false,
+      "ApplicationSource": 0,
+      "LocationGroupId": 570,
+      "RootLocationGroupName": "example-company",
+      "OrganizationGroupUuid": "9f148ebb-8989-49f1-9568-723ca307752d",
+      "LargeIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/55620571-da20-42db-ac14-63fa8eb05b4c/BlobHandler.pblob",
+      "MediumIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/bf2ada4f-5f61-467d-a79b-e45943aa77df/BlobHandler.pblob",
+      "SmallIconUri": "https://mobile.example-company.com/DeviceServices/publicblob/03aa3820-0dac-44aa-844c-4b9c359ce5c1/BlobHandler.pblob",
+      "PushMode": 0,
+      "AppRank": 0,
+      "AssignedDeviceCount": 0,
+      "InstalledDeviceCount": 0,
+      "NotInstalledDeviceCount": 0,
+      "AutoUpdateVersion": false,
+      "EnableProvisioning": false,
+      "IsDependencyFile": false,
+      "ContentGatewayId": 0,
+      "IconFileName": "Microsoft Visual Studio Code.png",
+      "ApplicationFileName": "Microsoft Visual Studio Code-universal-1.120.0.dmg",
+      "MetadataFileName": "Microsoft Visual Studio Code-1.120.0.plist",
+      "LaunchCommand": "",
+      "LaunchType": "LaunchPath",
+      "Id": {
+        "Value": 3347
+      },
+      "Uuid": "3dd4b7ae-1706-4b53-b33c-7a54f81c1757"
+    }
+  ],
+  "Page": 0,
+  "PageSize": 500,
+  "Total": 13
+}
