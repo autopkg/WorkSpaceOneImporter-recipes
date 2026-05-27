@@ -20,8 +20,6 @@ Input:
   WS1_API_URL: WORKSPACEONE_API_URL_HERE
   WS1_CONSOLE_URL: WORKSPACEONE_CONSOLE_URL_HERE
   WS1_GROUPID: GROUP_ID_HERE
-  WS1_SMART_GROUP_NAME: SMART_GROUP_NAME_HERE
-  WS1_PUSH_MODE: PUSH_MODE_SETTING
 
 Process:
 - Processor: com.github.codeskipper.OMNISSA-WorkSpaceOneImporter/WorkSpaceOneImporter
@@ -36,7 +34,4 @@ Process:
     ws1_api_url: '%WS1_API_URL%'
     ws1_console_url: '%WS1_CONSOLE_URL%'
     ws1_groupid: '%WS1_GROUPID%'
-    ws1_smart_group_name: '%WS1_SMART_GROUP_NAME%'
-    ws1_push_mode: '%WS1_PUSH_MODE%'
-
 
