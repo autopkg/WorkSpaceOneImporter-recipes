@@ -2,7 +2,7 @@
 #
 # WorkSpaceOneAssigner.py - a custom Autopkg processor
 # Copyright 2022 Martinus Verburg https://github.com/codeskipper
-# Adapted from https://github.com/jprichards/AirWatchImporter/blob/master/AirWatchImporter.py by
+# Adapted and extended from https://github.com/jprichards/AirWatchImporter/blob/master/AirWatchImporter.py by
 #     John Richards https://github.com/jprichards and
 #     Jeremy Baker https://github.com/jbaker10
 #

@@ -20,13 +20,11 @@
 """Autopkg processor to upload files from a Munki repo to Omnissa Workspace ONE UEM using REST API"""
 
 import hashlib
-import json
 import os
 import plistlib
 import re
 import subprocess
 import sys
-from datetime import datetime, timedelta
 
 import requests  # dependency, needs to be installed
 from autopkglib import ProcessorError, get_pref
@@ -94,11 +92,6 @@ class WorkSpaceOneImporter(WorkSpaceOneImporterBase):
             "default": "False",
             "description": 'If "true", force import into WS1 if version already exists. Default:false',
         },
-        "ws1_update_assignments": {
-            "required": False,
-            "default": "False",
-            "description": 'If "true", update assignments for existing app version in WS1. Default:false',
-        },
         "ws1_import_new_only": {
             "required": False,
             "default": "True",
@@ -106,22 +99,6 @@ class WorkSpaceOneImporter(WorkSpaceOneImporterBase):
             " in munki_repo to import into WS1.\n\n"
             "Default: true, meaning only newly imported versions are imported to WS1, this is default to preserve "
             "previous behaviour.",
-        },
-        "ws1_smart_group_name": {
-            "required": False,
-            "description": "The name of the first smart group the app should be assigned to, typically testers / "
-            "early access.",
-        },
-        "ws1_push_mode": {
-            "required": False,
-            "description": "for a simple app assignment, how to deploy the app, can be Auto or On-Demand.",
-        },
-        "ws1_assignment_rules": {
-            "required": False,
-            "description": 'Define recipe Input-variable "ws1_app_assignments" instead of this documentation '
-            "placeholder. NOT as Processor input var as it is "
-            "too complex to be be substituted. MUST override.\n\n"
-            "See https://github.com/codeskipper/WorkSpaceOneImporter/wiki/ws1_app_assignments\n",
         },
     }
 
@@ -142,9 +119,6 @@ class WorkSpaceOneImporter(WorkSpaceOneImporterBase):
             "description": "Application ID of the app version in WS1 UEM",
         },
         "ws1_imported_new": {
-            "description": "True if a new app version was imported in this session to WS1 UEM",
-        },
-        "ws1_app_assignments_changed": {
             "description": "True if a new app version was imported in this session to WS1 UEM",
         },
         "ws1_importer_summary_result": {"description": "Description of interesting results."},
@@ -170,48 +144,13 @@ class WorkSpaceOneImporter(WorkSpaceOneImporterBase):
         gitcmd = ["lfs", "pull", f'--include="{filename}"']
         self.git_run(repo, gitcmd)
 
-    def get_smartgroup_id(self, base_url, smartgroup, headers):
-        """Get Smart Group ID and UUID to assign the package to"""
-
-        # we need to replace any spaces with '%20' for the API call
-        condensed_sg = smartgroup.replace(" ", "%20")
-        r = requests.get(
-            f"{base_url}/api/mdm/smartgroups/search?name={condensed_sg}",
-            headers=headers,
-        )
-        if not r.status_code == 200:
-            raise ProcessorError(
-                f"WorkSpaceOneImporter: No SmartGroup ID found for SmartGroup {smartgroup} - bailing out."
-            )
-        sg_uuid = sg_id = ""
-        try:
-            smart_group_results = r.json()
-            for sg in smart_group_results["SmartGroups"]:
-                if smartgroup in sg["Name"]:
-                    sg_id = sg["SmartGroupID"]
-                    self.output(f"Smart Group ID: {sg_id}", verbose_level=2)
-                    sg_uuid = sg["SmartGroupUuid"]
-                    self.output(f"Smart Group UUID: {sg_uuid}", verbose_level=2)
-                    break
-        except (ValueError, TypeError):
-            raise ProcessorError("failed to parse results from Smart Group search API call")
-        return sg_id, sg_uuid
-
     def ws1_import(self, pkg_path, pkg_info_path, icon_path):
-        """high-level method for Workspace ONE API interactions like uploading an app, app assignment(s) and pruning
-        old app versions"""
+        """high-level method for Workspace ONE API interactions: uploading an app and creating the App object"""
         self.output("Beginning the WorkSpace ONE import process for %s." % self.env["NAME"])
         api_base_url = self.env.get("ws1_api_url")
         console_url = self.env.get("ws1_console_url")
         org_group_id = self.env.get("ws1_groupid")
-        assignment_group = self.env.get("ws1_smart_group_name")
-        assignment_pushmode = self.env.get("ws1_push_mode")
         force_import = self.env.get("ws1_force_import").lower() in ("true", "1", "t")
-        update_assignments = self.env.get("ws1_update_assignments").lower() in (
-            "true",
-            "1",
-            "t",
-        )
 
         # init result
         self.env["ws1_imported_new"] = False
@@ -222,10 +161,6 @@ class WorkSpaceOneImporter(WorkSpaceOneImporterBase):
                 verbose_level=2,
             )
             console_url = "https://my-mobile-admin-console.my-org.org"
-
-        # fetch the app assignments Input from the recipe
-        app_assignments = self.env.get("ws1_app_assignments")
-        self.output(f"App assignments Input from recipe: {app_assignments}", verbose_level=3)
 
         # Get some global variables for later use from pkginfo, don't rely on
         # munki_importer_summary_result being filled in current session
@@ -271,49 +206,11 @@ class WorkSpaceOneImporter(WorkSpaceOneImporterBase):
                         f"Pre-existing App platform: {app['Platform']}",
                         verbose_level=3,
                     )
-                    # if not self.env.get("ws1_force_import").lower() == "true":
                     if not force_import:
-                        if update_assignments and not assignment_group == "none":
-                            self.output("updating simple app assignment", verbose_level=2)
-                            app_assignment = self.ws1_app_assignment_conf(
-                                api_base_url,
-                                assignment_pushmode,
-                                assignment_group,
-                                headers,
-                            )
-                            self.ws1_app_assign(
-                                api_base_url,
-                                assignment_group,
-                                app_assignment,
-                                headers,
-                                ws1_app_id,
-                            )
-                            self.env["ws1_importer_summary_result"] = {
-                                "summary_text": "The following new app assignment was made in WS1:",
-                                "report_fields": [
-                                    "name",
-                                    "version",
-                                    "assignment_group",
-                                ],
-                                "data": {
-                                    "name": self.env["NAME"],
-                                    "version": app_version,
-                                    "assignment_group": assignment_group,
-                                },
-                            }
-                        elif update_assignments and not app_assignments == "none":
-                            self.output("updating advanced app assignment", verbose_level=2)
-                            self.ws1_app_assignments(api_base_url, app_assignments, headers, ws1_app_id)
-                        elif update_assignments:
-                            raise ProcessorError(
-                                "update_assignments is True, but ws1_smart_group_name is not"
-                                " specified and neither is ws1_app_assignments"
-                            )
-                        else:
-                            self.output(
-                                f"App [{app_name}] version [{app_version}] is already present on server, "
-                                "and neither ws1_force_import nor ws1_update_assignments is set."
-                            )
+                        self.output(
+                            f"App [{app_name}] version [{app_version}] is already present on server, "
+                            "and ws1_force_import is not set."
+                        )
                         return "Nothing new to upload - completed."
                     else:
                         self.output(
@@ -460,319 +357,7 @@ class WorkSpaceOneImporter(WorkSpaceOneImporterBase):
             },
         }
 
-        """
-        Create the app assignment details for API V1 assignments POST call
-        MAM (Mobile Application Management) REST API V1  - POST /apps/internal/{applicationId}/assignments
-        https://as135.awmdm.com/api/help/#!/InternalAppsV1/InternalAppsV1_AddAssignmentsWithFlexibleDeploymentParametersAsync
-        """
-        # get WS1 Smart Group ID from its name
-        if not assignment_group == "none":
-            app_assignment = self.ws1_app_assignment_conf(api_base_url, assignment_pushmode, assignment_group, headers)
-            self.ws1_app_assign(api_base_url, assignment_group, app_assignment, headers, ws1_app_id)
-        else:
-            self.ws1_app_assignments(api_base_url, app_assignments, headers, ws1_app_id)
-
         return "Application was successfully uploaded to WorkSpaceOne."
-
-    def ws1_app_assignments(self, api_base_url, app_assignments, headers, ws1_app_id):
-        """
-        prep app assignment rules and make API V2 assignments PUT call
-        MAM (Mobile Application Management) REST API V2  - PUT /apps/{applicationUuid}/assignment-rules
-        https://as135.awmdm.com/API/help/#!/AppsV2/AppsV2_UpdateAssignmentRuleAsync
-
-        NB - an App Assignment Rule with an effective_date in the future causes previous versions of the app to NOT be
-        deployed to newly enrolled devices, and NOT be offered in the Hub and user portal. Neither will the app version
-        with effective_date in the future be deployed or be offered in the Hub or user portal before effective_date.
-        For that reason, we need to postpone setting such assignment rules until effective_date, and skip those set
-        for a future date until next autopkg session.
-        """
-        # call Get for internal app to get app UUID
-        try:
-            r = requests.get(f"{api_base_url}/api/mam/apps/internal/{ws1_app_id}", headers=headers)
-            result = r.json()
-        except requests.exceptions.RequestException as err:
-            raise ProcessorError(f"API call to get internal app details failed, error: {err}")
-        if not r.status_code == 200:
-            raise ProcessorError(
-                f"WorkSpaceOneImporter: Unable to get internal app details - message: {result['message']}."
-            )
-        ws1_app_uuid = result["uuid"]
-        app_name = result["ApplicationName"]
-        app_version = result["ActualFileVersion"]
-        self.output(f"ws1_app_uuid: [{ws1_app_uuid}]", verbose_level=2)
-        if not app_assignments == "none":
-            # prepare API V2 headers
-            headers_v2 = dict(headers)
-            headers_v2["Accept"] = f"{headers['Accept']};version=2"
-            self.output(f"API v.2 call headers: {headers_v2}", verbose_level=4)
-
-            # get any existing assignment rules and see if they need updating
-            try:
-                r = requests.get(
-                    f"{api_base_url}/api/mam/apps/{ws1_app_uuid}/assignment-rules",
-                    headers=headers_v2,
-                )
-                result = r.json()
-            except requests.exceptions.RequestException as err:
-                raise ProcessorError(f"API call to get existing app assignment rules failed, error: {err}")
-            if not r.status_code == 200:
-                raise ProcessorError(
-                    f"WorkSpaceOneImporter: Unable to get existing app assignment rules from WS1 "
-                    f"- message: {result['message']}."
-                )
-            if not result["assignments"] and not self.env.get("ws1_imported_new"):
-                self.output(
-                    "No existing Assignment Rules found, operator must have removed those - skipping.",
-                    verbose_level=1,
-                )
-                return
-            elif result["assignments"]:
-                for index, assignment in enumerate(result["assignments"]):
-                    self.output(
-                        f"Existing assignment #[{index}] is [{assignment}]",
-                        verbose_level=2,
-                    )
-                    if assignment["distribution"]["description"]:
-                        if "#AUTOPKG_DONE" in assignment["distribution"]["description"]:
-                            self.output(
-                                "Assignment Rules are already marked as complete.",
-                                verbose_level=1,
-                            )
-                            return
-                        if "#AUTOPKG" not in assignment["distribution"]["description"]:
-                            self.output(
-                                "Assignment Rule description is NOT tagged as made by Autopkg - skipping.",
-                                verbose_level=1,
-                            )
-                            return
-                    else:
-                        self.output(
-                            "Assignment Rule description not present, so NOT tagged as made by Autopkg - skipping.",
-                            verbose_level=1,
-                        )
-                        return
-
-                # if there's an existing assignment rule, use its effective_date as base deployment date, else
-                # use today's date
-                ws1_app_ass_day0 = datetime.min
-                if result["assignments"][0]["distribution"]["effective_date"]:
-                    # ugly hack to split just the date at the T from the returned ISO-8601 as we don't care about the
-                    # time may have a float as seconds or an int
-                    # no timezone is returned in UEM v.22.12 but suspect that might change
-                    # datetime.fromisoformat() can't handle the above in current Python v3.10
-                    # alternative would be to install python-dateutil but that would introduce a new dependency
-                    edate = "".join(result["assignments"][0]["distribution"]["effective_date"].split("T", 1)[:1])
-                    self.output(
-                        f"Deployment date found in existing assignment #0: {[edate]} ",
-                        verbose_level=2,
-                    )
-                    ws1_app_ass_day0 = datetime.fromisoformat(edate).date()
-            else:
-                ws1_app_ass_day0 = datetime.today().date()
-
-            # process assignment rules from recipe input
-            self.output(
-                f"Assignments recipe input var is of type: [{type(app_assignments)}]",
-                verbose_level=3,
-            )
-            self.output(f"App assignments data input: {app_assignments}", verbose_level=2)
-            skip_remaining_assignments = False
-            report_assignment_rules = []
-            priority_index = 0
-            for priority_index, app_assignment in enumerate(app_assignments):
-                app_assignment["priority"] = str(priority_index)  # rules must be passed in order of ascending priority
-                app_assignment["distribution"]["smart_groups"] = []
-                report_assignment_rules.append(
-                    {
-                        "priority": str(priority_index),
-                        "name": app_assignment["distribution"]["name"],
-                    }
-                )
-                for smart_group_name in app_assignment["distribution"]["smart_group_names"]:
-                    self.output(
-                        f"App assignment[{priority_index}] Smart Group name: [{smart_group_name}]",
-                        verbose_level=2,
-                    )
-                    sg_id, sg_uuid = self.get_smartgroup_id(api_base_url, smart_group_name, headers)
-                    app_assignment["distribution"]["smart_groups"].append(sg_uuid)
-                # smart_group_names is used as input, NOT in API call
-                del app_assignment["distribution"]["smart_group_names"]
-                distr_delay_days = app_assignment["distribution"]["distr_delay_days"]
-                self.output(f"distr_delay_days: {distr_delay_days}", verbose_level=3)
-                if distr_delay_days == "0":
-                    app_assignment["distribution"]["effective_date"] = ws1_app_ass_day0.isoformat()
-                else:
-                    # calculate effective_date to use in API call
-                    num_delay_days = int(distr_delay_days)
-                    self.output(
-                        f"smart group deployment delay for assignment[{priority_index}] is: [{num_delay_days}] days",
-                        verbose_level=2,
-                    )
-                    deploy_date = ws1_app_ass_day0 + timedelta(days=num_delay_days)
-                    self.output(
-                        f"That makes the deploy date for assignment[{priority_index}]: [{deploy_date.isoformat()}].",
-                        verbose_level=2,
-                    )
-                    """
-                    Commented out the time setting part as it isn't respected in UEM v.22.9.0.8 (2209) as of 2023-02-17
-                    # convert date to datetime, and add 12 hours to deploy at noon in WS1 UEM console timezone
-                    deploy_datetime = datetime.datetime.combine(deploy_date, datetime.time(12))
-                    # specify target date and time as noon in iso 8601 format with local timezone offset
-                    app_assignment["distribution"]["effective_date"] = deploy_datetime.astimezone().isoformat()
-                    app_assignment["distribution"]["effective_date"] = deploy_datetime.isoformat()
-                    """
-
-                    # Assignments must be deployed after their designated date, otherwise they would 'hide' previous
-                    # versions
-                    if deploy_date > datetime.today().date():
-                        skip_remaining_assignments = True
-                        break
-                    app_assignment["distribution"]["effective_date"] = deploy_date.isoformat()
-                # distr_delay_days is used as input, NOT in API call
-                del app_assignment["distribution"]["distr_delay_days"]
-
-                if app_assignment["distribution"]["keep_app_updated_automatically"]:
-                    # need to pass auto_update_devices_with_previous_versions as well to have apps update automatically
-                    app_assignment["distribution"]["auto_update_devices_with_previous_versions"] = True
-                else:
-                    app_assignment["distribution"]["auto_update_devices_with_previous_versions"] = False
-
-                # If we made it to the last assignment...
-                if priority_index == (len(app_assignments) - 1):
-                    # add a tag to the assignment description to signify Autopkg processing is complete
-                    app_assignment["distribution"]["description"] += " #AUTOPKG_DONE"
-                else:
-                    # add a tag to the assignment description to signify it is handled by Autopkg
-                    app_assignment["distribution"]["description"] += " #AUTOPKG"
-            if skip_remaining_assignments:
-                del app_assignments[priority_index:]
-                del report_assignment_rules[priority_index:]
-                self.output(
-                    f"Skipping remaining assignments from index [{priority_index}] as they are designated for a  "
-                    f"future date.",
-                    verbose_level=1,
-                )
-
-            # remove existing assignments from report_assignment_rules
-            report_assignment_rules = report_assignment_rules[len(result["assignments"]) :]
-
-            # if the same number of assignments exist already, bail out
-            if len(app_assignments) <= len(result["assignments"]):
-                self.output("No new assignments to make at this time.", verbose_level=1)
-                return
-            else:
-                self.output(f"App assignments data to send: {app_assignments}", verbose_level=3)
-                try:
-                    assignment_rules = {"assignments": app_assignments}
-                    payload = json.dumps(assignment_rules)
-                    self.output(
-                        f"App assignments data to send as json: {payload}",
-                        verbose_level=2,
-                    )
-                except ValueError as err:
-                    raise ProcessorError(f"Failed parsing app assignments as json, error: {err}")
-
-                try:
-                    # Make the WS1 APIv2 call to assign the App
-                    r = requests.put(
-                        f"{api_base_url}/api/mam/apps/{ws1_app_uuid}/assignment-rules",
-                        headers=headers_v2,
-                        data=payload,
-                    )
-                except requests.exceptions.RequestException as err:
-                    raise ProcessorError(
-                        f"Failed setting assignment-rules for app [{app_name}] version [{app_version}], error: {err}"
-                    )
-                if not r.status_code == 202:
-                    result = r.json()
-                    self.output(
-                        f"Setting App assignment rules failed: {result['errorCode']} - {result['message']}",
-                        verbose_level=2,
-                    )
-                    raise ProcessorError(f"Unable to set assignment rules for [{app_name}] version [{app_version}]")
-
-                self.output(f"Successfully set assignment rules for [{app_name}] version [{app_version}]")
-                new_assignment_rules = ""
-                for rule in report_assignment_rules:
-                    new_assignment_rules += f"[{rule['priority']}: {rule['name']}] "
-                self.env["ws1_app_assignments_changed"] = True
-                app_ws1console_loc = (
-                    f"{self.env.get('ws1_console_url')}"
-                    f"/AirWatch/#/AirWatch/Apps/Details/Internal/{ws1_app_id}/Assignment"
-                )
-                if not self.env["ws1_imported_new"]:
-                    self.env["ws1_importer_summary_result"] = {
-                        "summary_text": "The following new app assignment rules are applied in WS1:",
-                        "report_fields": [
-                            "name",
-                            "version",
-                            "new_assignment_rules",
-                            "console_location",
-                        ],
-                        "data": {
-                            "name": self.env["NAME"],
-                            "version": app_version,
-                            "new_assignment_rules": new_assignment_rules,
-                            "console_location": app_ws1console_loc,
-                        },
-                    }
-                else:
-                    ws1_importer_summary_result = self.env.get("ws1_importer_summary_result")
-                    ws1_importer_summary_result["report_fields"].append("new_assignment_rules")
-                    ws1_importer_summary_result["data"]["new_assignment_rules"] = new_assignment_rules
-                    self.env["ws1_importer_summary_result"] = ws1_importer_summary_result
-
-    def ws1_app_assignment_conf(self, api_base_url, assignment_pushmode, assignment_group, headers):
-        """assemble app_assignment to pass in API V1 call"""
-        sg_id, sg_uuid = self.get_smartgroup_id(api_base_url, assignment_group, headers)
-        if assignment_pushmode == "Auto":
-            set_macos_desired_state_management = True
-        else:
-            set_macos_desired_state_management = False
-        app_assignment = {
-            "SmartGroupIds": [sg_id],
-            "DeploymentParameters": {
-                "PushMode": assignment_pushmode,
-                "AssignmentId": 1,
-                "MacOsDesiredStateManagement": set_macos_desired_state_management,
-                "RemoveOnUnEnroll": False,
-                "AutoUpdateDevicesWithPreviousVersion": True,
-                "VisibleInAppCatalog": True,
-            },
-        }
-        return app_assignment
-
-    def ws1_app_assign(self, base_url, smart_group, app_assignment, headers, ws1_app_id):
-        """Call WS1 API V1 assignments for to smart group(s) with the deployment settings
-        MAM (Mobile Application Management) REST API V1  - POST /apps/internal/{applicationId}/assignments
-        https://as135.awmdm.com/api/help/#!/InternalAppsV1/InternalAppsV1_AddAssignmentsWithFlexibleDeploymentParametersAsync
-        """  # noqa: E501
-        try:
-            payload = json.dumps(app_assignment)
-            self.output(f"App assignments data to send: {app_assignment}", verbose_level=2)
-        except ValueError:
-            raise ProcessorError("failed to parse App assignment as json")
-
-        try:
-            # Make the WS1 API call to assign the App
-            r = requests.post(
-                f"{base_url}/api/mam/apps/internal/{ws1_app_id}/assignments",
-                headers=headers,
-                data=payload,
-            )
-        except requests.exceptions.RequestException:
-            raise ProcessorError(
-                f"Something went wrong assigning the app [{self.env['NAME']}] to group [{smart_group}]"
-            )
-        if not r.status_code == 201:
-            result = r.json()
-            self.output(
-                f"App assignments failed: {result['errorCode']} - {result['message']}",
-                verbose_level=2,
-            )
-            raise ProcessorError(f"Unable to assign the app [{self.env['NAME']}] to the group [{smart_group}]")
-        self.env["ws1_app_assignments_changed"] = True
-        self.output(f"Successfully assigned the app [{self.env['NAME']}] to the group [{smart_group}]")
 
     def main(self):
         """Rebuild Munki catalogs in repo_path"""
@@ -781,7 +366,6 @@ class WorkSpaceOneImporter(WorkSpaceOneImporterBase):
         if "ws1_importer_summary_result" in self.env:
             del self.env["ws1_importer_summary_result"]
         self.env["ws1_imported_new"] = False
-        self.env["ws1_app_assignments_changed"] = False
 
         cache_dir = get_pref("CACHE_DIR") or os.path.expanduser("~/Library/AutoPkg/Cache")
         current_run_results_plist = os.path.join(cache_dir, "autopkg_results.plist")
