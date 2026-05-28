@@ -69,5 +69,5 @@ The processor is being split for [cloud-autopkg-runner (CAR)](https://pypi.org/p
 ## workaround for file creation issues in the chat AI
 - see 035.1. TOOLING_ISSUE file creation workaround.md
 - The tooling must use the workaround for create_file **with a literal (unescaped) path containing spaces.**
-- This is needed because create_file with a path containing spaces is currently producing an error in the chat AI, and this workaround allows us to continue saving our prompt and results documents without interruption. The workaround involves using a placeholder filename without spaces when calling create_file, and then renaming the file to the intended name with spaces after creation.
+- This is needed because create_file with a path containing spaces is currently producing an error in the chat AI, and this workaround allows us to continue saving our prompt and results documents without interruption.
 - Also, the use of a Heredoc in this context is failing, so that is not an option until the tooling is fixed.
