@@ -1,4 +1,4 @@
-Comment: TESTING 1...2..3.
+Comment:
 Description: Creates a Munki package for Suspicious Package, and imports it into WorkSpace ONE.
 Identifier: com.github.codeskipper.ws1.Apparency
 ParentRecipe: com.github.kevinmcox.munki.Apparency
