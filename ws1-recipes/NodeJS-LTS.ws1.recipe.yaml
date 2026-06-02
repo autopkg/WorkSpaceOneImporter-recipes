@@ -1,5 +1,5 @@
 Comment: Copied pkginfo section from Munki parent recipe to add to Description
-Description: Downloads and Creates a munki package for NodeJS-LTS, imports it into WorkSpace ONE UEM, and makes assignment rules.
+Description: Downloads and Creates a Munki package for NodeJS-LTS, and imports it into WorkSpace ONE.
 Identifier: com.github.codeskipper.ws1.NodeJS-LTS
 ParentRecipe: com.github.dataJAR-recipes.munki.nodejslts
 MinimumVersion: '2.3'

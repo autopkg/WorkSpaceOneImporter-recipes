@@ -1,5 +1,5 @@
 Comment:
-Description: Downloads and Creates a munki package for iTerm2, imports it into WorkSpace ONE UEM, and makes assignment rules.
+Description: Downloads and Creates a munki package for iTerm2, and imports it into WorkSpace ONE.
 Identifier: com.github.codeskipper.ws1.iTerm2
 ParentRecipe: io.github.hjuutilainen.munki.iTerm2
 MinimumVersion: '2.3'

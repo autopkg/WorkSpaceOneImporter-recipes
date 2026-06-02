@@ -1,7 +1,5 @@
-Comment: |
-  recipe with ws1_assignments for AppsV2 API style assignment-rules
-  See https://as135.awmdm.com/API/help/#!/apis/10001?!%2FAppsV2%2FAppsV2_UpdateAssignmentRuleAsync
-Description: Downloads and Creates a Munki package for Microsoft Company Portal, imports it into WorkSpace ONE UEM, and makes assignment rules.
+Comment:
+Description: Downloads and Creates a Munki package for Microsoft Company Portal, and imports it into WorkSpace ONE.
 Identifier: com.github.codeskipper.ws1.MicrosoftVisualStudioCode
 ParentRecipe: com.github.valdore86.munki.visualstudiocode
 MinimumVersion: '2.3'

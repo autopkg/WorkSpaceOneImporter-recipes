@@ -1,5 +1,5 @@
 Comment:
-Description: Creates a munki package for Munki Admin, imports it into WorkSpace ONE UEM, and makes assignment rules.
+Description: Creates a Munki package for Munki Admin, and imports it into WorkSpace ONE.
 Identifier: com.github.codeskipper.ws1.MunkiAdmin
 ParentRecipe: com.github.jleggat.MunkiAdmin.munki
 MinimumVersion: '2.3'

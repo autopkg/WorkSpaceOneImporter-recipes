@@ -1,7 +1,6 @@
 Comment:
 Description: |
-  Downloads and Creates a Munki package for Installomator, imports it into
-  WorkSpace ONE UEM, and makes assignment rules.
+  Downloads and Creates a Munki package for Installomator, and imports it into WorkSpace ONE.
 Identifier: com.github.codeskipper.ws1.Installomator
 ParentRecipe: com.github.precursorca.munki.installomator
 MinimumVersion: '2.3'

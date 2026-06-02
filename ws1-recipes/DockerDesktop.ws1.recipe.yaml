@@ -1,5 +1,5 @@
 Comment: use override with PLATFORM_ARCH setting to get Intel or Apple Silicon versions
-Description: Downloads and Creates a munki package for Docker Desktop, imports it into WorkSpace ONE UEM, and makes assignment rules.
+Description: Downloads and Creates a munki package for Docker Desktop, and imports it into WorkSpace ONE.
 Identifier: com.github.codeskipper.ws1.DockerDesktop
 ParentRecipe: com.github.homebysix.munki.DockerDesktop
 MinimumVersion: '2.3'

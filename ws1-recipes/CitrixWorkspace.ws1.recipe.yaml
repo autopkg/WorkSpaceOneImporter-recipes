@@ -1,5 +1,5 @@
 Comment:
-Description: Downloads and Creates a munki package for Citrix Workspace, imports it into WorkSpace ONE UEM, and makes assignment rules.
+Description: Downloads and Creates a munki package for Citrix Workspace, and imports it into WorkSpace ONE.
 Identifier: com.github.codeskipper.ws1.CitrixWorkspace
 ParentRecipe: io.github.hjuutilainen.munki.CitrixWorkspace
 MinimumVersion: '2.3'
