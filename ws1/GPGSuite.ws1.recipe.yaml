@@ -1,4 +1,7 @@
-Comment: Copied pkginfo section from Munki parent recipe, and added preinstall_script
+Comment: |
+  HEADS UP: the ws1-recipes will soon be split up to separate out the assignments and pruning features into separate recipes.
+
+  Copied pkginfo section from Munki parent recipe, and added preinstall_script
 Description: Creates a munki package for GPG Suite, imports it into WorkSpace ONE UEM, and makes assignment rules.
 Identifier: com.github.codeskipper.ws1.GPGSuite
 ParentRecipe: com.github.gerardkok.munki.GPGSuite

@@ -1,4 +1,6 @@
-Comment:
+Comment: |
+  HEADS UP: the ws1-recipes will soon be split up to separate out the assignments and pruning features into separate recipes.
+
 Description: |
   Downloads and Creates a Munki package for Mac Admins Python Recommended, imports it into
   WorkSpace ONE UEM, and makes assignment rules.

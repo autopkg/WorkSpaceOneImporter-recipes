@@ -1,4 +1,6 @@
 Comment: |
+  HEADS UP: the ws1-recipes will soon be split up to separate out the assignments and pruning features into separate recipes.
+
     2024-06-20 - this recipe replaces the Microsoft Teams (work or school) after the product name change by Microsoft
     2026-09-30 - updated the recipe to use parent recipe from main AutoPkg repo instead of from dataJAR to avoid error "Invalid file Failed". This happens when running with CAR in cloud, likely as a result of processing in the check phase.  PlistReader then throws an error when trying to access a file in autopkg/cache/local.ws1.MicrosoftTeams2/DOWNLOAD_XML/0409TEAMS21-chk.plist
 Description: Downloads, and creates a Munki package for Microsoft Teams, and imports it into WorkSpace ONE UEM.

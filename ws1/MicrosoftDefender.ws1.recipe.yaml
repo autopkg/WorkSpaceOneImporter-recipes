@@ -1,4 +1,6 @@
-Comment:
+Comment: |
+  HEADS UP: the ws1-recipes will soon be split up to separate out the assignments and pruning features into separate recipes.
+
 Description: Downloads and Creates a munki package for Microsoft Defender, imports it into WorkSpace ONE UEM, and makes assignment rules.
 Identifier: com.github.codeskipper.ws1.MicrosoftDefender
 ParentRecipe: com.github.rtrouton.munki.microsoftdefender

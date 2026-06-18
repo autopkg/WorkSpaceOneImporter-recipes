@@ -1,4 +1,7 @@
-Comment: First recipe with yaml format, added '.ws1-plist.' in the plist variant filename and in identifier to distinguish
+Comment: |
+  HEADS UP: the ws1-recipes will soon be split up to separate out the assignments and pruning features into separate recipes.
+
+  First recipe with yaml format, added '.ws1-plist.' in the plist variant filename and in identifier to distinguish
 Description: Creates a munki package for Suspicious Package, and imports it into WorkSpace ONE.
 Identifier: com.github.codeskipper.ws1.SuspiciousPackage
 ParentRecipe: com.github.poundbangbash.eholtam-recipes.munki.SuspiciousPackageApp

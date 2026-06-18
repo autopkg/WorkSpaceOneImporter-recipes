@@ -1,4 +1,6 @@
-Comment:
+Comment: |
+  HEADS UP: the ws1-recipes will soon be split up to separate out the assignments and pruning features into separate recipes.
+
 Description: Creates a munki package for Munki Admin, imports it into WorkSpace ONE UEM, and makes assignment rules.
 Identifier: com.github.codeskipper.ws1.MunkiAdmin
 ParentRecipe: com.github.jleggat.MunkiAdmin.munki

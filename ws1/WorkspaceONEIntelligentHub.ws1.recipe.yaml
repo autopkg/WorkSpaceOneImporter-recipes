@@ -1,4 +1,6 @@
 Comment: |
+  HEADS UP: the ws1-recipes will soon be split up to separate out the assignments and pruning features into separate recipes.
+
   Import to WS1 as native app to deploy as update. Avoids issue with No hub deployed on newly enrolled Macs, which
   is triggered by asking VMWare support to seed new versions in UEM
 Description: |

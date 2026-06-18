@@ -1,4 +1,6 @@
-Comment:
+Comment: |
+  HEADS UP: the ws1-recipes will soon be split up to separate out the assignments and pruning features into separate recipes.
+
 Description: Creates a munki package for JetBrains Toolbox, and imports it into WorkSpace ONE.
 Identifier: com.github.codeskipper.ws1.JetBrainsToolbox
 ParentRecipe: com.github.autopkg.arubdesu-recipes.munki.JetBrainsToolbox

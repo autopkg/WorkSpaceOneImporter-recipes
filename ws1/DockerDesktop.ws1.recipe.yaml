@@ -1,4 +1,7 @@
-Comment: use override with PLATFORM_ARCH setting to get Intel or Apple Silicon versions
+Comment: |
+  HEADS UP: the ws1-recipes will soon be split up to separate out the assignments and pruning features into separate recipes.
+
+  use override with PLATFORM_ARCH setting to get Intel or Apple Silicon versions
 Description: Downloads and Creates a munki package for Docker Desktop, imports it into WorkSpace ONE UEM, and makes assignment rules.
 Identifier: com.github.codeskipper.ws1.DockerDesktop
 ParentRecipe: com.github.homebysix.munki.DockerDesktop

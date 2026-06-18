@@ -1,4 +1,7 @@
-Comment: (see Notes in pkginfo)
+Comment: |
+  HEADS UP: the ws1-recipes will soon be split up to separate out the assignments and pruning features into separate recipes.
+
+  (see Notes in pkginfo)
 Description: download and import package for erase-install script into Munki, then import into WorkSpace ONE.
 Identifier: com.github.codeskipper.ws1.erase-install
 ParentRecipe: com.github.its-unibas.munki.erase-install

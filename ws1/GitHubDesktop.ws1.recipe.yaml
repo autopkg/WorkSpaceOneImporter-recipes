@@ -1,4 +1,6 @@
 Comment: |
+  HEADS UP: the ws1-recipes will soon be split up to separate out the assignments and pruning features into separate recipes.
+
   recipe with ws1_assignments for AppsV2 API style assignment-rules
   See https://as135.awmdm.com/API/help/#!/apis/10001?!%2FAppsV2%2FAppsV2_UpdateAssignmentRuleAsync
 Description: Creates a munki package for GitHub Desktop, imports it into WorkSpace ONE UEM, and makes assignment rules.

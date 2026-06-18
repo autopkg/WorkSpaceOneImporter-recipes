@@ -1,4 +1,6 @@
 Comment: |
+  HEADS UP: the ws1-recipes will soon be split up to separate out the assignments and pruning features into separate recipes.
+
     Intended to process the software package from YOUR company firewall - you need to specify the portal hostname in
     the recipe override
 Description: Creates a Munki package for Palo Alto Networks GlobalProtect, and imports it into WorkSpace ONE UEM.

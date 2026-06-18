@@ -1,4 +1,6 @@
-Comment:
+Comment: |
+  HEADS UP: the ws1-recipes will soon be split up to separate out the assignments and pruning features into separate recipes.
+
 Description: Creates a munki package for Lexmark Universal Printer Driver - Color, and imports it into WorkSpace ONE.
 Identifier: com.github.codeskipper.ws1.LexmarkUniversalDriverColor
 ParentRecipe: com.github.codeskipper.munki.LexmarkUniversalDriverColor
