@@ -279,6 +279,8 @@ class WorkSpaceOneSlacker(WorkSpaceOneImporterBase):
             ws1_row = ws1_results_data[0] if ws1_results_data else {}
             task_title = f"⚠️ Pruning safeguard — {app_name}"
             task_description = failure_message or "Pruning was skipped due to active device assignments.\n"
+            if not task_description.endswith("\n"):
+                task_description += "\n"
             if ws1_row.get("assigned_device_count"):
                 task_description += f"*Assigned device count:* `{ws1_row.get('assigned_device_count')}` \n"
             if ws1_row.get("version"):
