@@ -266,10 +266,10 @@ class WorkSpaceOneSlacker(WorkSpaceOneImporterBase):
         task_description = None
 
         if not trust_verified:
-            task_title = f"{app_name} failed trust verification (WS1_Slacker)"
+            task_title = f"{app_name} failed trust verification"
             task_description = failure_message or "Trust verification failed."
         elif has_error:
-            task_title = f"Failed to import {app_name} (WS1_Slacker)"
+            task_title = f"Failed to import {app_name}"
             if not failed_items:
                 task_description = "Unknown error"
             else:
@@ -281,7 +281,7 @@ class WorkSpaceOneSlacker(WorkSpaceOneImporterBase):
                     # Just no updates — return silently
                     return
         elif munki_updated and not ws1_updated:
-            task_title = f"Munki (NOT WS1 UEM!) imported {app_name} {str(updated_version)} (WS1_Slacker)"
+            task_title = f"Munki (NOT WS1 UEM!) imported {app_name} {str(updated_version)}"
             task_description = (
                 "*Catalogs:* %s \n" % imported_items[0].get("catalogs", "")
                 + "*Package Path:* `%s` \n" % imported_items[0].get("pkg_repo_path", "")
@@ -289,7 +289,7 @@ class WorkSpaceOneSlacker(WorkSpaceOneImporterBase):
             )
         elif munki_updated and ws1_updated:
             ws1_row = ws1_results_data[0] if ws1_results_data else {}
-            task_title = "WS1 UEM and Munki - Imported (WS1_Slacker)"
+            task_title = "WS1 UEM and Munki - Imported"
             task_description = (
                 "*WS1 UEM* \n" f"App:       `{app_name}` \n" f"Version: `{ws1_row.get('version', '')}` \n"
             )
@@ -310,7 +310,7 @@ class WorkSpaceOneSlacker(WorkSpaceOneImporterBase):
                 )
         elif ws1_updated:
             ws1_row = ws1_results_data[0] if ws1_results_data else {}
-            task_title = "WS1 UEM - Imported (WS1_Slacker)"
+            task_title = "WS1 UEM - Imported"
             task_description = f"App:       `{app_name}` \n" f"Version: `{ws1_row.get('version', '')}` \n"
             if ws1_row.get("new_assignment_rules"):
                 task_description += f"*Assignment rules:* `{ws1_row['new_assignment_rules']}` \n"
@@ -323,7 +323,7 @@ class WorkSpaceOneSlacker(WorkSpaceOneImporterBase):
                 )
         elif ws1_updated_assignments:
             ws1_row = ws1_results_data[0] if ws1_results_data else {}
-            task_title = "WS1 UEM - New Assignment Rules (WS1_Slacker)"
+            task_title = "WS1 UEM - New Assignment Rules"
             task_description = (
                 f"App:       `{app_name}` \n"
                 f"Version: `{ws1_row.get('version', '')}` \n"
@@ -338,7 +338,7 @@ class WorkSpaceOneSlacker(WorkSpaceOneImporterBase):
                 )
         elif ws1_pruned:
             ws1_row = ws1_results_data[0] if ws1_results_data else {}
-            task_title = "WS1 UEM - old app versions pruned (WS1_Slacker)"
+            task_title = "WS1 UEM - old app versions pruned"
             task_description = (
                 f"App:       `{app_name}` \n"
                 f"*Pruned versions:* `{ws1_row.get('pruned_versions', '')}` \n"
