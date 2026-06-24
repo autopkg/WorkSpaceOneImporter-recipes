@@ -1,5 +1,5 @@
 Comment: Copied pkginfo section from Munki parent recipe, and added preinstall_script
-Description: Creates a munki package for GPG Suite, and imports it into WorkSpace ONE.
+Description: Creates a Munki package for GPG Suite, and imports it into WorkSpace ONE.
 Identifier: com.github.codeskipper.ws1.GPGSuite
 ParentRecipe: com.github.gerardkok.munki.GPGSuite
 MinimumVersion: '2.3'

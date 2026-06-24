@@ -1,5 +1,5 @@
 Comment:
-Description: Creates a munki package for Microsoft Company Portal, and imports it into WorkSpace ONE.
+Description: Creates a Munki package for Microsoft Company Portal, and imports it into WorkSpace ONE.
 Identifier: com.github.codeskipper.ws1.CompanyPortal
 ParentRecipe: com.github.jlehikoinen.munki.CompanyPortal
 MinimumVersion: '2.3'
