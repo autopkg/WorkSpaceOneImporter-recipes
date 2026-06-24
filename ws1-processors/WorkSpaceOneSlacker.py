@@ -84,6 +84,11 @@ class WorkSpaceOneSlacker(WorkSpaceOneImporterBase):
             "required": False,
             "description": "Error/traceback text from a prior step, for inclusion in failure notifications.",
         },
+        "ws1_safeguard_triggered": {
+            "required": False,
+            "description": "Set to True if a pruning safeguard was triggered (version has active assignments). "
+            "This will be treated as a warning rather than an error.",
+        },
     }
 
     output_variables = {
@@ -247,12 +252,13 @@ class WorkSpaceOneSlacker(WorkSpaceOneImporterBase):
         trust_verified_str = self.env.get("ws1_slack_trust_verified", "True")
         trust_verified = trust_verified_str.lower() not in ("false", "0", "no")
         failure_message = self.env.get("ws1_slack_failure_message", "")
+        safeguard_triggered = self.env.get("ws1_safeguard_triggered", False)
 
         imported_items = results["imported"]
         failed_items = results["failed"]
         ws1_results_data = results["ws1_results_data"]
         munki_updated = bool(imported_items)
-        has_error = bool(failed_items)
+        has_error = bool(failed_items) or (bool(failure_message) and not safeguard_triggered)
         ws1_updated = results["ws1_updated"]
         ws1_updated_assignments = results["ws1_updated_assignments"]
         ws1_pruned = results["ws1_pruned"]
@@ -268,6 +274,15 @@ class WorkSpaceOneSlacker(WorkSpaceOneImporterBase):
         if not trust_verified:
             task_title = f"{app_name} failed trust verification"
             task_description = failure_message or "Trust verification failed."
+        elif safeguard_triggered:
+            # Pruning safeguard triggered — treat as warning, not error
+            ws1_row = ws1_results_data[0] if ws1_results_data else {}
+            task_title = f"⚠️ Pruning safeguard — {app_name}"
+            task_description = failure_message or "Pruning was skipped due to active device assignments.\n"
+            if ws1_row.get("assigned_device_count"):
+                task_description += f"*Assigned device count:* `{ws1_row.get('assigned_device_count')}` \n"
+            if ws1_row.get("version"):
+                task_description += f"*Version:* `{ws1_row.get('version')}` \n"
         elif has_error:
             task_title = f"Failed to import {app_name}"
             if not failed_items:
@@ -351,6 +366,8 @@ class WorkSpaceOneSlacker(WorkSpaceOneImporterBase):
 
         # Determine color
         if not trust_verified:
+            color = "warning"
+        elif safeguard_triggered:
             color = "warning"
         elif has_error:
             color = "danger"

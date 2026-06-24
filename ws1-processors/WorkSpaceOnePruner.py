@@ -71,6 +71,14 @@ class WorkSpaceOnePruner(WorkSpaceOneImporterBase):
             "Can be set across recipes and software titles, in this case "
             " an environment variable is practical.",
         },
+        "ws1_safeguard_halt_on_assigned": {
+            "required": False,
+            "default": "True",
+            "description": "Whether to halt (raise ProcessorError) when a safeguard detects versions still assigned to "
+            "devices. Default:True (current behavior — hard stop). Set to False to gracefully exit and allow "
+            "Slack notifications to be sent via WorkSpaceOneSlacker processor. When False, the pruning operation "
+            "is skipped for versions with active assignments, and a warning summary is recorded.",
+        },
     }
 
     output_variables = {
@@ -221,17 +229,39 @@ class WorkSpaceOnePruner(WorkSpaceOneImporterBase):
                 if row["status"] == "TO BE PRUNED":
                     self.output(f"Deleting old version {row['version']}...", verbose_level=3)
 
-                    # safeguard against removal of versions that are still assigned to devices, hardcoded limit for now
+                    # safeguard against removal of versions that are still assigned to devices
                     if int(row["num"]) > 0:
+                        safeguard_message = (
+                            f"Version {row['version']} is still assigned to {row['num']} devices, cannot be deleted."
+                        )
                         self.output(
-                            f"Version {row['version']} is still assigned to {row['num']} devices, "
-                            "cannot be deleted, bailing out.",
+                            f"{safeguard_message} Bail out policy: checking ws1_safeguard_halt_on_assigned.",
                             verbose_level=1,
                         )
-                        raise ProcessorError(
-                            f"WorkSpaceOnePruner: Version {row['version']} is still assigned to {row['num']} "
-                            "devices, cannot be deleted, bailing out."
-                        )
+
+                        # Check if we should halt or gracefully skip
+                        halt_on_assigned_str = self.env.get("ws1_safeguard_halt_on_assigned", "True")
+                        halt_on_assigned = halt_on_assigned_str.lower() not in ("false", "0", "no")
+
+                        if halt_on_assigned:
+                            # Current behavior: hard stop
+                            raise ProcessorError(f"WorkSpaceOnePruner: {safeguard_message}")
+                        else:
+                            # Graceful exit: set failure message for Slacker and create summary
+                            self.output(
+                                "ws1_safeguard_halt_on_assigned is False. Skipping versions marked for deletion "
+                                "due to active assignments. Slack notification will be sent.",
+                                verbose_level=1,
+                            )
+                            self.env["ws1_slack_failure_message"] = (
+                                f"⚠️ Pruning safeguard triggered for {app_name}: {safeguard_message}"
+                            )
+                            self.env["ws1_safeguard_triggered"] = True
+                            self.env["ws1_pruner_summary_result"] = self._create_safeguard_summary_result(
+                                app_name, row["version"], row["num"]
+                            )
+                            # Exit gracefully without deleting anything
+                            return None
                     else:
                         self.output(
                             f"Version {row['version']} is assigned to {row['num']} devices, and " "will be pruned.",
@@ -272,6 +302,19 @@ class WorkSpaceOnePruner(WorkSpaceOneImporterBase):
                         "pruned_versions_num": str(num_pruned),
                     },
                 }
+
+    def _create_safeguard_summary_result(self, app_name, version, assigned_count):
+        """Create a summary result for a safeguard-triggered event."""
+        return {
+            "summary_text": "Pruning safeguard triggered — version has active assignments",
+            "report_fields": ["name", "version", "assigned_device_count", "action"],
+            "data": {
+                "name": app_name,
+                "version": version,
+                "assigned_device_count": str(assigned_count),
+                "action": "Skipped — cannot delete version with active assignments",
+            },
+        }
 
     def main(self):
         """Prune old app versions from Workspace ONE UEM."""
