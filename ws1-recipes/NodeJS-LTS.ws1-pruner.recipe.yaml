@@ -6,6 +6,7 @@ MinimumVersion: '2.3'
 Input:
   NAME: Node JS LTS
   WS1_APP_VERSIONS_TO_KEEP: NUMBER_OF_VERSIONS_TO_KEEP_HERE
+  WS1_SAFEGUARD_HALT_ON_ASSIGNED: 'False'  # Set to False to gracefully handle safeguard with Slack notification
 
   # WS1 specific input,  secrets.  Only one set of API credentials is needed.
   WS1_OAUTH_CLIENT_ID: OAUTH2_CLIENT_ID_HERE
@@ -32,4 +33,4 @@ Process:
     ws1_api_url: '%WS1_API_URL%'
     ws1_groupid: '%WS1_GROUPID%'
     ws1_app_versions_to_keep: '%WS1_APP_VERSIONS_TO_KEEP%'
-
+    ws1_safeguard_halt_on_assigned: '%WS1_SAFEGUARD_HALT_ON_ASSIGNED%'
