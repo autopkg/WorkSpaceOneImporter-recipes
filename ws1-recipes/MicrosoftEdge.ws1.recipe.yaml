@@ -1,5 +1,5 @@
 Comment:
-Description: Creates a Munki package for Microsoft Edge, and imports it into WorkSpace ONE.
+Description: Creates a Munki package for Microsoft Edge, and imports it into Workspace ONE.
 Identifier: com.github.codeskipper.ws1.MicrosoftEdge
 ParentRecipe: com.github.n8felton.munki.MicrosoftEdge
 MinimumVersion: '2.3'

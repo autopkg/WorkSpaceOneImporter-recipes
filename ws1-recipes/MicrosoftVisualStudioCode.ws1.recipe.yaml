@@ -1,5 +1,5 @@
 Comment:
-Description: Downloads and Creates a Munki package for Microsoft Company Portal, and imports it into WorkSpace ONE.
+Description: Downloads and Creates a Munki package for Microsoft Company Portal, and imports it into Workspace ONE.
 Identifier: com.github.codeskipper.ws1.MicrosoftVisualStudioCode
 ParentRecipe: com.github.valdore86.munki.visualstudiocode
 MinimumVersion: '2.3'

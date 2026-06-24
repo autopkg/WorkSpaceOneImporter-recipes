@@ -1,5 +1,5 @@
 Comment:
-Description: Downloads and Creates a Munki package for Mozilla Firefox, and imports it into WorkSpace ONE.
+Description: Downloads and Creates a Munki package for Mozilla Firefox, and imports it into Workspace ONE.
 Identifier: com.github.codeskipper.ws1.MozillaFirefox
 ParentRecipe: com.github.autopkg.munki.firefox-rc-en_US
 MinimumVersion: '2.3'

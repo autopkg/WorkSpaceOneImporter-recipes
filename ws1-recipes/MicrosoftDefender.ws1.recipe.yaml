@@ -1,5 +1,5 @@
 Comment:
-Description: Downloads and Creates a Munki package for Microsoft Defender, and imports it into WorkSpace ONE.
+Description: Downloads and Creates a Munki package for Microsoft Defender, and imports it into Workspace ONE.
 Identifier: com.github.codeskipper.ws1.MicrosoftDefender
 ParentRecipe: com.github.rtrouton.munki.microsoftdefender
 MinimumVersion: '2.3'

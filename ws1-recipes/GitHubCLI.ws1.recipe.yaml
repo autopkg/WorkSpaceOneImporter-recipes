@@ -1,5 +1,5 @@
 Comment:
-Description: Creates a Munki package for GitHub CLI, and imports it into WorkSpace ONE.
+Description: Creates a Munki package for GitHub CLI, and imports it into Workspace ONE.
 Identifier: com.github.codeskipper.ws1.GitHubCLI
 ParentRecipe: com.github.homebysix.munki.GitHubCLI
 MinimumVersion: '2.3'

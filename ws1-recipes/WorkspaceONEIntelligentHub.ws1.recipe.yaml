@@ -2,7 +2,7 @@ Comment: |
   Import to WS1 as native app to deploy as update. Avoids issue with No hub deployed on newly enrolled Macs, which
   is triggered by asking Omnissa support to seed new versions in UEM
 Description: |
-  Downloads and Creates a Munki package for Omnissa Workspace ONE Intelligent Hub, and imports it into WorkSpace ONE.
+  Downloads and Creates a Munki package for Omnissa Workspace ONE Intelligent Hub, and imports it into Workspace ONE.
 Identifier: com.github.codeskipper.ws1.WorkspaceONEIntelligentHub
 ParentRecipe: io.github.hjuutilainen.munki.WorkspaceONEIntelligentHub
 MinimumVersion: '2.3'

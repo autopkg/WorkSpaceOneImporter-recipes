@@ -1,7 +1,7 @@
 Comment: |
     Intended to process the software package from YOUR company firewall - you need to specify the portal hostname in
     the recipe override
-Description: Creates a Munki package for Palo Alto Networks GlobalProtect, and imports it into WorkSpace ONE UEM.
+Description: Creates a Munki package for Palo Alto Networks GlobalProtect, and imports it into Workspace ONE UEM.
 Identifier: com.github.codeskipper.PaloAltoNetworksGlobalProtect.ws1.recipe.yaml
 ParentRecipe: com.github.codeskipper.munki.PaloAltoNetworksGlobalProtect
 MinimumVersion: '2.3'

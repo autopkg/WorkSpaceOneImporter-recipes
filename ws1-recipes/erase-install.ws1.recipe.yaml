@@ -1,5 +1,5 @@
 Comment: (see Notes in pkginfo)
-Description: download and import package for erase-install script into Munki, then import into WorkSpace ONE.
+Description: download and import package for erase-install script into Munki, then import into Workspace ONE.
 Identifier: com.github.codeskipper.ws1.erase-install
 ParentRecipe: com.github.its-unibas.munki.erase-install
 MinimumVersion: '2.3'

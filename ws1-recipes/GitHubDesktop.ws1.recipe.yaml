@@ -1,5 +1,5 @@
 Comment:
-Description: Creates a Munki package for GitHub Desktop, and imports it into WorkSpace ONE.
+Description: Creates a Munki package for GitHub Desktop, and imports it into Workspace ONE.
 Identifier: com.github.codeskipper.ws1.GitHubDesktop
 ParentRecipe: com.github.homebysix.munki.GitHubDesktop
 MinimumVersion: '2.3'

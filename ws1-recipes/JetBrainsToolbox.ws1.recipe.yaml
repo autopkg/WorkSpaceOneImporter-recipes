@@ -1,5 +1,5 @@
 Comment:
-Description: Creates a Munki package for JetBrains Toolbox, and imports it into WorkSpace ONE.
+Description: Creates a Munki package for JetBrains Toolbox, and imports it into Workspace ONE.
 Identifier: com.github.codeskipper.ws1.JetBrainsToolbox
 ParentRecipe: com.github.autopkg.arubdesu-recipes.munki.JetBrainsToolbox
 MinimumVersion: '2.3'

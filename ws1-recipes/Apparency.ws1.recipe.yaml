@@ -1,5 +1,5 @@
 Comment:
-Description: Creates a Munki package for Suspicious Package, and imports it into WorkSpace ONE.
+Description: Creates a Munki package for Suspicious Package, and imports it into Workspace ONE.
 Identifier: com.github.codeskipper.ws1.Apparency
 ParentRecipe: com.github.kevinmcox.munki.Apparency
 MinimumVersion: '2.3'

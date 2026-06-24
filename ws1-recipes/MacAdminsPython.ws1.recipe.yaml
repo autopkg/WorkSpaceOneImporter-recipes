@@ -1,6 +1,6 @@
 Comment:
 Description: |
-  Downloads and Creates a Munki package for Mac Admins Python Recommended,and imports it into WorkSpace ONE.
+  Downloads and Creates a Munki package for Mac Admins Python Recommended,and imports it into Workspace ONE.
 Identifier: com.github.codeskipper.ws1.MacAdminsPython
 ParentRecipe: com.github.natewalck.munki.MacadminsPython
 MinimumVersion: '2.3'

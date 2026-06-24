@@ -1,5 +1,5 @@
 Comment:
-Description: Creates a Munki package for Google Chrome, and imports it into WorkSpace ONE.
+Description: Creates a Munki package for Google Chrome, and imports it into Workspace ONE.
 Identifier: com.github.codeskipper.ws1.GoogleChrome.ws1.recipe.yaml
 ParentRecipe: com.github.autopkg.munki.googlechromepkg
 MinimumVersion: '2.3'
