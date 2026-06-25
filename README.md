@@ -41,21 +41,31 @@ You can reach me as @Martinus in MacAdmins Slack. Issues and PRs welcome in GitH
 In the fall of 2025, [cloud-autopkg-runner (CAR)](https://pypi.org/project/cloud-autopkg-runner/) was released, and I have started to adapt the code to be optimised for running in CAR.
 This will allow for concurrent processing of recipes, as well as for caching the metadata for downloads, so it can run efficiently in the cloud.
 
-So far, all features are working in a single custom processor.
+Until now, all features have been are working in a single custom processor.
 One of the optimisations in CAR is to cut short the processor run after the check phase is done, if there are no new downloads for a recipe.
 This means the code for app assignments, and for pruning of old versions will not run with CAR if there are no new downloads.
 
-Therefore, the plan is to separate out the code for API client in a Python library.
+Therefore, I have separated out the code for API client in a Python library.
 App assignments, and pruning of old versions can then be moved to separate processors, so they can be run either as pre-processors, or on a separate schedule.
-Code for Slack notifications is to be moved from a Python script with the runner in the CICD repo to a separate processor in this repo, so it can be used when running with CAR when processing recipes concurrently.
+
+Code for Slack notifications has been made available in a separate processor in this repo.  It was refactored from a Python script with the runner in the CICD repo, so it can be used when running with CAR when processing recipes concurrently.
+
+The Slack notification script with the runner in the CICD repo is still available, and it is still useful for notifications about recipe trust that are failing so the operator can check out the changes in parent recipes for approval.
+
+The recipes have now been separated out to use the new processors, and users must generate new overrides and must move settings for the relevant features over to the new overrides.
+Generating the new overrides is done like so:
+```
+autopkg make-override --format=yaml <recipe_name>.ws1-assigner.recipe.yaml
+autopkg make-override --format=yaml <recipe_name>.ws1-pruner.recipe.yaml
+```
 
 Done:
    * add WS1 Slack notification code to a new custom processor
    * separate out the pruning code to a new custom processor
+   * optimise for [cloud-autopkg-runner (CAR)](https://pypi.org/project/cloud-autopkg-runner/)
+     * separate out the app assignment code to a new custom processor
 
 ToDo:
- * optimise for [cloud-autopkg-runner (CAR)](https://pypi.org/project/cloud-autopkg-runner/) and share example code for that
-   * separate out the app assignment code to a new custom processor
  * publish separate example / demo repo
  * expand usage documentation in wiki
 
