@@ -1,0 +1,53 @@
+Comment: Copied pkginfo section from Munki parent recipe to add to Description
+Description: Downloads and Creates a Munki package for NodeJS-LTS, and imports it into Workspace ONE.
+Identifier: com.github.codeskipper.ws1.NodeJS-LTS
+ParentRecipe: com.github.dataJAR-recipes.munki.nodejslts
+MinimumVersion: '2.3'
+
+Input:
+  NAME: Node JS LTS
+  MUNKI_REPO_SUBDIR: ''
+  MUNKI_CATEGORY: 'Development'
+  pkginfo:
+    notes: LTS version
+    catalogs:
+    - testing
+    description: |
+      Node.js® is a platform built on Chrome's JavaScript runtime for easily building fast, scalable network applications.
+
+      https://nodejs.org
+    developer: Node.js Foundation
+    display_name: '%NAME%'
+    name: '%NAME%'
+    category: '%MUNKI_CATEGORY%'
+    unattended_install: true
+    unattended_uninstall: true
+    blocking_applications:
+    - node
+    - npm
+
+  # WS1 specific input,  secrets
+  WS1_OAUTH_CLIENT_ID: OAUTH2_CLIENT_ID_HERE
+  WS1_OAUTH_CLIENT_SECRET: OAUTH2_CLIENT_CLIENT_SECRET_HERE
+  WS1_OAUTH_TOKEN_URL: OAUTH2_ACCESS_TOKEN_SERVER_URL_HERE
+  WS1_API_USERNAME: API_USERNAME_HERE
+  WS1_API_PASSWORD: API_PASSWORD_HERE
+  WS1_API_TOKEN: API_TOKEN_HERE
+  WS1_B64ENCODED_API_CREDENTIALS: B64ENCODED_API_CREDENTIALS_HERE
+  WS1_API_URL: WORKSPACEONE_API_URL_HERE
+  WS1_CONSOLE_URL: WORKSPACEONE_CONSOLE_URL_HERE
+  WS1_GROUPID: GROUP_ID_HERE
+
+Process:
+- Processor: com.github.codeskipper.OMNISSA-WorkSpaceOneImporter/WorkSpaceOneImporter
+  Arguments:
+    ws1_oauth_client_id: '%WS1_OAUTH_CLIENT_ID%'
+    ws1_oauth_client_secret: '%WS1_OAUTH_CLIENT_SECRET%'
+    ws1_oauth_token_url: '%WS1_OAUTH_TOKEN_URL%'
+    ws1_api_token: '%WS1_API_TOKEN%'
+    ws1_api_username: '%WS1_API_USERNAME%'
+    ws1_api_password: '%WS1_API_PASSWORD%'
+    ws1_b64encoded_api_credentials: '%WS1_B64ENCODED_API_CREDENTIALS%'
+    ws1_api_url: '%WS1_API_URL%'
+    ws1_console_url: '%WS1_CONSOLE_URL%'
+    ws1_groupid: '%WS1_GROUPID%'

@@ -1,0 +1,62 @@
+Comment: Copied pkginfo section from Munki parent recipe, and added preinstall_script
+Description: Creates a Munki package for GPG Suite, and imports it into Workspace ONE.
+Identifier: com.github.codeskipper.ws1.GPGSuite
+ParentRecipe: com.github.gerardkok.munki.GPGSuite
+MinimumVersion: '2.3'
+
+Input:
+  NAME: 'GPG Suite'
+  MUNKI_REPO_SUBDIR: 'apps/%NAME%'
+  MUNKI_CATEGORY: 'Utilities'
+  pkginfo:
+    catalogs:
+    - testing
+    description: |
+      Everything you need to get started with secure communication and encrypting files
+      in one simple package.
+
+      https://gpgtools.org
+    developer: GPGTools GmbH
+    display_name: '%NAME%'
+    name: '%NAME%'
+    category: '%MUNKI_CATEGORY%'
+    unattended_install: true
+    unattended_uninstall: true
+    blocking_applications:
+    - Mail
+    - Postbox
+    - gpg
+    - GPG
+    preinstall_script: |
+      #!/bin/sh
+      # get Console user - Thanks to Graham Pugh - copied from erase-install.sh
+      current_user=$(/usr/sbin/scutil <<< "show State:/Users/ConsoleUser" |
+        /usr/bin/awk -F': ' '/[[:space:]]+Name[[:space:]]:/ { if ( $2 != "loginwindow" ) { print $2 }}')
+      sudo -u "$current_user" defaults write org.gpgtools.gpgmail.upgrader DontAskAgain -bool true
+      exit 0
+
+  # WS1 specific input,  secrets
+  WS1_OAUTH_CLIENT_ID: OAUTH2_CLIENT_ID_HERE
+  WS1_OAUTH_CLIENT_SECRET: OAUTH2_CLIENT_CLIENT_SECRET_HERE
+  WS1_OAUTH_TOKEN_URL: OAUTH2_ACCESS_TOKEN_SERVER_URL_HERE
+  WS1_API_USERNAME: API_USERNAME_HERE
+  WS1_API_PASSWORD: API_PASSWORD_HERE
+  WS1_API_TOKEN: API_TOKEN_HERE
+  WS1_B64ENCODED_API_CREDENTIALS: B64ENCODED_API_CREDENTIALS_HERE
+  WS1_API_URL: WORKSPACEONE_API_URL_HERE
+  WS1_CONSOLE_URL: WORKSPACEONE_CONSOLE_URL_HERE
+  WS1_GROUPID: GROUP_ID_HERE
+
+Process:
+- Processor: com.github.codeskipper.OMNISSA-WorkSpaceOneImporter/WorkSpaceOneImporter
+  Arguments:
+    ws1_oauth_client_id: '%WS1_OAUTH_CLIENT_ID%'
+    ws1_oauth_client_secret: '%WS1_OAUTH_CLIENT_SECRET%'
+    ws1_oauth_token_url: '%WS1_OAUTH_TOKEN_URL%'
+    ws1_api_token: '%WS1_API_TOKEN%'
+    ws1_api_username: '%WS1_API_USERNAME%'
+    ws1_api_password: '%WS1_API_PASSWORD%'
+    ws1_b64encoded_api_credentials: '%WS1_B64ENCODED_API_CREDENTIALS%'
+    ws1_api_url: '%WS1_API_URL%'
+    ws1_console_url: '%WS1_CONSOLE_URL%'
+    ws1_groupid: '%WS1_GROUPID%'

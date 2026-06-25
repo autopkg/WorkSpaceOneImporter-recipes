@@ -1,0 +1,54 @@
+Comment: (see Notes in pkginfo)
+Description: download and import package for erase-install script into Munki, then import into Workspace ONE.
+Identifier: com.github.codeskipper.ws1.erase-install
+ParentRecipe: com.github.its-unibas.munki.erase-install
+MinimumVersion: '2.3'
+
+Input:
+  NAME: Erase-Install
+
+  pkginfo:
+    catalogs:
+      - testing
+    category: Utilities
+    description: A set of scripts and tools to automate downloading macOS installers and erasing
+      or upgrading macOS in a single process. See https://github.com/grahampugh/erase-install
+    developer: Graham Pugh
+    display_name: '%NAME%'
+    minimum_os_version: '11.0'
+    name: '%NAME%'
+    notes: |
+      To be installed silently and not shown in Hub.
+
+      Additionally installs mist-cli to download macOS installers and swiftDialog for user dialogues.
+
+      To be called on-demand from WS1 UEM script.
+
+      Avoids the need to remove a EFI firmware password on Intel Macs at the
+      expense of additional waiting to download the macOS installer and
+      preparation time.
+
+  WS1_OAUTH_CLIENT_ID: OAUTH2_CLIENT_ID_HERE
+  WS1_OAUTH_CLIENT_SECRET: OAUTH2_CLIENT_CLIENT_SECRET_HERE
+  WS1_OAUTH_TOKEN_URL: OAUTH2_ACCESS_TOKEN_SERVER_URL_HERE
+  WS1_API_USERNAME: API_USERNAME_HERE
+  WS1_API_PASSWORD: API_PASSWORD_HERE
+  WS1_API_TOKEN: API_TOKEN_HERE
+  WS1_B64ENCODED_API_CREDENTIALS: B64ENCODED_API_CREDENTIALS_HERE
+  WS1_API_URL: WORKSPACEONE_API_URL_HERE
+  WS1_CONSOLE_URL: WORKSPACEONE_CONSOLE_URL_HERE
+  WS1_GROUPID: GROUP_ID_HERE
+
+Process:
+- Processor: com.github.codeskipper.OMNISSA-WorkSpaceOneImporter/WorkSpaceOneImporter
+  Arguments:
+    ws1_oauth_client_id: '%WS1_OAUTH_CLIENT_ID%'
+    ws1_oauth_client_secret: '%WS1_OAUTH_CLIENT_SECRET%'
+    ws1_oauth_token_url: '%WS1_OAUTH_TOKEN_URL%'
+    ws1_api_token: '%WS1_API_TOKEN%'
+    ws1_api_username: '%WS1_API_USERNAME%'
+    ws1_api_password: '%WS1_API_PASSWORD%'
+    ws1_b64encoded_api_credentials: '%WS1_B64ENCODED_API_CREDENTIALS%'
+    ws1_api_url: '%WS1_API_URL%'
+    ws1_console_url: '%WS1_CONSOLE_URL%'
+    ws1_groupid: '%WS1_GROUPID%'

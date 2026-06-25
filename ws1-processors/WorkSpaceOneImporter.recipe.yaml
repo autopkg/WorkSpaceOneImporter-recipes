@@ -1,0 +1,14 @@
+Description: |
+  This is the yaml stub recipe for WorkSpaceOneImporter shared processor, so it can be
+  used by another recipe outside of this repo.
+  NB - identifier is different to avoid conflict with the plist version!
+  Instead of setting the 'Processor' key to a processor name only, we separate the
+  recipe identifier and the processor name with a slash:
+  Processor: com.github.codeskipper.OMNISSA-WorkSpaceOneImporter/WorkSpaceOneImporter
+  ..assuming that this recipe is in one of AutoPkg's search dirs.
+
+Identifier: com.github.codeskipper.OMNISSA-WorkSpaceOneImporter
+Input: {}
+MinimumVersion: "2.3"
+Process: []
+

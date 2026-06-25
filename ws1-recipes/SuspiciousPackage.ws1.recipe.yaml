@@ -1,0 +1,49 @@
+Comment: First recipe with yaml format, added '.ws1-plist.' in the plist variant filename and in identifier to distinguish
+Description: Creates a Munki package for Suspicious Package, and imports it into Workspace ONE.
+Identifier: com.github.codeskipper.ws1.SuspiciousPackage
+ParentRecipe: com.github.poundbangbash.eholtam-recipes.munki.SuspiciousPackageApp
+MinimumVersion: '2.3'
+
+Input:
+  NAME: Suspicious Package
+  WS1_OAUTH_CLIENT_ID: OAUTH2_CLIENT_ID_HERE
+  WS1_OAUTH_CLIENT_SECRET: OAUTH2_CLIENT_CLIENT_SECRET_HERE
+  WS1_OAUTH_TOKEN_URL: OAUTH2_ACCESS_TOKEN_SERVER_URL_HERE
+  WS1_API_USERNAME: API_USERNAME_HERE
+  WS1_API_PASSWORD: API_PASSWORD_HERE
+  WS1_API_TOKEN: API_TOKEN_HERE
+  WS1_B64ENCODED_API_CREDENTIALS: B64ENCODED_API_CREDENTIALS_HERE
+  WS1_API_URL: WORKSPACEONE_API_URL_HERE
+  WS1_CONSOLE_URL: WORKSPACEONE_CONSOLE_URL_HERE
+  WS1_GROUPID: GROUP_ID_HERE
+
+  MUNKI_REPO_SUBDIR: 'apps/MothersRuin/SuspiciousPackage'
+  repo_subdirectory: '%MUNKI_REPO_SUBDIR%'
+
+  pkginfo:
+    catalogs:
+    - testing
+    category: Utilities
+    description: |
+      With Suspicious Package, you can open a macOS Installer package and see what's inside, without installing it first.
+
+      https://www.mothersruin.com/software/SuspiciousPackage
+    developer: Mothers Ruin Software
+    display_name: Suspicious Package
+    minimum_os_version: '12.0'
+    name: '%NAME%'
+    unattended_install: true
+
+Process:
+- Processor: com.github.codeskipper.OMNISSA-WorkSpaceOneImporter/WorkSpaceOneImporter
+  Arguments:
+    ws1_oauth_client_id: '%WS1_OAUTH_CLIENT_ID%'
+    ws1_oauth_client_secret: '%WS1_OAUTH_CLIENT_SECRET%'
+    ws1_oauth_token_url: '%WS1_OAUTH_TOKEN_URL%'
+    ws1_api_token: '%WS1_API_TOKEN%'
+    ws1_api_username: '%WS1_API_USERNAME%'
+    ws1_api_password: '%WS1_API_PASSWORD%'
+    ws1_b64encoded_api_credentials: '%WS1_B64ENCODED_API_CREDENTIALS%'
+    ws1_api_url: '%WS1_API_URL%'
+    ws1_console_url: '%WS1_CONSOLE_URL%'
+    ws1_groupid: '%WS1_GROUPID%'

@@ -1,0 +1,14 @@
+Description: |
+  This is the yaml stub recipe for WorkSpaceOneAssigner shared processor, so it can be
+  used by another recipe outside of this repo.
+  Manages app assignments (simple V1 & advanced V2) in Omnissa Workspace ONE UEM.
+  Instead of setting the 'Processor' key to a processor name only, we separate the
+  recipe identifier and the processor name with a slash:
+  Processor: com.github.codeskipper.OMNISSA-WorkSpaceOneAssigner/WorkSpaceOneAssigner
+
+Identifier: com.github.codeskipper.OMNISSA-WorkSpaceOneAssigner
+Input: {}
+MinimumVersion: "2.3"
+Process: []
+
+

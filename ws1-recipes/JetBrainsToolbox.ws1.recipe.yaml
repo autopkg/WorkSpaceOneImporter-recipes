@@ -1,0 +1,49 @@
+Comment:
+Description: Creates a Munki package for JetBrains Toolbox, and imports it into Workspace ONE.
+Identifier: com.github.codeskipper.ws1.JetBrainsToolbox
+ParentRecipe: com.github.autopkg.arubdesu-recipes.munki.JetBrainsToolbox
+MinimumVersion: '2.3'
+
+Input:
+  ARCH: Override_as_mac_or_macM1
+  NAME: JetBrains Toolbox
+  pkginfo:
+    category: Development
+    catalogs:
+    - testing
+    description: |
+      Manage your JetBrains tools easily.
+        - Install
+        - Update automatically
+        - Update the plugins together with IDE
+        - Roll back and downgrade
+    developer: JetBrains s.r.o.
+    display_name: JetBrains Toolbox
+    name: '%NAME%'
+    unattended_install: true
+
+  # WS1 specific input,  secrets
+  WS1_OAUTH_CLIENT_ID: OAUTH2_CLIENT_ID_HERE
+  WS1_OAUTH_CLIENT_SECRET: OAUTH2_CLIENT_CLIENT_SECRET_HERE
+  WS1_OAUTH_TOKEN_URL: OAUTH2_ACCESS_TOKEN_SERVER_URL_HERE
+  WS1_API_USERNAME: API_USERNAME_HERE
+  WS1_API_PASSWORD: API_PASSWORD_HERE
+  WS1_API_TOKEN: API_TOKEN_HERE
+  WS1_B64ENCODED_API_CREDENTIALS: B64ENCODED_API_CREDENTIALS_HERE
+  WS1_API_URL: WORKSPACEONE_API_URL_HERE
+  WS1_CONSOLE_URL: WORKSPACEONE_CONSOLE_URL_HERE
+  WS1_GROUPID: GROUP_ID_HERE
+
+Process:
+- Processor: com.github.codeskipper.OMNISSA-WorkSpaceOneImporter/WorkSpaceOneImporter
+  Arguments:
+    ws1_oauth_client_id: '%WS1_OAUTH_CLIENT_ID%'
+    ws1_oauth_client_secret: '%WS1_OAUTH_CLIENT_SECRET%'
+    ws1_oauth_token_url: '%WS1_OAUTH_TOKEN_URL%'
+    ws1_api_token: '%WS1_API_TOKEN%'
+    ws1_api_username: '%WS1_API_USERNAME%'
+    ws1_api_password: '%WS1_API_PASSWORD%'
+    ws1_b64encoded_api_credentials: '%WS1_B64ENCODED_API_CREDENTIALS%'
+    ws1_api_url: '%WS1_API_URL%'
+    ws1_console_url: '%WS1_CONSOLE_URL%'
+    ws1_groupid: '%WS1_GROUPID%'

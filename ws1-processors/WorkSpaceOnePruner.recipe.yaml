@@ -1,0 +1,13 @@
+Description: |
+  This is the yaml stub recipe for WorkSpaceOnePruner shared processor, so it can be
+  used by another recipe outside of this repo.
+  Prunes old app versions from Omnissa Workspace ONE UEM.
+  Instead of setting the 'Processor' key to a processor name only, we separate the
+  recipe identifier and the processor name with a slash:
+  Processor: com.github.codeskipper.OMNISSA-WorkSpaceOnePruner/WorkSpaceOnePruner
+
+Identifier: com.github.codeskipper.OMNISSA-WorkSpaceOnePruner
+Input: {}
+MinimumVersion: "2.3"
+Process: []
+
