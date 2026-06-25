@@ -60,6 +60,7 @@ autopkg make-override --format=yaml <recipe_name>.ws1-pruner.recipe.yaml
 ```
 
 Done:
+   * added support for Slack notifications when a pruning safeguard is triggered
    * add WS1 Slack notification code to a new custom processor
    * separate out the pruning code to a new custom processor
    * optimise for [cloud-autopkg-runner (CAR)](https://pypi.org/project/cloud-autopkg-runner/)

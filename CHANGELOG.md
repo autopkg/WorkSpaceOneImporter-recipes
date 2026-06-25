@@ -1,4 +1,7 @@
 Changelog (latest first):
+ * added support for Slack notifications when a pruning safeguard is triggered
+ * separated out the Assigner and Pruner functions to their own custom processors
+ * made WorkSpaceOneSlacker available for use as a PostProcessor
  * optimise for CAR - separate out the WS1 API auth and supporting functions to a library
  * copy wiki from [old repo and wiki location](https://github.com/codeskipper/WorkSpaceOneImporter/wiki)
  * make macsesh optional
