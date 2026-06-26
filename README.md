@@ -31,7 +31,7 @@ The Omnissa service requests for these issues have been resolved.  One remediati
 #### In short, UEM 2410 Patch 36 and 2506 Patch 17, and later are known to have the fix for the app duplicates issue.
 
 ---
-### Roadmap
+### Project history and roadmap
 
 Project is working stable in production since late 2022.
 Changelog is available in [CHANGELOG.md](CHANGELOG.md).
@@ -39,14 +39,15 @@ Changelog is available in [CHANGELOG.md](CHANGELOG.md).
 Contact and contribution welcome.
 You can reach me as @Martinus in MacAdmins Slack. Issues and PRs welcome in GitHub.
 
-In the fall of 2025, [cloud-autopkg-runner (CAR)](https://pypi.org/project/cloud-autopkg-runner/) was released, and I have started to adapt the code to be optimised for running in CAR.
-This will allow for concurrent processing of recipes, as well as for caching the metadata for downloads, so it can run efficiently in the cloud.
+In the fall of 2025, [cloud-autopkg-runner (CAR)](https://pypi.org/project/cloud-autopkg-runner/) was released, and this repo has now been adapted for running in CAR.
+This allows for concurrent processing of recipes, as well as for caching the metadata for downloads, so it can run efficiently in the cloud.
+Running the new version in a Self-Hosted GitHub Runner is also still possible, and may be preferable for those with a large number of recipes.
 
 Until now, all features have been are working in a single custom processor.
 One of the optimisations in CAR is to cut short the processor run after the check phase is done, if there are no new downloads for a recipe.
 This means the code for app assignments, and for pruning of old versions will not run with CAR if there are no new downloads.
 
-Therefore, I have separated out the code for API client in a Python library.
+The code for API client has been separated out in a Python library.
 App assignments, and pruning of old versions can then be moved to separate processors, so they can be run either as pre-processors, or on a separate schedule.
 
 Code for Slack notifications has been made available in a separate processor in this repo.  It was refactored from a Python script with the runner in the CICD repo, so it can be used when running with CAR when processing recipes concurrently.
@@ -61,6 +62,7 @@ autopkg make-override --format=yaml <recipe_name>.ws1-pruner.recipe.yaml
 ```
 
 Done:
+   * a separate example repo has been published - [AutoPkg-WS1-example](https://github.com/equinor/AutoPkg-WS1-example)
    * added support for Slack notifications when a pruning safeguard is triggered
    * add WS1 Slack notification code to a new custom processor
    * separate out the pruning code to a new custom processor
@@ -68,7 +70,7 @@ Done:
      * separate out the app assignment code to a new custom processor
 
 ToDo:
- * publish separate example / demo repo
+ * publish a blogpost about the new features and how to use them
  * expand usage documentation in wiki
 
 ---
