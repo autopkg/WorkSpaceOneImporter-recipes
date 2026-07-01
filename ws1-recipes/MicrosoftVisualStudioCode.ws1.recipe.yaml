@@ -1,22 +1,28 @@
 Comment:
-Description: Downloads and Creates a Munki package for Microsoft Company Portal, and imports it into Workspace ONE.
+Description: Downloads and Creates a Munki package for Microsoft Visual Studio Code, and imports it into Workspace ONE.
 Identifier: com.github.codeskipper.ws1.MicrosoftVisualStudioCode
-ParentRecipe: com.github.valdore86.munki.visualstudiocode
-MinimumVersion: '2.3'
+ParentRecipe: com.github.jc0b.munki.VisualStudioCode
+MinimumVersion: '2.7.6'
 
 Input:
   NAME: Microsoft Visual Studio Code
   DISPLAY_NAME: Microsoft Visual Studio Code
   MUNKI_REPO_SUBDIR: apps/Microsoft
+  ARCH: "arm64" # Intel = "x86_64", Apple Silicon = "arm64, Universal = "universal" || Delete the supported_architectures array if using "universal"
+  EXTRACT_ICON: "" # Pass an empty variable to skip icon extraction.
   pkginfo:
     catalogs:
     - testing
     category: Development
     developer: Microsoft
     description: |
-      Code combines the streamlined UI of a modern editor with rich code assistance and navigation, and an integrated debugging experience – without the need for a full IDE.
+      Free and built on open source. Integrated Git, debugging and extensions.
+
+      Apple processor architecture: %ARCH%
     display_name: '%DISPLAY_NAME%'
     name: '%NAME%'
+    supported_architectures:
+      - "%ARCH%"
     unattended_install: true
     unattended_uninstall: true
 
