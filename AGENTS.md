@@ -52,6 +52,12 @@ export AUTOPKG_ws1_import_new_only=false
 ```
 Smoke test for the base-class refactor: `ws1-processors/ws1_lib/test_refactor.py` — run with AutoPkg's Python.
 
+## Agent Tooling (Preview)
+
+For recipe authoring/review, read `.github/skills/autopkg-workspace-one/SKILL.md` and its referenced guidance. The bundle is self-contained and does not require another local skill. Setup, limitations, and manual Copilot/Pi acceptance checks are documented in `docs/agent-skills.md`.
+
+Offline tests: `python3 -m unittest discover -s tests/agent_skills -v` (PyYAML required). Install test dependencies only into an approved disposable environment. Do not treat offline tests or `autopkg info` as permission to execute live recipes.
+
 ## Adding a New Recipe
 
 Copy an existing `.ws1.recipe.yaml` from `ws1-recipes/` (e.g., `Firefox.ws1.recipe.yaml`). Set `ParentRecipe` to the community munki recipe identifier, update `Identifier` to `com.github.codeskipper.ws1.<AppName>`, and keep the `Process` block referencing the shared processor with `%WS1_*%` variable substitution. All `WS1_*` Input keys are placeholders — actual values come from recipe overrides or env vars.
