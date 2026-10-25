@@ -1,9 +1,12 @@
 ---
 name: autopkg-workspace-one
 description: Create, review, and debug AutoPkg Workspace ONE UEM importer, assigner, and pruner recipes in WorkSpaceOneImporter-recipes. Covers vendor marketing names, Munki parents, metadata, assignment configuration, and pruning safeguards.
+license: Apache-2.0
 ---
 
 # Workspace ONE AutoPkg recipes
+
+Copyright 2026 Martinus Verburg. Licensed under Apache-2.0; see the bundled [LICENSE](LICENSE).
 
 This skill is self-contained. It uses ordinary file/shell tools, not a particular coding-harness SDK. Resolve every resource path relative to this SKILL.md, not the shell working directory. Read referenced files explicitly; do not assume automatic loading or host-specific slash commands.
 

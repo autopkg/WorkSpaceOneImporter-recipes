@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: Apache-2.0
+# Copyright 2026 Martinus Verburg
 """Scaffold WS1 YAML recipes; never execute recipes or overwrite existing files."""
 
 import argparse

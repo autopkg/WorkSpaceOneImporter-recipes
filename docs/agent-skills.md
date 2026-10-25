@@ -19,7 +19,11 @@ The tooling is a preview. Offline script/resource checks are separate from inter
 
 General AutoPkg parent authoring can use the published [homebysix skill](https://github.com/autopkg/homebysix-recipes/blob/master/.claude/skills/create-autopkg-recipes/SKILL.md) and Recipe Robot. That skill is linked as an optional resource, not bundled, copied, or required to be installed alongside this one. Its repository-specific conventions are not universal WS1 policy.
 
-No top-level license was present when this tooling was prepared. The optional package manifest therefore remains `private: true` / `UNLICENSED` until maintainers choose distribution terms. Do not publish to npm or represent the preview as licensed for redistribution until that decision is made.
+The agent tooling is licensed under Apache-2.0, consistent with the existing Importer, Assigner, and Pruner notices. See the root [LICENSE](../LICENSE); a full copy is also included in the standalone skill bundle so its terms travel with copied skills. Preserve applicable copyright, license, and third-party notices when redistributing.
+
+Existing file-specific exceptions remain in force: `ws1-processors/WorkSpaceOneSlacker.py` retains its BSD-3-Clause license and attributions. Adding the root license does not replace those terms or relicense external parent repositories.
+
+The optional Pi manifest declares `Apache-2.0` and remains `private: true` solely to prevent accidental npm publication. That setting does not restrict use or redistribution under the license, or Git-based Pi installation. Interactive harness acceptance tests are still outstanding; licensing does not imply runtime certification.
 
 ## GitHub Copilot in PyCharm
 

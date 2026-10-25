@@ -8,6 +8,7 @@ on:
       - 'tests/agent_skills/**'
       - 'docs/agent-skills.md'
       - 'package.json'
+      - 'LICENSE'
   push:
     branches: [main]
     paths:
@@ -16,6 +17,7 @@ on:
       - 'tests/agent_skills/**'
       - 'docs/agent-skills.md'
       - 'package.json'
+      - 'LICENSE'
   workflow_dispatch:
 
 permissions:

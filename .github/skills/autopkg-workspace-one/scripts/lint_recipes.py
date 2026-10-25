@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: Apache-2.0
+# Copyright 2026 Martinus Verburg
 """Offline structural recipe lint; not AutoPkg runtime or deployment validation."""
 
 import argparse

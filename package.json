@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "description": "Portable Workspace ONE AutoPkg agent skill with a thin Pi discovery manifest.",
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "keywords": ["pi-package", "agent-skills", "autopkg", "workspace-one"],
   "files": [
     ".github/skills/autopkg-workspace-one/**/*.md",
     ".github/skills/autopkg-workspace-one/**/*.py",
     ".github/skills/autopkg-workspace-one/**/*.in",
+    ".github/skills/autopkg-workspace-one/LICENSE",
     "docs/agent-skills.md"
   ],
   "pi": {

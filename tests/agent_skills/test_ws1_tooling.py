@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright 2026 Martinus Verburg
 """Offline regression tests. No AutoPkg processing or UEM connections."""
 
 import importlib.util
@@ -183,11 +185,23 @@ class DistributionTests(unittest.TestCase):
         metadata = yaml.safe_load(text.split("---", 2)[1])
         self.assertEqual(metadata["name"], SKILL.name)
         self.assertLessEqual(len(metadata["description"]), 1024)
-        self.assertEqual(set(metadata), {"name", "description"})
+        self.assertEqual(set(metadata), {"name", "description", "license"})
+        self.assertEqual(metadata["license"], "Apache-2.0")
         package = json.loads((ROOT / "package.json").read_text())
         self.assertEqual(package["pi"]["skills"], ["./.github/skills/autopkg-workspace-one"])
         self.assertTrue(package["private"])
         self.assertNotIn("dependencies", package)
+
+    def test_license_is_included_with_copied_and_packaged_skill(self):
+        root_license = (ROOT / "LICENSE").read_bytes()
+        self.assertEqual(root_license, (SKILL / "LICENSE").read_bytes())
+        self.assertIn(b"Apache License", root_license)
+        self.assertIn(b"END OF TERMS AND CONDITIONS", root_license)
+        package = json.loads((ROOT / "package.json").read_text())
+        self.assertEqual(package["license"], "Apache-2.0")
+        self.assertIn(".github/skills/autopkg-workspace-one/LICENSE", package["files"])
+        for path in SKILL.glob("scripts/*.py"):
+            self.assertIn("SPDX-License-Identifier: Apache-2.0", path.read_text())
 
     def test_skill_bundle_works_after_copy_without_other_skills(self):
         with tempfile.TemporaryDirectory() as directory:
