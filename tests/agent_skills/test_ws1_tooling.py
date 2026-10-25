@@ -1,4 +1,5 @@
 """Offline regression tests. No AutoPkg processing or UEM connections."""
+
 import importlib.util
 import json
 import plistlib

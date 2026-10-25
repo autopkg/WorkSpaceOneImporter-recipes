@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Offline structural recipe lint; not AutoPkg runtime or deployment validation."""
+
 import argparse
 import plistlib
 import re
