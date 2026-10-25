@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Scaffold WS1 YAML recipes; never execute recipes or overwrite existing files."""
+
 import argparse
 import json
 import re
