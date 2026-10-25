@@ -1,0 +1,53 @@
+name: Agent skill tooling
+
+on:
+  pull_request:
+    paths:
+      - '.github/skills/**'
+      - '.github/workflows/agent-skills.yml'
+      - 'tests/agent_skills/**'
+      - 'docs/agent-skills.md'
+      - 'package.json'
+  push:
+    branches: [main]
+    paths:
+      - '.github/skills/**'
+      - '.github/workflows/agent-skills.yml'
+      - 'tests/agent_skills/**'
+      - 'docs/agent-skills.md'
+      - 'package.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10', '3.13']
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install test dependencies
+        run: python -m pip install -r tests/agent_skills/requirements.txt
+      - name: Run offline regression tests
+        run: python -m unittest discover -s tests/agent_skills -v
+      - name: Strict-check generated recipes without executing them
+        run: |
+          SKILL=.github/skills/autopkg-workspace-one
+          OUTPUT="$RUNNER_TEMP/ws1-generated-recipes"
+          python "$SKILL/scripts/new_ws1_recipe.py" ExampleApp \
+            --name 'Vendor Example App' \
+            --identifier-prefix com.github.example \
+            --parent com.github.vendor.munki.ExampleApp \
+            --out "$OUTPUT"
+          python "$SKILL/scripts/lint_recipes.py" --ws1 "$OUTPUT"/*.recipe.yaml
+          check-autopkg-recipes --strict "$OUTPUT"/*.recipe.yaml
