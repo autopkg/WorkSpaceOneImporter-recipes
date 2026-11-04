@@ -69,7 +69,7 @@ The processor is being split for [cloud-autopkg-runner (CAR)](https://pypi.org/p
 
 ## Prompt and results summary saving style
 
-- **Prompt and results** are saved in a new, separate Markdown file, with the prompt at the top and results below.  Folder structure is `ws1-processors/dev work/2026 refactoring to separate WS1 operations/<number>. REFACTOR_PROMPT <short-description>.md`.
+- **Prompt and results** are saved in a new, separate Markdown file, with the prompt at the top and results below.  Folder structure is `dev work/<year> <seq> <topic>/<number>. REFACTOR_PROMPT <short-description>.md` (repo root), e.g. `dev work/2026 3 agentic tooling/`. Earlier refactoring work is in `dev work/2026 refactoring to separate WS1 operations/`.
 
 
 ## workaround for file creation issues in the chat AI
