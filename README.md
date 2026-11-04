@@ -9,6 +9,8 @@ WorkSpaceOneImporter is a custom AutoPkg Processor for automating import of Mac 
 
 Adapted from [jprichards/AirWatchImporter](https://github.com/jprichards/AirWatchImporter).
 
+Thanks to [SoxIn4](https://github.com/SoxIn4) for contributing support for encoded credentials and an organization group search fix (2022).
+
 A comprehensive set of examples for using these recipes, processor and setup around it available in [the Equinor AutoPkg-WS1-example repo](https://github.com/equinor/AutoPkg-WS1-example)
 ___
 

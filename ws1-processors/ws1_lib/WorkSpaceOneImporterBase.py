@@ -1,10 +1,11 @@
 #!/usr/local/autopkg/python
 #
 # WorkSpaceOneImporterBase.py - base class for WS1 Autopkg processors
-# Copyright 2022 Martinus Verburg https://github.com/codeskipper
+# Copyright 2022-2026 Martinus Verburg https://github.com/codeskipper
 # Adapted from https://github.com/jprichards/AirWatchImporter/blob/master/AirWatchImporter.py by
 #     John Richards https://github.com/jprichards and
 #     Jeremy Baker https://github.com/jbaker10
+#     which retains the upstream notice: Copyright 2013 Greg Neagle
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
