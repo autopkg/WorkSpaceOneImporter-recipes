@@ -159,7 +159,7 @@ You'll need to specify credentials for either Oauth or Basic authentication.
 
 `ws1_smart_group_name` and `ws1_push_mode` let you make simple App Assignments to Assignment Groups, while `ws1_app_assignments` gives you complete control over the App Assignment settings, but needs more settings in the recipe override.
 
-`ws1_app_versions_prune` lets you prune old software versions, it is set to `dry_run` per default. Behaviour can be controlled in detail by setting `ws1_app_versions_to_keep` and `ws1_app_versions_to_keep_default`.
+`ws1_app_versions_prune` lets you prune old software versions, it is set to `dry_run` per default. Behaviour can be controlled in detail by setting `ws1_app_versions_to_keep` and `ws1_app_versions_to_keep_default`. Versions that are still assigned to devices are never deleted; `ws1_prune_safeguard_halt_on_assigned` decides whether the pruner halts or skips them with a Slack warning.
 
 
 * [`ws1_api_url`](https://github.com/autopkg/WorkSpaceOneImporter-recipes/wiki/ws1_api_url)
@@ -181,6 +181,7 @@ You'll need to specify credentials for either Oauth or Basic authentication.
 * [`ws1_app_versions_to_keep`](https://github.com/codeskipper/WorkSpaceOneImporter-recipes/wiki/ws1_app_versions_to_keep)
 * [`ws1_app_versions_to_keep_default`](https://github.com/codeskipper/WorkSpaceOneImporter-recipes/wiki/ws1_app_versions_to_keep_default)
 * [`ws1_app_versions_prune`](https://github.com/codeskipper/WorkSpaceOneImporter-recipes/wiki/ws1_app_versions_prune)
+* [`ws1_prune_safeguard_halt_on_assigned`](https://github.com/autopkg/WorkSpaceOneImporter-recipes/wiki/ws1_prune_safeguard_halt_on_assigned)
 
 
 ### List available input variables
