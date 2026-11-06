@@ -84,6 +84,8 @@ ToDo:
  * expand usage documentation in wiki
  * cache the OAuth token on non-macOS runners (Linux has no Keychain, so every recipe requests a new token) - see
    [dev work/2026 5 oauth token cache on linux runners](<dev work/2026 5 oauth token cache on linux runners/040. IMPROVEMENT OAuth token cache on non-macOS runners.md>
+ * pruner: prune unassigned versions instead of skipping them, and make tie-date ordering deterministic - see
+   [dev work/2026 6 pruner unassigned versions and tie-date ordering](<dev work/2026 6 pruner unassigned versions and tie-date ordering/041. IMPROVEMENT Pruner handling of unassigned versions and tie-date ordering.md>)
 
 ---
 
