@@ -47,7 +47,7 @@ Templates use `.recipe.yaml.in` to avoid being mistaken for runnable recipes. Ge
 
 - Auth Input keys are uppercase `WS1_*`; processor Arguments are lowercase `ws1_*` with string substitutions. Never put real secrets, tenants, organization IDs, or smart groups in published templates.
 - Complex inputs such as `ws1_app_assignments` must be lowercase Input lists/dicts consumed directly, not `%VAR%` strings. For AppsV2 assignments, clear the simple smart-group input; do not supply both methods. Preserve `#AUTOPKG` / `#AUTOPKG_DONE` behavior.
-- Retention and safeguard options expected as strings must stay strings. The safeguard's `"1"` means enabled for this processor; do not assume another option interprets numeric strings the same way.
+- Retention and safeguard options expected as strings must stay strings. The safeguard (`ws1_prune_safeguard_halt_on_assigned`; the older `ws1_safeguard_halt_on_assigned` is deprecated) treats `"1"` as enabled for this processor; do not assume another option interprets numeric strings the same way.
 - Pruner scaffolds explicitly select `dry_run`. Dry runs still authenticate/query UEM and require permission. Change deletion mode only with explicit approval. Retention placeholders are not a safety boundary: the processor may fall back to a default.
 - Keep UEM's version aligned with Munki metadata, including any necessary normalization. Do not normalize version formats without inspecting the application and target requirements.
 - Preserve scripts inherited from the Munki parent unless a change is justified. Inspect how the importer passes pkginfo to UEM; do not assume scripts are ignored.

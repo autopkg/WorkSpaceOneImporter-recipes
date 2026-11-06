@@ -74,7 +74,7 @@ class GeneratorTests(unittest.TestCase):
         recipe = recipe_lint.load_recipe(self.out / "ExampleApp.ws1-pruner.recipe.yaml")
         inputs = recipe["Input"]
         self.assertIsInstance(inputs["WS1_APP_VERSIONS_TO_KEEP"], str)
-        self.assertEqual(inputs["WS1_SAFEGUARD_HALT_ON_ASSIGNED"], "1")
+        self.assertEqual(inputs["WS1_PRUNE_SAFEGUARD_HALT_ON_ASSIGNED"], "1")
         self.assertEqual(inputs["WS1_APP_VERSIONS_PRUNE"], "dry_run")
         self.assertEqual(recipe["Process"][0]["Arguments"]["ws1_app_versions_prune"], "%WS1_APP_VERSIONS_PRUNE%")
 
@@ -141,6 +141,14 @@ class LintTests(unittest.TestCase):
         self.assertGreaterEqual(len(recipe_lint.lint(recipe, ws1=True)[0]), 5)
 
     def test_boolean_safeguard_is_rejected(self):
+        recipe = {
+            "Identifier": "com.example.ws1-pruner.App",
+            "Input": {"NAME": "Vendor App", "WS1_PRUNE_SAFEGUARD_HALT_ON_ASSIGNED": True},
+            "Process": [],
+        }
+        self.assertIn("WS1_PRUNE_SAFEGUARD_HALT_ON_ASSIGNED must be a string", recipe_lint.lint(recipe, ws1=True)[0])
+
+    def test_boolean_legacy_safeguard_is_rejected(self):
         recipe = {
             "Identifier": "com.example.ws1-pruner.App",
             "Input": {"NAME": "Vendor App", "WS1_SAFEGUARD_HALT_ON_ASSIGNED": True},

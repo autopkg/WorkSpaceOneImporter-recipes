@@ -71,6 +71,9 @@ autopkg make-override --format=yaml <recipe_name>.ws1-pruner.recipe.yaml
 
 Done:
    * a separate example repo has been published - [AutoPkg-WS1-example](https://github.com/equinor/AutoPkg-WS1-example)
+   * renamed the pruner safeguard input `ws1_safeguard_halt_on_assigned` to `ws1_prune_safeguard_halt_on_assigned`
+     (and its output `ws1_safeguard_triggered` to `ws1_prune_safeguard_triggered`). The old names still work but log a
+     deprecation warning - please update your pruner overrides.
    * added support for Slack notifications when a pruning safeguard is triggered
    * add WS1 Slack notification code to a new custom processor
    * separate out the pruning code to a new custom processor

@@ -89,7 +89,7 @@ python3 "$SKILL/scripts/new_ws1_recipe.py" ExampleApp \
 
 Substitute a real reviewed Munki parent before using the recipe. The illustrative parent does not exist. Namespace prefixes for generated recipes do not change the reference processors' namespace. Existing files are never overwritten; conflicting names, identifiers, or a supplied parent are errors.
 
-The importer inherits metadata. The assigner starts with simple assignment placeholders; AppsV2 users must clear the simple group input and supply a lowercase list. The pruner explicitly defaults to dry_run and a string-typed enabled assigned-version safeguard. Dry-run mode still contacts UEM; changing it to deletion mode requires approval. Retention placeholders may fall back to processor defaults and are not a guardrail.
+The importer inherits metadata. The assigner starts with simple assignment placeholders; AppsV2 users must clear the simple group input and supply a lowercase list. The pruner explicitly defaults to dry_run and a string-typed enabled assigned-version safeguard (`ws1_prune_safeguard_halt_on_assigned`). Dry-run mode still contacts UEM; changing it to deletion mode requires approval. Retention placeholders may fall back to processor defaults and are not a guardrail.
 
 Templates end in `.in` so normal AutoPkg indexing and strict recipe hooks do not mistake incomplete scaffolds for runnable recipes. Output files have the normal `.recipe.yaml` extension.
 

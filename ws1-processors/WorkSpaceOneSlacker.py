@@ -84,10 +84,11 @@ class WorkSpaceOneSlacker(WorkSpaceOneImporterBase):
             "required": False,
             "description": "Error/traceback text from a prior step, for inclusion in failure notifications.",
         },
-        "ws1_safeguard_triggered": {
+        "ws1_prune_safeguard_triggered": {
             "required": False,
-            "description": "Set to True if a pruning safeguard was triggered (version has active assignments). "
-            "This will be treated as a warning rather than an error.",
+            "description": "Set to True by WorkSpaceOnePruner if the pruning safeguard was triggered (version has "
+            "active assignments). This will be treated as a warning rather than an error. "
+            "The deprecated name ws1_safeguard_triggered is still honoured.",
         },
     }
 
@@ -252,7 +253,9 @@ class WorkSpaceOneSlacker(WorkSpaceOneImporterBase):
         trust_verified_str = self.env.get("ws1_slack_trust_verified", "True")
         trust_verified = trust_verified_str.lower() not in ("false", "0", "no")
         failure_message = self.env.get("ws1_slack_failure_message", "")
-        safeguard_triggered = self.env.get("ws1_safeguard_triggered", False)
+        safeguard_triggered = self.env.get(
+            "ws1_prune_safeguard_triggered", self.env.get("ws1_safeguard_triggered", False)
+        )
 
         imported_items = results["imported"]
         failed_items = results["failed"]

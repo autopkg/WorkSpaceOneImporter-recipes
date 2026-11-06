@@ -109,6 +109,9 @@ def lint(recipe, ws1=False):
             "ws1_app_versions_to_keep",
             "WS1_APP_VERSIONS_PRUNE",
             "ws1_app_versions_prune",
+            "WS1_PRUNE_SAFEGUARD_HALT_ON_ASSIGNED",
+            "ws1_prune_safeguard_halt_on_assigned",
+            # deprecated names, still linted for legacy recipes
             "WS1_SAFEGUARD_HALT_ON_ASSIGNED",
             "ws1_safeguard_halt_on_assigned",
         ):
