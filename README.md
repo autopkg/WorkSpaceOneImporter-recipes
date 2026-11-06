@@ -78,6 +78,8 @@ Done:
 ToDo:
  * publish a blogpost about the new features and how to use them
  * expand usage documentation in wiki
+ * investigate [rolling promotion of superseded versions](docs/feature-ideas/rolling-promotion-of-superseded-versions.md)
+   in the assigner, so soak time no longer depends on a version staying the latest release
 
 ---
 
