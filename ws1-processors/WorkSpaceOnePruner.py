@@ -72,13 +72,14 @@ class WorkSpaceOnePruner(WorkSpaceOneImporterBase):
             "Can be set across recipes and software titles, in this case "
             " an environment variable is practical.",
         },
-        "ws1_safeguard_halt_on_assigned": {
+        "ws1_prune_safeguard_halt_on_assigned": {
             "required": False,
             "default": "True",
-            "description": "Whether to halt (raise ProcessorError) when a safeguard detects versions still assigned to "
-            "devices. Default:True (current behavior — hard stop). Set to False to gracefully exit and allow "
+            "description": "Whether to halt (raise ProcessorError) when the pruning safeguard detects versions still "
+            "assigned to devices. Default:True (hard stop). Set to False to gracefully exit and allow "
             "Slack notifications to be sent via WorkSpaceOneSlacker processor. When False, the pruning operation "
-            "is skipped for versions with active assignments, and a warning summary is recorded.",
+            "is skipped for versions with active assignments, and a warning summary is recorded.\n"
+            "Replaces the deprecated name ws1_safeguard_halt_on_assigned, which is still honoured with a warning.",
         },
     }
 
@@ -89,9 +90,25 @@ class WorkSpaceOnePruner(WorkSpaceOneImporterBase):
         "ws1_pruner_summary_result": {
             "description": "Summary of the pruning operation.",
         },
+        "ws1_prune_safeguard_triggered": {
+            "description": "True if the pruning safeguard was triggered and ws1_prune_safeguard_halt_on_assigned "
+            "is False. Consumed by WorkSpaceOneSlacker.",
+        },
     }
 
     description = __doc__
+
+    def _get_prune_safeguard_halt_on_assigned(self):
+        """Return the halt-on-assigned setting, honouring the deprecated ws1_safeguard_halt_on_assigned name."""
+        new_key = "ws1_prune_safeguard_halt_on_assigned"
+        old_key = "ws1_safeguard_halt_on_assigned"
+        if old_key in self.env:
+            if new_key in self.env:
+                self.output(f"Both {new_key} and deprecated {old_key} are set; using {new_key}.", verbose_level=2)
+            else:
+                self.output(f"WARNING: {old_key} is deprecated, please rename it to {new_key}.", verbose_level=1)
+                return str(self.env[old_key])
+        return str(self.env.get(new_key, "True"))
 
     def ws1_app_versions_prune(self, api_base_url, headers, app_name, search_results):
         """
@@ -236,12 +253,12 @@ class WorkSpaceOnePruner(WorkSpaceOneImporterBase):
                             f"Version {row['version']} is still assigned to {row['num']} devices, cannot be deleted."
                         )
                         self.output(
-                            f"{safeguard_message} Bail out policy: checking ws1_safeguard_halt_on_assigned.",
+                            f"{safeguard_message} Bail out policy: checking ws1_prune_safeguard_halt_on_assigned.",
                             verbose_level=1,
                         )
 
                         # Check if we should halt or gracefully skip
-                        halt_on_assigned_str = self.env.get("ws1_safeguard_halt_on_assigned", "True")
+                        halt_on_assigned_str = self._get_prune_safeguard_halt_on_assigned()
                         halt_on_assigned = halt_on_assigned_str.lower() not in ("false", "0", "no")
 
                         if halt_on_assigned:
@@ -250,14 +267,14 @@ class WorkSpaceOnePruner(WorkSpaceOneImporterBase):
                         else:
                             # Graceful exit: set failure message for Slacker and create summary
                             self.output(
-                                "ws1_safeguard_halt_on_assigned is False. Skipping versions marked for deletion "
+                                "ws1_prune_safeguard_halt_on_assigned is False. Skipping versions marked for deletion "
                                 "due to active assignments. Slack notification will be sent.",
                                 verbose_level=1,
                             )
                             self.env["ws1_slack_failure_message"] = (
                                 f"⚠️ Pruning safeguard triggered for {app_name}: {safeguard_message}"
                             )
-                            self.env["ws1_safeguard_triggered"] = True
+                            self.env["ws1_prune_safeguard_triggered"] = True
                             self.env["ws1_pruner_summary_result"] = self._create_safeguard_summary_result(
                                 app_name, row["version"], row["num"]
                             )

@@ -1,0 +1,4 @@
+# Install into a disposable development virtualenv, not AutoPkg's global Python.
+PyYAML>=6.0,<7
+# Same checker revision as .pre-commit-config.yaml (v1.24.1); not published on PyPI.
+pre-commit-macadmin @ git+https://github.com/homebysix/pre-commit-macadmin.git@8bb0f36a7c3d85644906eff9091abb61fa47a52b

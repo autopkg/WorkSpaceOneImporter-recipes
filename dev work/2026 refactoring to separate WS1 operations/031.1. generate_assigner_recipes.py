@@ -3,9 +3,9 @@
 
 import os
 
-# Script location: ws1-processors/dev work/2026 refactoring to separate WS1 operations/
+# Script location: dev work/2026 refactoring to separate WS1 operations/
 # Output recipes to: ws1-recipes/ (at repo root level)
-BASE = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../../ws1-recipes"))
+BASE = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../ws1-recipes"))
 
 TEMPLATE = (
     "Comment: |\n"

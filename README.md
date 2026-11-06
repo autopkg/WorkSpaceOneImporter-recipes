@@ -13,6 +13,8 @@ Thanks to [SoxIn4](https://github.com/SoxIn4) for contributing support for encod
 
 A comprehensive set of examples for using these recipes, processor and setup around it available in [the Equinor AutoPkg-WS1-example repo](https://github.com/equinor/AutoPkg-WS1-example)
 
+Optional [agent tooling (preview)](docs/agent-skills.md) provides a portable WS1 recipe skill, offline scaffolding and validation tools, Copilot setup guidance, and a thin Pi discovery manifest. It does not run deployments automatically.
+
 #### License
 
 Unless otherwise noted in an individual file, this project is licensed under the [Apache License 2.0](LICENSE), consistent with the existing Importer, Assigner, and Pruner license notices. Existing third-party notices and file-specific licenses remain in effect; in particular, `ws1-processors/WorkSpaceOneSlacker.py` retains its BSD-3-Clause license and attributions. External parent recipes retain their own licenses.
@@ -69,6 +71,9 @@ autopkg make-override --format=yaml <recipe_name>.ws1-pruner.recipe.yaml
 
 Done:
    * a separate example repo has been published - [AutoPkg-WS1-example](https://github.com/equinor/AutoPkg-WS1-example)
+   * renamed the pruner safeguard input `ws1_safeguard_halt_on_assigned` to `ws1_prune_safeguard_halt_on_assigned`
+     (and its output `ws1_safeguard_triggered` to `ws1_prune_safeguard_triggered`). The old names still work but log a
+     deprecation warning - please update your pruner overrides.
    * added support for Slack notifications when a pruning safeguard is triggered
    * add WS1 Slack notification code to a new custom processor
    * separate out the pruning code to a new custom processor
