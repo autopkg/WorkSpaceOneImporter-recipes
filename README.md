@@ -81,8 +81,9 @@ Done:
      * separate out the app assignment code to a new custom processor
 
 ToDo:
- * publish a blogpost about the new features and how to use them
  * expand usage documentation in wiki
+ * cache the OAuth token on non-macOS runners (Linux has no Keychain, so every recipe requests a new token) - see
+   [dev work/2026 5 oauth token cache on linux runners](<dev work/2026 5 oauth token cache on linux runners/040. IMPROVEMENT OAuth token cache on non-macOS runners.md>
 
 ---
 
