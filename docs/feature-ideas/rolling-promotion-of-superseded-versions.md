@@ -66,6 +66,18 @@ Effects:
 7. **Testing.** Unit-test the selection function with synthetic version/date sets covering: no
    eligible version, one eligible, several eligible with gaps, eligible version older than current
    holder. Acceptance test against a tenant with a fast-moving app (VS Code, Chrome, Edge).
+8. **Console-created rules may carry a back-dated `effective_date`.** Observed 2026-11-06: an
+   operator manually added a PROD assignment to VS Code 1.143.1 in the WS1 UEM console (CET, late
+   morning); the API returned `effective_date: 2026-11-05T00:00:00` — the previous calendar day,
+   most likely the console storing the date in UTC and/or truncating the time. Implications:
+   - Day0 derived from `assignments[0].distribution.effective_date` can be up to a day earlier
+     than the real import for manually created rules; eligibility checks should treat
+     `effective_date` as date-only and tolerate ±1 day rather than comparing to "today" exactly.
+   - When the assigner writes its own rules it already uses a date-only ISO string, so dates it
+     produces are unaffected — but mixed manual/automatic histories will show this skew.
+   - Manual promotions are a legitimate operator action (the interim mitigation above relied on
+     one). The selection rule must treat a manually assigned stage holder exactly like an
+     automatic one: never re-pin a stage to an older version, only supersede with a newer one.
 
 ## Interim mitigation (in use at Equinor)
 
