@@ -1,0 +1,37 @@
+Comment: |
+  NAME is the vendor marketing name "Microsoft 365 Copilot": the pkg downloaded via fwlink 2325114 installs
+  /Applications/Copilot.app with bundle ID com.microsoft.m365copilot (verified from the pkg Distribution, 2026-11-07).
+  Parent chain: gmarnin-recipes MicrosoftCopilot.munki -> rtrouton-recipes MicrosoftCopilot.download.
+  The parent's installs item path is hard-coded to Copilot.app and pkginfo name/display_name use %NAME%.
+  MinimumVersion 2.7 follows the parent (derive_minimum_os_version in MunkiInstallsItemsCreator).
+Description: Downloads Microsoft 365 Copilot using its Munki parent and imports it into Workspace ONE.
+Identifier: com.github.codeskipper.ws1.Microsoft365Copilot
+ParentRecipe: com.github.gmarnin.munki.microsoftcopilot
+MinimumVersion: '2.7'
+
+Input:
+  NAME: Microsoft 365 Copilot
+  WS1_OAUTH_CLIENT_ID: OAUTH2_CLIENT_ID_HERE
+  WS1_OAUTH_CLIENT_SECRET: OAUTH2_CLIENT_SECRET_HERE
+  WS1_OAUTH_TOKEN_URL: OAUTH2_ACCESS_TOKEN_SERVER_URL_HERE
+  WS1_API_USERNAME: API_USERNAME_HERE
+  WS1_API_PASSWORD: API_PASSWORD_HERE
+  WS1_API_TOKEN: API_TOKEN_HERE
+  WS1_B64ENCODED_API_CREDENTIALS: B64ENCODED_API_CREDENTIALS_HERE
+  WS1_API_URL: WORKSPACEONE_API_URL_HERE
+  WS1_CONSOLE_URL: WORKSPACEONE_CONSOLE_URL_HERE
+  WS1_GROUPID: GROUP_ID_HERE
+
+Process:
+- Processor: com.github.codeskipper.OMNISSA-WorkSpaceOneImporter/WorkSpaceOneImporter
+  Arguments:
+    ws1_api_password: '%WS1_API_PASSWORD%'
+    ws1_api_token: '%WS1_API_TOKEN%'
+    ws1_api_url: '%WS1_API_URL%'
+    ws1_api_username: '%WS1_API_USERNAME%'
+    ws1_b64encoded_api_credentials: '%WS1_B64ENCODED_API_CREDENTIALS%'
+    ws1_console_url: '%WS1_CONSOLE_URL%'
+    ws1_groupid: '%WS1_GROUPID%'
+    ws1_oauth_client_id: '%WS1_OAUTH_CLIENT_ID%'
+    ws1_oauth_client_secret: '%WS1_OAUTH_CLIENT_SECRET%'
+    ws1_oauth_token_url: '%WS1_OAUTH_TOKEN_URL%'
