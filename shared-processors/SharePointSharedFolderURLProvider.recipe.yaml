@@ -1,0 +1,12 @@
+Description: |
+  This is the yaml stub recipe for the SharePointSharedFolderURLProvider shared processor, so it can be
+  used by another recipe outside of this repo.
+  Provides a URLDownloader-ready url + request_headers for a file in an anonymous OneDrive/SharePoint share link.
+  Instead of setting the 'Processor' key to a processor name only, we separate the
+  recipe identifier and the processor name with a slash:
+  Processor: com.github.codeskipper.SharePointSharedFolderURLProvider/SharePointSharedFolderURLProvider
+
+Identifier: com.github.codeskipper.SharePointSharedFolderURLProvider
+Input: {}
+MinimumVersion: "2.3"
+Process: []

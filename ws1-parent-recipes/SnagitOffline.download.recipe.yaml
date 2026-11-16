@@ -1,0 +1,44 @@
+Description: |
+  Downloads the latest TechSmith Snagit offline-licensing ("Passive") build from the anonymous OneDrive/SharePoint
+  folder link that TechSmith shares with volume-licence customers. The public consumer build is a different build;
+  use com.github.dataJAR-recipes.download.Snagit for that.
+
+  Set WS1_SP_SHARE_URL_SNAGIT to the share link, preferably through the AUTOPKG_WS1_SP_SHARE_URL_SNAGIT environment
+  variable (treat it as a secret; never commit it). The link covers one major version (e.g. "Snagit 2026"); update
+  it when TechSmith shares the next one.
+
+  SharePoint offers no ETag/304, so SharePointSharedFolderURLProvider detects an unchanged file itself and
+  StopProcessingIf ends the run before URLDownloader (no transfer, no download reported, nothing to import).
+  To force a re-import, delete the cached DMG from the recipe cache downloads folder first.
+Identifier: com.github.codeskipper.download.SnagitOffline
+MinimumVersion: '2.3'
+
+Input:
+  NAME: TechSmith Snagit
+  WS1_SP_SHARE_URL_SNAGIT: SHARE_URL_HERE
+  SP_SUBFOLDER: DMG Installers
+  SP_FILENAME_REGEX: 'snagit-(?P<version>\d+(\.\d+)+)-\d+\.dmg'
+
+Process:
+- Processor: com.github.codeskipper.SharePointSharedFolderURLProvider/SharePointSharedFolderURLProvider
+  Arguments:
+    share_url: '%WS1_SP_SHARE_URL_SNAGIT%'
+    subfolder: '%SP_SUBFOLDER%'
+    filename_regex: '%SP_FILENAME_REGEX%'
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: sharepoint_unchanged == TRUE
+
+- Processor: URLDownloader
+  Arguments:
+    filename: '%sharepoint_file_name%'
+
+- Processor: EndOfCheckPhase
+
+- Processor: CodeSignatureVerifier
+  Arguments:
+    input_path: '%pathname%/Snagit.app'
+    requirement: anchor apple generic and identifier "com.TechSmith.Snagit" and (certificate leaf[field.1.2.840.113635.100.6.1.9]
+      /* exists */ or certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13]
+      /* exists */ and certificate leaf[subject.OU] = "7TQL462TU8")

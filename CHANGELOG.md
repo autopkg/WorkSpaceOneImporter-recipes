@@ -1,4 +1,5 @@
 Changelog (latest first):
+ * added generic `SharePointSharedFolderURLProvider` shared processor (anonymous OneDrive/SharePoint share links) and `SnagitOffline` recipes for TechSmith Snagit offline-licensing builds
  * a separate example repo has been published - [AutoPkg-WS1-example](https://github.com/equinor/AutoPkg-WS1-example)
  * added support for Slack notifications when a pruning safeguard is triggered
  * separated out the Assigner and Pruner functions to their own custom processors

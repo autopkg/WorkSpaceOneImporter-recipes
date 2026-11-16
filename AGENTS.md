@@ -11,6 +11,7 @@ Custom [AutoPkg](https://github.com/autopkg/autopkg) shared processor and recipe
 - **`ws1-processors/ws1_lib/`** — Python package (`__init__.py` re-exports `WorkSpaceOneImporterBase`). Imported via `sys.path.insert(0, os.path.dirname(__file__))` in the processor — this `sys.path` hack is required by AutoPkg's shared processor loading; keep the `# noqa: E402` comments on the resulting imports.
 - **`ws1-recipes/`** — YAML `.ws1.recipe.yaml` files. Each chains a community munki `ParentRecipe` with the shared processor. Secrets are templated as `%WS1_*%` variables.
 - **`ws1-parent-recipes/`** — Custom munki parent recipes for apps not in community repos.
+- **`shared-processors/SharePointSharedFolderURLProvider.py`** — Generic URL provider for anonymous OneDrive/SharePoint share links (folder listing via REST, cookie session, curl via `URLGetter`). Outputs `url` + `request_headers` for `URLDownloader` and `sharepoint_unchanged` for `StopProcessingIf` (SharePoint returns no ETag and no 304). Stub recipe identifier `com.github.codeskipper.SharePointSharedFolderURLProvider`. Used by `SnagitOffline` recipes.
 - **`ws1-processors/WorkSpaceOneImporter.recipe.yaml`** — Stub recipe that registers the shared processor identifier `com.github.codeskipper.OMNISSA-WorkSpaceOneImporter`. Recipes reference it as `com.github.codeskipper.OMNISSA-WorkSpaceOneImporter/WorkSpaceOneImporter`.
 
 ## Key Conventions
@@ -50,6 +51,8 @@ autopkg run -vvvv --key ws1_import_new_only=false SuspiciousPackage.ws1.recipe.y
 export AUTOPKG_verbose=2
 export AUTOPKG_ws1_import_new_only=false
 ```
+Unit tests for `SharePointSharedFolderURLProvider` (offline, no network): `/Library/AutoPkg/Python3/Python.framework/Versions/Current/bin/python3 -m unittest discover -s tests/shared_processors -v`.
+
 Smoke test for the base-class refactor: `ws1-processors/ws1_lib/test_refactor.py` — run with AutoPkg's Python.
 
 ## Agent Tooling (Preview)
