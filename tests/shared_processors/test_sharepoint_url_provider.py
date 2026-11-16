@@ -197,6 +197,7 @@ class TestMain(unittest.TestCase):
         self.assertEqual(proc.env["sharepoint_file_name"], "snagit-2026.4.3-50.dmg")
         self.assertEqual(proc.env["sharepoint_file_size"], 7)
         self.assertFalse(proc.env["sharepoint_unchanged"])
+        self.assertNotIn("PKG", proc.env)
         self.assertFalse(any("TOKEN" in m or "secret-fedauth" in m for m in proc.messages))
 
     def test_unchanged_when_cached(self):
@@ -206,6 +207,7 @@ class TestMain(unittest.TestCase):
         proc = FakeProvider(self.env, [("/Files", self.listing)])
         proc.main()
         self.assertTrue(proc.env["sharepoint_unchanged"])
+        self.assertEqual(proc.env["PKG"], os.path.join(self.tmp.name, "downloads", "snagit-2026.4.3-50.dmg"))
 
     def test_single_file_link(self):
         env = dict(self.env, subfolder="", filename_regex="")

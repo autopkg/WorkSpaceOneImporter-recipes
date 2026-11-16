@@ -8,9 +8,9 @@ Description: |
   variable (treat it as a secret; never commit it). The link covers one major version (e.g. "Snagit 2026"); update
   it when TechSmith shares the next one.
 
-  SharePoint offers no ETag/304, so SharePointSharedFolderURLProvider detects an unchanged file itself and
-  StopProcessingIf ends the run before URLDownloader (no transfer, no download reported, nothing to import).
-  To force a re-import, delete the cached DMG from the recipe cache downloads folder first.
+  SharePoint offers no ETag/304, so SharePointSharedFolderURLProvider detects an unchanged cached file itself and
+  hands it to URLDownloader as PKG (no transfer, no new download reported); the rest of the recipe still runs.
+  To force a fresh download, delete the cached DMG from the recipe cache downloads folder first.
 Identifier: com.github.codeskipper.download.SnagitOffline
 MinimumVersion: '2.3'
 
@@ -26,10 +26,6 @@ Process:
     share_url: '%WS1_SP_SHARE_URL_SNAGIT%'
     subfolder: '%SP_SUBFOLDER%'
     filename_regex: '%SP_FILENAME_REGEX%'
-
-- Processor: StopProcessingIf
-  Arguments:
-    predicate: sharepoint_unchanged == TRUE
 
 - Processor: URLDownloader
   Arguments:

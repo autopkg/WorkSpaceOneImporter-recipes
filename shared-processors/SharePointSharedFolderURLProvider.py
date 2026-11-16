@@ -53,9 +53,12 @@ class SharePointSharedFolderURLProvider(URLGetter):
     URLDownloader.
 
     SharePoint's `$value` endpoint sends no ETag, a dynamic Last-Modified and never answers 304, so URLDownloader
-    would fetch the whole file on every run. This processor therefore also outputs `sharepoint_unchanged`: True
-    when the selected file is already in the download cache under its remote name with the same size, and was not
-    re-uploaded after it was downloaded. Use it with StopProcessingIf before URLDownloader, and give URLDownloader
+    would fetch the whole file on every run. This processor therefore checks the download cache itself: when the
+    selected file is already there under its remote name with the same size, and was not re-uploaded after it was
+    downloaded, it sets `PKG` to the cached file and `sharepoint_unchanged` to True. URLDownloader then uses that
+    file without a transfer and without reporting a new download, while the rest of the recipe still runs (as with
+    a 304). This keeps `autopkg run --check` (e.g. cloud-autopkg-runner) and the full run that follows consistent;
+    do not end the recipe with StopProcessingIf, which cannot tell the two apart. Give URLDownloader
     `filename: %sharepoint_file_name%`. Do not set `prefetch_filename` (SharePoint rejects HEAD).
 
     Links that require sign-in (organisation-only shares, Entra ID app registrations) are not supported.
@@ -114,6 +117,7 @@ class SharePointSharedFolderURLProvider(URLGetter):
         "sharepoint_unchanged": {
             "description": "True if the cached download already matches the selected file (see description)."
         },
+        "PKG": {"description": "Path of the cached download, set only when sharepoint_unchanged is True."},
     }
 
     # --- HTTP helpers -------------------------------------------------------------------------------------------
@@ -309,9 +313,10 @@ class SharePointSharedFolderURLProvider(URLGetter):
         self.output(f"Selected {name} ({size} bytes, modified {modified})")
 
         download_dir = self.env.get("download_dir") or os.path.join(self.env["RECIPE_CACHE_DIR"], "downloads")
-        self.env["sharepoint_unchanged"] = self.is_unchanged(
-            os.path.join(download_dir, name), size, self.parse_sp_time(modified)
-        )
+        cached_path = os.path.join(download_dir, name)
+        self.env["sharepoint_unchanged"] = self.is_unchanged(cached_path, size, self.parse_sp_time(modified))
+        if self.env["sharepoint_unchanged"]:
+            self.env["PKG"] = cached_path
 
 
 def redact(text):
