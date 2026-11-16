@@ -72,7 +72,10 @@ class SharePointSharedFolderURLProvider(URLGetter):
         "subfolder": {
             "required": False,
             "default": "",
-            "description": "Path below the shared folder to look in, e.g. 'DMG Installers'.",
+            "description": (
+                "Path below the shared folder to look in, e.g. 'DMG Installers'. Ignored when the share link "
+                "already points at a folder ending in this path."
+            ),
         },
         "filename_regex": {
             "required": False,
@@ -260,7 +263,8 @@ class SharePointSharedFolderURLProvider(URLGetter):
 
             folder = item_path.rstrip("/")
             subfolder = (self.env.get("subfolder") or "").strip("/")
-            if subfolder:
+            # the link may point at the subfolder itself (OneDrive also lands there when shared directly)
+            if subfolder and not folder.lower().endswith(f"/{subfolder.lower()}"):
                 folder = f"{folder}/{subfolder}"
             api = f"{site_url}/_api/web"
             folder_mode = bool(subfolder or self.env.get("filename_regex"))
@@ -273,6 +277,9 @@ class SharePointSharedFolderURLProvider(URLGetter):
             except ProcessorError:
                 if folder_mode:
                     raise
+            if not files and folder_mode:
+                # SharePoint returns an empty list rather than 404 for a folder that does not exist
+                raise ProcessorError(f"No files in shared folder '{folder}' - check that the subfolder exists.")
             if not files and not folder_mode:
                 # single-file share link: the landing path is the file itself
                 files = [self.rest_get(f"{api}/GetFileByServerRelativeUrl('{self.odata_path(folder)}')", cookie_jar)]

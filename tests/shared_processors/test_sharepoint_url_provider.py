@@ -228,6 +228,21 @@ class TestMain(unittest.TestCase):
         with self.assertRaises(ProcessorError):
             proc.main()
 
+    def test_empty_listing_is_error(self):
+        proc = FakeProvider(self.env, [("/Files", {"value": []})])
+        with self.assertRaisesRegex(ProcessorError, "DMG Installers"):
+            proc.main()
+
+    def test_link_already_at_subfolder(self):
+        landing = f"{SITE}/_layouts/15/onedrive.aspx?id={FOLDER}/DMG Installers&ga=1"
+        proc = FakeProvider(self.env, [("/Files", self.listing)], landing=landing)
+        proc.main()
+        self.assertEqual(
+            proc.calls,
+            [f"{SITE}/_api/web/GetFolderByServerRelativeUrl('{FOLDER}/DMG Installers'".replace(" ", "%20") + ")/Files"],
+        )
+        self.assertEqual(proc.env["version"], "2026.4.3")
+
     def test_share_url_placeholder_rejected(self):
         for value in ("SHARE_URL_HERE", "none", ""):
             with self.assertRaises(ProcessorError):
