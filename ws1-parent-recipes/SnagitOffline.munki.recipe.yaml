@@ -7,9 +7,8 @@ Description: |
   as the user) activates each new app version there. The key therefore ends up in the pkginfo and is readable by
   every user of the Mac.
 
-  The installs array has two items: Snagit.app (CFBundleShortVersionString) and PassiveFilechck.dylib, which only
-  the offline build contains. A consumer Snagit install (any version) therefore counts as "not installed" and is
-  replaced by the licensed offline build.
+  The installs array holds Snagit.app only, compared on CFBundleShortVersionString. A consumer Snagit install of the
+  same or a newer version therefore counts as installed and is not replaced by the offline build.
 Identifier: com.github.codeskipper.munki.SnagitOffline
 ParentRecipe: com.github.codeskipper.download.SnagitOffline
 MinimumVersion: '2.3'
@@ -99,7 +98,6 @@ Process:
     faux_root: '%RECIPE_CACHE_DIR%/payload'
     installs_item_paths:
     - /Applications/Snagit.app
-    - /Applications/Snagit.app/Contents/Frameworks/PassiveFilechck.dylib
     version_comparison_key: CFBundleShortVersionString
     derive_minimum_os_version: true
 
