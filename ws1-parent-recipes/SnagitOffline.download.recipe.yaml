@@ -1,7 +1,8 @@
 Description: |
   Downloads the latest TechSmith Snagit offline-licensing ("Passive") build from the anonymous OneDrive/SharePoint
   folder link that TechSmith shares with volume-licence customers. The public consumer build is a different build;
-  use com.github.dataJAR-recipes.download.Snagit for that.
+  use com.github.dataJAR-recipes.download.Snagit for that. Do not mix consumer and offline-licensing builds on the
+  same Macs; see the SnagitOffline munki recipe description.
 
   Set WS1_SP_SHARE_URL_SNAGIT to the share link, preferably through the AUTOPKG_WS1_SP_SHARE_URL_SNAGIT environment
   variable (treat it as a secret; never commit it). The link covers one major version (e.g. "Snagit 2026"); update

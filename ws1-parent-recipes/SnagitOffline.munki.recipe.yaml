@@ -7,8 +7,10 @@ Description: |
   as the user) activates each new app version there. The key therefore ends up in the pkginfo and is readable by
   every user of the Mac.
 
-  The installs array holds Snagit.app only, compared on CFBundleShortVersionString. A consumer Snagit install of the
-  same or a newer version therefore counts as installed and is not replaced by the offline build.
+  The installs array holds Snagit.app only, compared on CFBundleShortVersionString, and cannot tell the consumer and
+  offline-licensing builds apart. These recipes do not support mixing the two builds on the same Macs: a consumer
+  install of the same or a newer version counts as installed and is not replaced, and both builds share the same
+  app path, so mixing them leads to undesired behaviour. Target each group of Macs with only one of the two builds.
 Identifier: com.github.codeskipper.munki.SnagitOffline
 ParentRecipe: com.github.codeskipper.download.SnagitOffline
 MinimumVersion: '2.3'
