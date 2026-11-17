@@ -3,9 +3,9 @@ Description: |
 
   Set WS1_SNAGIT_LICENSE_KEY to the licence (contents of the LicensePassive file from TechSmith), preferably through
   the AUTOPKG_WS1_SNAGIT_LICENSE_KEY environment variable; never commit it. TechSmith's design requires the licence
-  in /Users/Shared/TechSmith/Snagit/LicensePassive with /Users/Shared/TechSmith world-writable, because Snagit (running
-  as the user) activates each new app version there. The key therefore ends up in the pkginfo and is readable by
-  every user of the Mac.
+  in /Users/Shared/TechSmith/Snagit/LicensePassive with /Users/Shared/TechSmith recursively world-writable, because
+  Snagit (running as the user) activates each new app version there. The key therefore ends up in the pkginfo and
+  is readable by every user of the Mac.
 
   The installs array holds Snagit.app only, compared on CFBundleShortVersionString, and cannot tell the consumer and
   offline-licensing builds apart. These recipes do not support mixing the two builds on the same Macs: a consumer
@@ -52,7 +52,8 @@ Input:
       exit 0
     postinstall_script: |
       #!/bin/zsh
-      # TechSmith requires the licence in /Users/Shared/TechSmith/Snagit with /Users/Shared/TechSmith world-writable:
+      # TechSmith requires the licence in /Users/Shared/TechSmith/Snagit with /Users/Shared/TechSmith recursively
+      # world-writable:
       # Snagit, running as the user, writes there to activate the licence per app version.
       set -euo pipefail
 
@@ -72,8 +73,10 @@ Input:
       esac
 
       mkdir -p "$license_file_loc"
-      chmod 777 /Users/Shared/TechSmith
       print -r -- "$license_key" >"$license_file_loc/$license_file_name"
+      # recursive, after writing the key: on first launch Snagit (as the user) creates Snagit/License to activate;
+      # without write access to the Snagit subfolder the licence does not activate
+      chmod -R 777 /Users/Shared/TechSmith
     uninstall_script: |
       #!/bin/zsh
       # Running Snagit is handled by Munki blocking_applications (removal deferred until the app is quit).
