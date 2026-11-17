@@ -33,6 +33,8 @@ Formatting: **Black** (line-length 120, `pyproject.toml`). Import sorting: **iso
 /Library/AutoPkg/Python3/Python.framework/Versions/Current/bin/pre-commit run --all-files
 ```
 
+If AutoPkg's bundled pre-commit is too old for a hook (seen with the isort hook), run a current one instead: `uvx pre-commit run --files <paths>` or `uvx pre-commit run --all-files`.
+
 ## Dependencies & Runtime
 
 Python deps (`requests`, `requests_toolbelt`) must be installed into AutoPkg's Python:
@@ -42,7 +44,7 @@ sudo -H /Library/AutoPkg/Python3/Python.framework/Versions/Current/bin/pip3 inst
 
 ## Testing
 
-No automated test suite. Validate by running recipes through `autopkg`:
+There is no automated test suite for the WS1 processors. Validate by running recipes through `autopkg`:
 ```sh
 autopkg run -vvvv --key ws1_import_new_only=false SuspiciousPackage.ws1.recipe.yaml
 ```
@@ -64,6 +66,13 @@ Offline tests: `python3 -m unittest discover -s tests/agent_skills -v` (PyYAML r
 ## Adding a New Recipe
 
 Copy an existing `.ws1.recipe.yaml` from `ws1-recipes/` (e.g., `Firefox.ws1.recipe.yaml`). Set `ParentRecipe` to the community munki recipe identifier, update `Identifier` to `com.github.codeskipper.ws1.<AppName>`, and keep the `Process` block referencing the shared processor with `%WS1_*%` variable substitution. All `WS1_*` Input keys are placeholders — actual values come from recipe overrides or env vars.
+
+## Recipe Authoring Pitfalls
+
+- **Check phase and full run must agree.** Runners such as cloud-autopkg-runner run `autopkg run --check` first and the full recipe only when a download was reported. AutoPkg just drops the steps after `EndOfCheckPhase`; a processor cannot tell which of the two it is in. Never stop a recipe on "unchanged" before `EndOfCheckPhase` (e.g. `StopProcessingIf`): the full run sees the file the check phase just downloaded as unchanged and stops before the import. When a processor detects an unchanged cached download itself, set `PKG` to the cached file: URLDownloader then skips the transfer, reports no download, and the rest of the recipe still runs (as with a 304). See `SharePointSharedFolderURLProvider` and `SnagitOffline.download`.
+- **MunkiInstallsItemsCreator.** A string `version_comparison_key` is applied to every installs item, so the run fails if one of them (e.g. a dylib) lacks that key. The per-path dict form is ignored in YAML recipes, and file items always get an md5. Keep `installs_item_paths` to the app bundle unless every item has the key.
+- **Install scripts in `pkginfo`.** Run them in a sandbox first (rewrite the paths to a temp folder, substitute a fake secret). Test an upgrade over an existing install as well as a fresh install. Folders a script creates are owned by root: if the app writes there as the user, set the permissions explicitly, after writing the files. Example: Snagit creates `Snagit/License` on first launch and does not activate without write access (`SnagitOffline.munki`).
+- **Testing a recipe that is not merged yet.** With `FAIL_RECIPES_WITHOUT_TRUST_INFO` set, make throwaway overrides: `autopkg make-override --override-dir /tmp/<dir> -d shared-processors -d ws1-parent-recipes <recipe>`, then `autopkg run --override-dir /tmp/<dir> -d … <recipe>`. Run `autopkg update-trust-info` on them after every recipe or processor change. Pass secrets as `AUTOPKG_<KEY>` environment variables and import into a scratch `MUNKI_REPO`.
 
 ## Planned Refactoring
 
