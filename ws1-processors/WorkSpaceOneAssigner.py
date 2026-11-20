@@ -20,6 +20,7 @@
 # limitations under the License.
 """Autopkg processor to manage app assignments in Omnissa Workspace ONE UEM using REST API V1 & V2."""
 
+import copy
 import json
 import os
 import sys
@@ -40,11 +41,18 @@ from ws1_lib.WorkSpaceOneImporterBase import WorkSpaceOneImporterBase, is_url  #
 __all__ = ["WorkSpaceOneAssigner"]
 
 
+ASSIGNMENT_STRATEGIES = ("newest_eligible", "latest_only")
+
+
 class WorkSpaceOneAssigner(WorkSpaceOneImporterBase):
     """Manages app assignments (simple V1 & advanced V2) in Workspace ONE UEM.
 
-    Searches for the app by NAME on the WS1 server, determines the latest version,
-    and applies assignments to it. Uses app UUID as the primary identifier.
+    Searches for the app by NAME on the WS1 server and applies assignments. Uses app UUID as the primary identifier.
+
+    Advanced (V2) assignments are staged rings (e.g. TESTING, QA, PROD), each with a delay in days counted from the
+    day a version got its first assignment. With the default strategy "newest_eligible" every ring is given the
+    newest version that has completed that ring's delay and already holds the previous ring, so a ring keeps moving
+    when new versions arrive faster than its delay. Strategy "latest_only" only ever works on the latest version.
     """
 
     input_variables = {
@@ -66,6 +74,19 @@ class WorkSpaceOneAssigner(WorkSpaceOneImporterBase):
             "required": False,
             "description": "Advanced app assignments (API V2 rules). Complex structure — "
             "see https://github.com/autopkg/WorkSpaceOneImporter-recipes/wiki/ws1_app_assignments",
+        },
+        "ws1_assignment_strategy": {
+            "required": False,
+            "default": "newest_eligible",
+            "description": "Which app version the advanced (V2) assignment rings are applied to. "
+            "'newest_eligible' (default): each ring gets the newest version that has completed that ring's "
+            "distr_delay_days and already holds the previous ring, so a ring is not starved when new versions arrive "
+            "faster than its delay. 'latest_only': previous behaviour, only the latest version is ever assigned.",
+        },
+        "ws1_assign_dry_run": {
+            "required": False,
+            "default": "False",
+            "description": "If True, only log which assignments would be made, without changing anything in WS1.",
         },
     }
 
@@ -132,11 +153,11 @@ class WorkSpaceOneAssigner(WorkSpaceOneImporterBase):
         except (ValueError, AttributeError):
             return ()
 
-    def find_latest_app_version(self, search_results, app_name):
-        """Find the latest macOS app version from WS1 search results.
+    def find_app_versions(self, search_results, app_name):
+        """Find all macOS app versions matching app_name in WS1 search results, newest first.
 
         Iterates through search results to find all macOS (Platform==10) apps matching app_name,
-        then determines the latest by comparing the normalized AppVersion field (always 4 components,
+        and orders them by comparing the normalized AppVersion field (always 4 components,
         e.g. "1.118.1.0") as integer tuples. Falls back to highest App ID if version parsing fails.
 
         Args:
@@ -144,7 +165,7 @@ class WorkSpaceOneAssigner(WorkSpaceOneImporterBase):
             app_name: Application name to match.
 
         Returns:
-            Dict with keys: app_id, app_uuid, app_version.
+            List of dicts with keys: app_id, app_uuid, app_version, app_version_sortable. Newest version first.
 
         Raises:
             ProcessorError: If no matching macOS app is found.
@@ -169,13 +190,29 @@ class WorkSpaceOneAssigner(WorkSpaceOneImporterBase):
         if not matching_apps:
             raise ProcessorError(f"WorkSpaceOneAssigner: No macOS app matching [{app_name}] found on WS1 server.")
 
-        # Determine the latest version using the normalized AppVersion field (4-component, e.g. "1.118.1.0")
+        # Order by the normalized AppVersion field (4-component, e.g. "1.118.1.0")
         # which allows reliable semantic version comparison via integer tuples.
         # Fall back to highest App ID if AppVersion is missing or unparseable.
-        latest = max(
-            matching_apps,
+        matching_apps.sort(
             key=lambda x: self._parse_version_tuple(x["app_version_sortable"]) or (int(x["app_id"]),),
+            reverse=True,
         )
+        return matching_apps
+
+    def find_latest_app_version(self, search_results, app_name):
+        """Find the latest macOS app version from WS1 search results.
+
+        Args:
+            search_results: JSON response dict from the app search API.
+            app_name: Application name to match.
+
+        Returns:
+            Dict with keys: app_id, app_uuid, app_version.
+
+        Raises:
+            ProcessorError: If no matching macOS app is found.
+        """
+        latest = self.find_app_versions(search_results, app_name)[0]
         self.output(
             f"Latest app version: ID [{latest['app_id']}] UUID [{latest['app_uuid']}] "
             f"version [{latest['app_version']}]",
@@ -229,9 +266,11 @@ class WorkSpaceOneAssigner(WorkSpaceOneImporterBase):
         self.env["ws1_app_assignments_changed"] = True
         self.output(f"Successfully assigned the app [{self.env['NAME']}] to the group [{smart_group}]")
 
-    def ws1_app_assign_v2(self, api_base_url, app_assignments, headers, ws1_app_uuid, app_name, app_version):
+    def ws1_app_assign_v2(
+        self, api_base_url, app_assignments, headers, ws1_app_uuid, app_name, app_version, dry_run=False
+    ):
         """
-        Apply advanced assignment rules via API V2.
+        Apply advanced assignment rules via API V2 to one app version (strategy "latest_only").
         MAM REST API V2 — PUT /apps/{applicationUuid}/assignment-rules
 
         NB - an App Assignment Rule with an effective_date in the future causes previous versions of the app to NOT be
@@ -411,6 +450,14 @@ class WorkSpaceOneAssigner(WorkSpaceOneImporterBase):
             except ValueError as err:
                 raise ProcessorError(f"Failed parsing app assignments as json, error: {err}")
 
+            if dry_run:
+                planned_rules = " ".join(f"[{rule['priority']}: {rule['name']}]" for rule in report_assignment_rules)
+                self.output(
+                    f"DRY RUN: would set assignment rules {planned_rules} for [{app_name}] version [{app_version}]",
+                    verbose_level=1,
+                )
+                return
+
             try:
                 # Make the WS1 APIv2 call to assign the App
                 r = requests.put(
@@ -453,10 +500,383 @@ class WorkSpaceOneAssigner(WorkSpaceOneImporterBase):
                 },
             }
 
+    @staticmethod
+    def _is_true(value):
+        """Interpret a recipe/environment input value as a boolean."""
+        return str(value).strip().lower() in ("true", "1", "yes", "y", "t")
+
+    @staticmethod
+    def _parse_effective_date(value):
+        """Return the date part of an ISO-8601 timestamp as returned by the WS1 API, or None if absent/unparseable.
+
+        Only the date matters here. The time part may have float or int seconds, which datetime.fromisoformat()
+        can't handle in Python 3.10, so it is cut off at the 'T'.
+        """
+        if not value:
+            return None
+        try:
+            return datetime.fromisoformat(str(value).split("T", 1)[0]).date()
+        except ValueError:
+            return None
+
+    @staticmethod
+    def cumulative_delays(ring_specs):
+        """Return the effective delay in days per ring: a ring is never due before the ring preceding it."""
+        delays = []
+        highest = 0
+        for ring in ring_specs:
+            highest = max(highest, ring["delay"])
+            delays.append(highest)
+        return delays
+
+    @staticmethod
+    def describe_version_rules(existing_rules, ring_specs):
+        """Work out which rings an app version holds, from its existing assignment rules.
+
+        Args:
+            existing_rules: The "assignments" list from GET /apps/{uuid}/assignment-rules for one app version.
+            ring_specs: List of dicts with keys name, delay, smart_groups (UUIDs) - one per ring in recipe order.
+
+        Returns:
+            Dict with keys:
+                managed: True if AutoPkg may change the rules: there are none yet, or all are tagged #AUTOPKG and
+                    none is tagged #AUTOPKG_DONE. Rules made or changed by hand are left alone.
+                held: Set of ring indexes this version is assigned to.
+                level: Number of leading rings held (0 = none, len(ring_specs) = all).
+                day0: Date of the first assignment (effective_date of rule #0), or None.
+        """
+        ring_count = len(ring_specs)
+        distributions = [rule.get("distribution") or {} for rule in existing_rules]
+        descriptions = [distribution.get("description") or "" for distribution in distributions]
+        done = any("#AUTOPKG_DONE" in description for description in descriptions)
+        managed = not done and all("#AUTOPKG" in description for description in descriptions)
+
+        if done:
+            held = set(range(ring_count))
+        elif managed:
+            # rules made by this processor are cumulative and in ring order
+            held = set(range(min(len(existing_rules), ring_count)))
+        else:
+            # rules made or changed by hand: recognise rings by name or by the smart groups they cover
+            held = set()
+            for index, ring in enumerate(ring_specs):
+                ring_groups = {group.lower() for group in ring["smart_groups"]}
+                for distribution in distributions:
+                    rule_groups = {
+                        group.lower() for group in distribution.get("smart_groups") or [] if isinstance(group, str)
+                    }
+                    if distribution.get("name") == ring["name"] or (ring_groups and ring_groups <= rule_groups):
+                        held.add(index)
+                        break
+
+        level = 0
+        while level in held:
+            level += 1
+        day0 = None
+        if distributions:
+            day0 = WorkSpaceOneAssigner._parse_effective_date(distributions[0].get("effective_date"))
+        return {"managed": managed, "held": held, "level": level, "day0": day0}
+
+    @staticmethod
+    def plan_ring_promotions(versions, ring_specs, today):
+        """Decide which app versions get which rings today (strategy "newest_eligible"). Makes no API calls.
+
+        Ring 0 always goes to the latest version, the day it is first seen (its day-0).
+        Every later ring goes to the newest version that
+          * AutoPkg manages (see describe_version_rules),
+          * already held the previous ring before this run - so a version reaches PROD only after it has been in QA.
+            Rings with the same delay as the previous ring are the exception, they are assigned together,
+          * has completed the ring's delay, counted from its day-0, and
+          * is not older than the newest version already holding that ring, nor older than the newest version
+            holding the final ring. A ring never moves back to an older version.
+
+        Args:
+            versions: App versions, newest first. Dicts with keys managed, held, level, day0
+                (see describe_version_rules).
+            ring_specs: List of dicts with keys name, delay, smart_groups - one per ring in recipe order.
+            today: Date to evaluate delays against.
+
+        Returns:
+            Tuple (promotions, ring_report).
+            promotions: List of dicts {index, level, day0}, newest version first: versions[index] must get the
+                first [level] rings, with effective dates counted from day0.
+            ring_report: One dict {ring, action, index} per ring. action is "promote" (versions[index] gets the
+                ring) or "keep" (nothing changes; index is the newest version holding the ring, or None).
+        """
+        ring_count = len(ring_specs)
+        if not versions or not ring_count:
+            return [], []
+        delays = WorkSpaceOneAssigner.cumulative_delays(ring_specs)
+        planned = [version["level"] for version in versions]
+        day0s = [version["day0"] for version in versions]
+
+        def newest_holder(ring):
+            return next((index for index, version in enumerate(versions) if ring in version["held"]), None)
+
+        final_holder = newest_holder(ring_count - 1)
+        boundary = len(versions) - 1 if final_holder is None else final_holder
+
+        latest = versions[0]
+        if latest["managed"] and day0s[0] is None:
+            day0s[0] = today
+        if 0 not in latest["held"] and latest["managed"] and latest["level"] == 0 and delays[0] == 0:
+            planned[0] = 1
+            day0s[0] = today
+            ring_report = [{"ring": 0, "action": "promote", "index": 0}]
+        else:
+            ring_report = [{"ring": 0, "action": "keep", "index": newest_holder(0)}]
+
+        for ring in range(1, ring_count):
+            holder = newest_holder(ring)
+            limit = boundary if holder is None else min(boundary, holder)
+            target = None
+            for index in range(limit + 1):
+                version = versions[index]
+                if not version["managed"] or day0s[index] is None:
+                    continue
+                if day0s[index] + timedelta(days=delays[ring]) > today:
+                    continue
+                held_before_this_run = version["level"] >= ring
+                assigned_together = planned[index] >= ring and delays[ring] == delays[ring - 1]
+                if held_before_this_run or assigned_together:
+                    target = index
+                    break
+            if target is None or versions[target]["level"] > ring:
+                ring_report.append({"ring": ring, "action": "keep", "index": holder})
+            else:
+                planned[target] = ring + 1
+                ring_report.append({"ring": ring, "action": "promote", "index": target})
+
+        promotions = [
+            {"index": index, "level": planned[index], "day0": day0s[index]}
+            for index, version in enumerate(versions)
+            if planned[index] > version["level"]
+        ]
+        return promotions, ring_report
+
+    @staticmethod
+    def build_assignment_rules(app_assignments, ring_specs, level, day0):
+        """Build the API V2 assignment rules for the first [level] rings. Does not modify app_assignments.
+
+        Rules are cumulative: a version on ring 2 also carries the rules for rings 0 and 1. Effective dates are
+        day0 + the ring's distr_delay_days, which is never in the future for rings chosen by plan_ring_promotions.
+        """
+        rules = []
+        for index in range(level):
+            rule = copy.deepcopy(app_assignments[index])
+            distribution = rule["distribution"]
+            rule["priority"] = str(index)  # rules must be passed in order of ascending priority
+            distribution["smart_groups"] = list(ring_specs[index]["smart_groups"])
+            # smart_group_names and distr_delay_days are used as input, NOT in API call
+            distribution.pop("smart_group_names", None)
+            distribution.pop("distr_delay_days", None)
+            distribution["effective_date"] = (day0 + timedelta(days=ring_specs[index]["delay"])).isoformat()
+            # need to pass auto_update_devices_with_previous_versions as well to have apps update automatically
+            distribution["auto_update_devices_with_previous_versions"] = bool(
+                distribution.get("keep_app_updated_automatically")
+            )
+            # tag the description: handled by Autopkg, or complete when the last ring is reached
+            tag = " #AUTOPKG_DONE" if index == len(ring_specs) - 1 else " #AUTOPKG"
+            distribution["description"] = f"{distribution.get('description') or ''}{tag}"
+            rules.append(rule)
+        return rules
+
+    def resolve_ring_specs(self, api_base_url, app_assignments, headers):
+        """Turn the ws1_app_assignments input into ring specs: name, delay in days and smart group UUIDs."""
+        if not isinstance(app_assignments, (list, tuple)) or not app_assignments:
+            raise ProcessorError("WorkSpaceOneAssigner: ws1_app_assignments must be a non-empty list of assignments.")
+        ring_specs = []
+        group_uuids = {}
+        for index, app_assignment in enumerate(app_assignments):
+            try:
+                distribution = app_assignment["distribution"]
+                name = distribution["name"]
+                delay = int(distribution["distr_delay_days"])
+                group_names = list(distribution["smart_group_names"])
+            except (KeyError, TypeError, ValueError) as err:
+                raise ProcessorError(
+                    f"WorkSpaceOneAssigner: ws1_app_assignments[{index}] needs distribution.name, "
+                    f"distribution.distr_delay_days (number of days) and distribution.smart_group_names: {err!r}"
+                )
+            if delay < 0:
+                raise ProcessorError(
+                    f"WorkSpaceOneAssigner: ws1_app_assignments[{index}] distr_delay_days must not be negative."
+                )
+            smart_groups = []
+            for group_name in group_names:
+                if group_name not in group_uuids:
+                    self.output(f"App assignment[{index}] Smart Group name: [{group_name}]", verbose_level=2)
+                    _, sg_uuid = self.get_smartgroup_id(api_base_url, group_name, headers)
+                    if not sg_uuid:
+                        raise ProcessorError(f"WorkSpaceOneAssigner: Smart Group [{group_name}] not found on WS1.")
+                    group_uuids[group_name] = sg_uuid
+                smart_groups.append(group_uuids[group_name])
+            ring_specs.append({"name": name, "delay": delay, "smart_groups": smart_groups})
+        return ring_specs
+
+    def get_assignment_rules(self, api_base_url, headers_v2, app_uuid):
+        """Get the existing assignment rules of one app version via API V2. Returns a list, empty if none."""
+        try:
+            r = requests.get(f"{api_base_url}/api/mam/apps/{app_uuid}/assignment-rules", headers=headers_v2)
+            result = r.json()
+        except (requests.exceptions.RequestException, ValueError) as err:
+            raise ProcessorError(f"API call to get existing app assignment rules failed, error: {err}")
+        if not r.status_code == 200:
+            raise ProcessorError(
+                f"WorkSpaceOneAssigner: Unable to get existing app assignment rules from WS1 "
+                f"- message: {result.get('message') if isinstance(result, dict) else result}."
+            )
+        return result.get("assignments") or []
+
+    def put_assignment_rules(self, api_base_url, headers_v2, app_uuid, rules, app_name, app_version):
+        """Set the assignment rules of one app version via API V2, replacing any existing rules."""
+        try:
+            payload = json.dumps({"assignments": rules})
+        except (TypeError, ValueError) as err:
+            raise ProcessorError(f"Failed parsing app assignments as json, error: {err}")
+        self.output(f"App assignments data to send as json: {payload}", verbose_level=2)
+        try:
+            r = requests.put(
+                f"{api_base_url}/api/mam/apps/{app_uuid}/assignment-rules",
+                headers=headers_v2,
+                data=payload,
+            )
+        except requests.exceptions.RequestException as err:
+            raise ProcessorError(
+                f"Failed setting assignment-rules for app [{app_name}] version [{app_version}], error: {err}"
+            )
+        if not r.status_code == 202:
+            self.output(f"Setting App assignment rules failed: {r.status_code} - {r.text}", verbose_level=2)
+            raise ProcessorError(f"Unable to set assignment rules for [{app_name}] version [{app_version}]")
+
+    def ws1_app_assign_v2_newest_eligible(
+        self, api_base_url, app_assignments, headers, app_versions, app_name, dry_run=False, today=None
+    ):
+        """
+        Apply advanced assignment rules via API V2, giving each ring the newest eligible app version.
+        MAM REST API V2 — PUT /apps/{applicationUuid}/assignment-rules
+
+        Unlike ws1_app_assign_v2 this looks at older versions too, so a ring with a delay (e.g. PROD) still moves
+        on when new versions arrive faster than that delay. See plan_ring_promotions for the rules.
+
+        WS1 gives a device the highest app version assigned to it, so a later ring can safely sit on an older
+        version than an earlier ring. See
+        https://docs.omnissa.com/MobileApplicationManagement-VSaaS/InternalApplicationVersions/
+
+        Args:
+            app_versions: All versions of the app, newest first (see find_app_versions).
+            today: Date to evaluate delays against; defaults to the current date.
+        """
+        today = today or datetime.today().date()
+        console_url = self.env.get("ws1_console_url")
+        if not is_url(console_url):
+            self.output(
+                f"WS1 Console URL input value [{console_url}] does not look like a valid URL, setting example value",
+                verbose_level=2,
+            )
+            console_url = "https://my-mobile-admin-console.my-org.org"
+
+        # prepare API V2 headers
+        headers_v2 = dict(headers)
+        headers_v2["Accept"] = f"{headers['Accept']};version=2"
+
+        self.output(f"App assignments data input: {app_assignments}", verbose_level=2)
+        ring_specs = self.resolve_ring_specs(api_base_url, app_assignments, headers)
+        final_ring = len(ring_specs) - 1
+
+        # Collect the rings held per version, newest first. Versions older than the newest one on the final ring
+        # are never changed, so stop there.
+        versions = []
+        for app in app_versions:
+            existing_rules = self.get_assignment_rules(api_base_url, headers_v2, app["app_uuid"])
+            for index, assignment in enumerate(existing_rules):
+                self.output(
+                    f"Version [{app['app_version']}] existing assignment #[{index}] is [{assignment}]",
+                    verbose_level=3,
+                )
+            state = self.describe_version_rules(existing_rules, ring_specs)
+            versions.append({**app, **state})
+            held_rings = " ".join(f"[{ring}: {ring_specs[ring]['name']}]" for ring in sorted(state["held"]))
+            self.output(
+                f"Version [{app['app_version']}] holds rings: {held_rings or 'none'} - first assigned (day-0): "
+                f"[{state['day0']}] - managed by AutoPkg: [{state['managed']}]",
+                verbose_level=2,
+            )
+            if final_ring in state["held"]:
+                break
+
+        promotions, ring_report = self.plan_ring_promotions(versions, ring_specs, today)
+
+        for entry in ring_report:
+            ring_label = f"Ring [{entry['ring']}: {ring_specs[entry['ring']]['name']}]"
+            version = versions[entry["index"]]["app_version"] if entry["index"] is not None else None
+            if entry["action"] == "promote":
+                self.output(f"{ring_label} will be assigned to version [{version}].", verbose_level=1)
+            elif version:
+                self.output(f"{ring_label} stays on version [{version}].", verbose_level=1)
+            else:
+                self.output(f"{ring_label} is not assigned yet, no version is eligible.", verbose_level=1)
+
+        if not promotions:
+            self.output("No new assignments to make at this time.", verbose_level=1)
+            return
+
+        applied = []
+        # oldest version first, so the later rings (e.g. PROD) are served first
+        for promotion in reversed(promotions):
+            version = versions[promotion["index"]]
+            new_rings = " ".join(
+                f"[{ring}: {ring_specs[ring]['name']}]" for ring in range(version["level"], promotion["level"])
+            )
+            rules = self.build_assignment_rules(app_assignments, ring_specs, promotion["level"], promotion["day0"])
+            if dry_run:
+                self.output(
+                    f"DRY RUN: would set assignment rules {new_rings} for [{app_name}] "
+                    f"version [{version['app_version']}]",
+                    verbose_level=1,
+                )
+                continue
+            self.put_assignment_rules(
+                api_base_url, headers_v2, version["app_uuid"], rules, app_name, version["app_version"]
+            )
+            self.output(
+                f"Successfully set assignment rules {new_rings} for [{app_name}] version [{version['app_version']}]"
+            )
+            applied.append({"version": version, "new_rings": new_rings})
+
+        if not applied:
+            return
+        applied.reverse()  # report newest version first
+        if len(applied) == 1:
+            new_assignment_rules = f"{applied[0]['new_rings']} "
+        else:
+            new_assignment_rules = "; ".join(
+                f"{item['version']['app_version']}: {item['new_rings']}" for item in applied
+            )
+        newest_app_id = applied[0]["version"]["app_id"]
+        self.env["ws1_app_assignments_changed"] = True
+        self.env["ws1_importer_summary_result"] = {
+            "summary_text": "The following new app assignment rules are applied in WS1:",
+            "report_fields": [
+                "name",
+                "version",
+                "new_assignment_rules",
+                "console_location",
+            ],
+            "data": {
+                "name": app_name,
+                "version": ", ".join(item["version"]["app_version"] for item in applied),
+                "new_assignment_rules": new_assignment_rules,
+                "console_location": (
+                    f"{console_url}/AirWatch/#/AirWatch/Apps/Details/Internal/{newest_app_id}/Assignment"
+                ),
+            },
+        }
+
     def main(self):
         """Manage app assignments in Workspace ONE UEM.
 
-        Searches for the app by NAME, finds the latest version via highest App ID,
+        Searches for the app by NAME, finds its versions on WS1,
         and applies the configured assignment (V1 simple or V2 advanced).
         """
         # Clear any pre-existing summary result
@@ -470,6 +890,15 @@ class WorkSpaceOneAssigner(WorkSpaceOneImporterBase):
         assignment_pushmode = self.env.get("ws1_push_mode")
         app_assignments = self.env.get("ws1_app_assignments")
         console_url = self.env.get("ws1_console_url")
+        dry_run = self._is_true(self.env.get("ws1_assign_dry_run", "False"))
+        strategy = str(self.env.get("ws1_assignment_strategy") or "none").strip().lower()
+        if strategy == "none":
+            strategy = ASSIGNMENT_STRATEGIES[0]
+        if strategy not in ASSIGNMENT_STRATEGIES:
+            raise ProcessorError(
+                f"WorkSpaceOneAssigner: ws1_assignment_strategy [{strategy}] is not valid, "
+                f"use one of: {', '.join(ASSIGNMENT_STRATEGIES)}."
+            )
 
         # Validate mutual exclusivity of V1 vs V2 assignment modes
         has_simple = assignment_group and assignment_group != "none"
@@ -491,6 +920,8 @@ class WorkSpaceOneAssigner(WorkSpaceOneImporterBase):
             raise ProcessorError("WorkSpaceOneAssigner: NAME is not set — cannot determine which app to assign.")
 
         self.output(f"Beginning the WorkSpace ONE assignment process for {app_name}.")
+        if dry_run:
+            self.output("ws1_assign_dry_run is set: no changes will be made in WS1.", verbose_level=1)
 
         # Init TLS and authenticate
         self.init_tls()
@@ -508,8 +939,14 @@ class WorkSpaceOneAssigner(WorkSpaceOneImporterBase):
                 f"WorkSpaceOneAssigner: No matching applications for [{app_name}] found on WS1 server."
             )
 
-        # Find the latest version (highest App ID = most recently uploaded)
-        latest_app = self.find_latest_app_version(search_results, app_name)
+        # Find all versions, newest first (highest AppVersion)
+        app_versions = self.find_app_versions(search_results, app_name)
+        latest_app = app_versions[0]
+        self.output(
+            f"Latest app version: ID [{latest_app['app_id']}] UUID [{latest_app['app_uuid']}] "
+            f"version [{latest_app['app_version']}]",
+            verbose_level=1,
+        )
         ws1_app_uuid = latest_app["app_uuid"]
         ws1_app_id = latest_app["app_id"]
         app_version = latest_app["app_version"]
@@ -517,16 +954,21 @@ class WorkSpaceOneAssigner(WorkSpaceOneImporterBase):
         # Set output variables
         self.env["ws1_app_uuid"] = ws1_app_uuid
         self.env["ws1_app_id"] = ws1_app_id
-        self.output(
-            f"Targeting latest app version [{app_version}] UUID [{ws1_app_uuid}] for assignment.",
-            verbose_level=1,
-        )
-
         if has_simple:
             # API V1 simple assignment (uses numeric app ID)
             if not assignment_pushmode:
                 raise ProcessorError("WorkSpaceOneAssigner: ws1_push_mode is required for simple (V1) assignments.")
+            self.output(
+                f"Targeting latest app version [{app_version}] UUID [{ws1_app_uuid}] for assignment.",
+                verbose_level=1,
+            )
             self.output(f"Using simple V1 assignment to group [{assignment_group}]", verbose_level=1)
+            if dry_run:
+                self.output(
+                    f"DRY RUN: would assign [{app_name}] version [{app_version}] to group [{assignment_group}]",
+                    verbose_level=1,
+                )
+                return
             self.ws1_app_assign_v1(api_base_url, assignment_group, assignment_pushmode, headers, ws1_app_id)
 
             if not is_url(console_url):
@@ -547,10 +989,22 @@ class WorkSpaceOneAssigner(WorkSpaceOneImporterBase):
                     "console_location": app_ws1console_loc,
                 },
             }
+        elif strategy == "latest_only":
+            # API V2 advanced assignments (uses app UUID natively), latest version only
+            self.output(
+                f"Targeting latest app version [{app_version}] UUID [{ws1_app_uuid}] for assignment.",
+                verbose_level=1,
+            )
+            self.output("Using advanced V2 assignment rules, strategy [latest_only]", verbose_level=1)
+            self.ws1_app_assign_v2(
+                api_base_url, app_assignments, headers, ws1_app_uuid, app_name, app_version, dry_run=dry_run
+            )
         else:
-            # API V2 advanced assignments (uses app UUID natively)
-            self.output("Using advanced V2 assignment rules", verbose_level=1)
-            self.ws1_app_assign_v2(api_base_url, app_assignments, headers, ws1_app_uuid, app_name, app_version)
+            # API V2 advanced assignments, each ring gets the newest version that completed its delay
+            self.output("Using advanced V2 assignment rules, strategy [newest_eligible]", verbose_level=1)
+            self.ws1_app_assign_v2_newest_eligible(
+                api_base_url, app_assignments, headers, app_versions, app_name, dry_run=dry_run
+            )
 
 
 if __name__ == "__main__":

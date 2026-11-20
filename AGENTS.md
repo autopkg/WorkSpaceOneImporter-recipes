@@ -53,6 +53,8 @@ export AUTOPKG_ws1_import_new_only=false
 ```
 Unit tests for `SharePointSharedFolderURLProvider` (offline, no network): `/Library/AutoPkg/Python3/Python.framework/Versions/Current/bin/python3 -m unittest discover -s tests/shared_processors -v`.
 
+Unit tests for the `WorkSpaceOneAssigner` ring promotion (offline, no network): `/Library/AutoPkg/Python3/Python.framework/Versions/Current/bin/python3 -m unittest discover -s tests/ws1_processors -v`.
+
 Smoke test for the base-class refactor: `ws1-processors/ws1_lib/test_refactor.py` — run with AutoPkg's Python.
 
 ## Agent Tooling (Preview)

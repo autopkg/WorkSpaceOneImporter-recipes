@@ -1,4 +1,5 @@
 Changelog (latest first):
+ * WorkSpaceOneAssigner: each assignment ring now gets the newest version that completed its delay (`ws1_assignment_strategy`, default `newest_eligible`), instead of only the latest version. Fixes rings such as PROD never being updated when new versions arrive faster than the ring's delay. Set `latest_only` for the previous behaviour. Added `ws1_assign_dry_run`
  * added generic `SharePointSharedFolderURLProvider` shared processor (anonymous OneDrive/SharePoint share links) and `SnagitOffline` recipes for TechSmith Snagit offline-licensing builds
  * a separate example repo has been published - [AutoPkg-WS1-example](https://github.com/equinor/AutoPkg-WS1-example)
  * added support for Slack notifications when a pruning safeguard is triggered

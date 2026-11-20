@@ -162,6 +162,14 @@ You'll need to specify credentials for either Oauth or Basic authentication.
 
 `ws1_smart_group_name` and `ws1_push_mode` let you make simple App Assignments to Assignment Groups, while `ws1_app_assignments` gives you complete control over the App Assignment settings, but needs more settings in the recipe override.
 
+With `ws1_app_assignments` the assignments are staged rings (for example TESTING, QA, PROD), each with a delay in days (`distr_delay_days`) counted from the day a version got its first assignment. `ws1_assignment_strategy` controls which version a ring is given:
+* `newest_eligible` (default) - each ring gets the newest version that has completed that ring's delay and already holds the previous ring. A ring keeps moving when new versions arrive faster than its delay, and a version only reaches PROD after it has been in QA. A ring never moves back to an older version, and assignment rules made or changed by hand in the console are left alone.
+* `latest_only` - previous behaviour: only the latest version is ever assigned, so a new version restarts the delay for all rings. When versions arrive faster than a ring's delay, that ring is never updated.
+
+This relies on WS1 giving a device the highest app version assigned to it, see [Internal Application Versions](https://docs.omnissa.com/MobileApplicationManagement-VSaaS/InternalApplicationVersions/) in the Omnissa docs.
+
+Set `ws1_assign_dry_run` to `True` to have WorkSpaceOneAssigner only log which assignments it would make, without changing anything in WS1.
+
 `ws1_app_versions_prune` lets you prune old software versions, it is set to `dry_run` per default. Behaviour can be controlled in detail by setting `ws1_app_versions_to_keep` and `ws1_app_versions_to_keep_default`. Versions that are still assigned to devices are never deleted; `ws1_prune_safeguard_halt_on_assigned` decides whether the pruner halts or skips them with a Slack warning.
 
 
@@ -180,6 +188,8 @@ You'll need to specify credentials for either Oauth or Basic authentication.
 * [`ws1_smart_group_name`](https://github.com/codeskipper/WorkSpaceOneImporter-recipes/wiki/ws1_smart_group_name)
 * [`ws1_push_mode`](https://github.com/codeskipper/WorkSpaceOneImporter-recipes/wiki/ws1_push_mode)
 * [`ws1_app_assignments`](https://github.com/codeskipper/WorkSpaceOneImporter-recipes/wiki/ws1_app_assignments)
+* `ws1_assignment_strategy`
+* `ws1_assign_dry_run`
 * [`ws1_update_assignments`](https://github.com/codeskipper/WorkSpaceOneImporter-recipes/wiki/ws1_update_assignments)
 * [`ws1_app_versions_to_keep`](https://github.com/codeskipper/WorkSpaceOneImporter-recipes/wiki/ws1_app_versions_to_keep)
 * [`ws1_app_versions_to_keep_default`](https://github.com/codeskipper/WorkSpaceOneImporter-recipes/wiki/ws1_app_versions_to_keep_default)
